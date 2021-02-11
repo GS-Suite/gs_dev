@@ -9,13 +9,13 @@ import os, sys
 from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-load_dotenv(os.path.join(BASE_DIR, ".env"))
+load_dotenv()
 sys.path.append(BASE_DIR)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", os.getenv("GS_DB_URL"))
+config.set_main_option("sqlalchemy.url", os.getenv("PG_DB_URL"))
 
 
 # Interpret the config file for Python logging.
@@ -26,6 +26,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 from user import models as user_models
 from tokens import models as token_models
+from classrooms import models as classroom_models
 from models import Base
 
 target_metadata = Base.metadata

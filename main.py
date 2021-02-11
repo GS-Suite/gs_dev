@@ -13,9 +13,7 @@ Base.metadata.create_all(bind = engine)
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
-    "https://gstestreact.herokuapp.com",
-    "*"
+    "*",
 ]
 
 app.add_middleware(
@@ -27,13 +25,14 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/", include_in_schema = False)
 async def home_to_doc():
     return RedirectResponse("/docs")
 
 
 from user.apis import *
 from tokens.apis import *
+from classrooms.apis import *
 
 
 if __name__ == "__main__":
