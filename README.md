@@ -18,10 +18,15 @@
 ---
 
 ### .env.py
--- Contains `GS_DATABASE_URL`
+-- Contains `PG_DB_URL` , `MONGO_DB_URL`
 
--- To load the variables:
-- `pipenv run pip freeze > .\requirements.txt`
-- `pipenv install`
+---
+
+### Alembic
+-- Create a new migration: `alembic revision --autogenerate -m "<message>"`
+
+-- Run migrations: `alembic upgrade head`
+
+-- Check out the documentation: https://alembic.sqlalchemy.org/en/latest/tutorial.html
 
 ---
