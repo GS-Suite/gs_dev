@@ -15,6 +15,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "https://gstestreact.herokuapp.com",
+    "*"
 ]
 
 app.add_middleware(
