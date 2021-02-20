@@ -9,7 +9,7 @@ async def create_classroom(classroom, response, token):
 
     if tkn_validation_resp:
         tkn = tkn_validation_resp['token']
-        response.headers["token"] = tkn.token_value
+        response.headers["token"] = tkn
         
         #print(tkn)
         res = await classroom_controllers.create_class(tkn, classroom.class_name)

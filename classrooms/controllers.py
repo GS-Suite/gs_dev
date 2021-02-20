@@ -13,13 +13,13 @@ async def create_class(token, class_name):
         # check if classroom with same name exists
         classrooms = await classroom_model.get_classrooms_by_user(res.user_id)
         for c in classrooms:
-            print(c.name)
+            #print(c.name)
             if c.name == class_name:
                 return status.HTTP_409_CONFLICT
 
         uid = await classroom_helpers.generate_uid()
         resp = await classroom_model.create_classroom(res.user_id, class_name, uid)
-        # print(resp)
+        #print(resp)
         if resp:
             '''
                 Creating mongo representation of postgres classroom
