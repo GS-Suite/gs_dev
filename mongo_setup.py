@@ -5,5 +5,4 @@ import os
 
 load_dotenv()
 
-connection = pymongo.MongoClient(os.getenv("MONGO_DB_URL"))
-mongodb = connection["Enrolled"]
+Mongo_CONN = pymongo.MongoClient(os.getenv("MONGO_DB_URL"))
