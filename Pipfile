@@ -17,6 +17,7 @@ bcrypt = "*"
 gunicorn = "*"
 motor = "*"
 dnspython = "*"
+pymongo = "*"
 
 [dev-packages]
 

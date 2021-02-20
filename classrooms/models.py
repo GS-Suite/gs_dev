@@ -5,12 +5,13 @@ import datetime
 
 db = SessionLocal()
 
+
 class Classroom(Base):
 
     __tablename__ = "classrooms"
-    
-    id = Column(Integer, primary_key = True, index = True)
-    uid = Column(String, unique = True, index = True)
+
+    id = Column(Integer, primary_key=True, index=True)
+    uid = Column(String, unique=True, index=True)
     creator_uid = Column(String, ForeignKey(User.uid))
     name = Column(String)
     enrolled = Column(ARRAY(String), default = [])
@@ -42,16 +43,16 @@ async def get_classroom_by_name(uid: str, name: str):
 
 async def create_classroom(creator_uid: str, name: str, uid: str):
     classroom = Classroom(
-        uid = uid,
-        creator_uid = creator_uid,
-        name = name,
-        date_created = datetime.datetime.now()
+        uid=uid,
+        creator_uid=creator_uid,
+        name=name,
+        date_created=datetime.datetime.now()
     )
     try:
         db.add(classroom)
         db.commit()
         db.refresh(classroom)
-        return classroom
+        return True
     except Exception as e:
         print(e)
         db.rollback()
