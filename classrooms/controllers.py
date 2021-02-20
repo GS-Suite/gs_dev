@@ -24,7 +24,8 @@ async def create_class(token, class_name):
             '''
                 Creating mongo representation of postgres classroom
             '''
-            if await mongo.create_monogo_class(uid):
+            mongo_res = mongo.create_monogo_class(uid)
+            if mongo_res:
                 return status.HTTP_200_OK
             else:
                 '''Mongo failed to create'''
