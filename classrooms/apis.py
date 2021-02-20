@@ -11,3 +11,7 @@ async def create_classroom(classroom: classroom_schemas.CreateClassroomSchema, r
 @app.post("/get_classrooms/")
 async def get_classrooms(response: Response, token: str = Header(None)):
     return await classroom_routes.get_classrooms(token, response)
+
+@app.post("/get_classroom_details/")
+async def get_classroom_details(classroom: classroom_schemas.CreateClassroomSchema, response: Response, token: str = Header(None)):
+    return await classroom_routes.get_classroom_details(classroom, response, token)

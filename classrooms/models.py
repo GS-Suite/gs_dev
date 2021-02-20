@@ -21,13 +21,22 @@ async def get_classrooms_by_user(uid: str):
     return db.query(Classroom).filter(
         Classroom.creator_uid == uid
     ).with_entities(
-        Classroom.name
+        Classroom.name, Classroom.uid
     ).all()
 
 
 async def get_classroom_by_uid(uid: str):
     return db.query(Classroom).filter(
         Classroom.uid == uid
+    ).first()
+
+
+async def get_classroom_by_name(uid: str, name: str):
+    return db.query(Classroom).filter(
+        Classroom.creator_uid == uid,
+        Classroom.name == name
+    ).with_entities(
+        Classroom.name, Classroom.uid, Classroom.creator_uid, Classroom.date_created, Classroom.enrolled
     ).first()
 
 
@@ -59,3 +68,12 @@ async def delete_classroom(classroom: Classroom):
         print(e)
         db.rollback()
         return False
+
+async def enroll_students(classroom: Classroom, uids):
+    try:
+        classroom.enrolled = classroom.enrolled.extend(uids)
+        db.commit()
+        db.refresh(classroom)
+    except Exception as e:
+        db.rollback()
+        print(e)

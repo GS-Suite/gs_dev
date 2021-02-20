@@ -26,6 +26,16 @@ async def create_class(token, class_name):
         ### invalid token
         return status.HTTP_401_UNAUTHORIZED
 
-async def get_classrooms_by_user(uid):
-    classrooms = await classroom_model.get_classrooms_by_user(uid)
+
+async def get_classrooms_by_user(user_uid):
+    classrooms = await classroom_model.get_classrooms_by_user(user_uid)
     return classrooms
+
+
+async def get_classroom_by_name(user_id, name):
+    classroom = await classroom_model.get_classroom_by_name(user_id, name)
+    return classroom
+
+
+async def delete_classroom(token, classroom_name):
+    pass
