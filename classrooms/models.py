@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, ARRAY
 from models import Base, SessionLocal
 from user.models import User
 import datetime
@@ -14,6 +14,7 @@ class Classroom(Base):
     uid = Column(String, unique=True, index=True)
     creator_uid = Column(String, ForeignKey(User.uid))
     name = Column(String)
+    enrolled = Column(ARRAY(String), default = [])
     date_created = Column(DateTime)
 
 
