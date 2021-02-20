@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, ARRAY
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from models import Base, SessionLocal
 from user.models import User
 import datetime
+
+from classrooms import mongo
 
 db = SessionLocal()
 
@@ -14,7 +16,6 @@ class Classroom(Base):
     uid = Column(String, unique=True, index=True)
     creator_uid = Column(String, ForeignKey(User.uid))
     name = Column(String)
-    enrolled = Column(ARRAY(String), default = [])
     date_created = Column(DateTime)
 
 
@@ -51,6 +52,11 @@ async def create_classroom(creator_uid: str, name: str, uid: str):
     try:
         db.add(classroom)
         db.commit()
+        '''
+            Creating Mongo classroom
+        '''
+        mongo_resp = mongo.create_monogo_class(uid)
+
         db.refresh(classroom)
         return True
     except Exception as e:
@@ -69,6 +75,7 @@ async def delete_classroom(classroom: Classroom):
         print(e)
         db.rollback()
         return False
+
 
 async def enroll_students(classroom: Classroom, uids):
     try:
