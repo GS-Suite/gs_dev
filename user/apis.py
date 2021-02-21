@@ -22,3 +22,9 @@ async def sign_out(token: str, response: Response, background_tasks: BackgroundT
 @app.post("/delete_account/")
 async def delete_account(response: Response, password: user_schemas.DeleteUserSchema, token: str = Header(None)):
     return await user_routes.delete_account(password, token, response)
+
+
+@app.post('/enroll/')
+async def course_enroll(token: str, enroll: user_schemas.UserCourseEnroll, response: Response):
+    print(course_uid, enroll)
+    # return await user_routes.course_enroll(course_uid, enroll)
