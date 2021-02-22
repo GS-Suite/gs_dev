@@ -73,13 +73,3 @@ async def delete_classroom(classroom: Classroom):
         print(e)
         db.rollback()
         return False
-
-
-async def enroll_students(classroom: Classroom, uids):
-    try:
-        classroom.enrolled = classroom.enrolled.extend(uids)
-        db.commit()
-        db.refresh(classroom)
-    except Exception as e:
-        db.rollback()
-        print(e)
