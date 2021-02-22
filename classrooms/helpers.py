@@ -8,3 +8,8 @@ async def generate_uid():
         gen = str(uuid4())
     print(gen)
     return gen
+
+async def get_user_role(user_id, classroom_id):
+    return "teacher"
+    return "student"
+    return False

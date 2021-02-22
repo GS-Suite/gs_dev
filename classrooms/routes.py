@@ -5,13 +5,11 @@ from fastapi import status
 
 
 async def create_classroom(classroom, response, token):
-    tkn_validation_resp = await token_controllers.validate_token(token)
+    tkn = await token_controllers.validate_token(token)
 
-    if tkn_validation_resp:
-        tkn = tkn_validation_resp['token']
+    if tkn:
         response.headers["token"] = tkn
         
-        #print(tkn)
         res = await classroom_controllers.create_class(tkn, classroom.class_name)
         response.status_code = res
         if res == status.HTTP_200_OK:
@@ -25,14 +23,14 @@ async def create_classroom(classroom, response, token):
 
 
 async def get_classrooms(token, response):
-    tkn_validation_resp = await token_controllers.validate_token(token)
+    tkn = await token_controllers.validate_token(token)
 
-    if tkn_validation_resp:
-        tkn = await token_controllers.get_token_by_value(tkn_validation_resp["token"])
+    if tkn:
+        tkn = await token_controllers.get_token_by_value(tkn)
         response.headers["token"] = tkn.token_value
 
         res = await classroom_controllers.get_classrooms_by_user(tkn.user_id)
-        print(res)
+        #print(res)
         if res:
             return {"success": True, "message": "Classrooms retrieved", "data": res}, status.HTTP_200_OK
         else:
@@ -43,14 +41,14 @@ async def get_classrooms(token, response):
 
 
 async def get_classroom_details(classroom, response, token):
-    tkn_validation_resp = await token_controllers.validate_token(token)
+    tkn = await token_controllers.validate_token(token)
 
-    if tkn_validation_resp:
-        tkn = await token_controllers.get_token_by_value(tkn_validation_resp["token"])
+    if tkn:
+        tkn = await token_controllers.get_token_by_value(tkn)
         response.headers["token"] = tkn.token_value
         
         #print(tkn)
-        res = await classroom_controllers.get_classroom_by_name(tkn.user_id, classroom.class_name)
+        res = await classroom_controllers.get_classroom_details(tkn.user_id, classroom.class_name)
         print(res)
         if res:
             return {"success": True, "message": "Classroom details retrieved", "data": res}, status.HTTP_200_OK

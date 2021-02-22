@@ -1,6 +1,7 @@
 from classrooms import helpers as classroom_helpers
 from tokens import controllers as token_controllers
 from classrooms import models as classroom_model
+from user import models as user_models
 from fastapi import status
 
 
@@ -32,9 +33,29 @@ async def get_classrooms_by_user(user_uid):
     return classrooms
 
 
-async def get_classroom_by_name(user_id, name):
+async def get_classroom_details(user_id, name):
+    ### check user role (teacher, student, owner, etc)
+    ### accordingly retrieve data
     classroom = await classroom_model.get_classroom_by_name(user_id, name)
-    return classroom
+    
+    ### get mongo rows, check users and classrooms
+    role = await classroom_helpers.get_user_role(user_id, classroom.uid)
+
+    if role == "teacher":
+        creator = await user_models.get_user_by_uid(classroom.creator_uid)
+        cls = {
+            "name": classroom.name,
+            "created_by": creator.username
+        }
+    elif role == "student":
+        creator = await user_models.get_user_by_uid(classroom.creator_uid)
+        cls = {
+            "name": classroom.name,
+            "created_by": creator.username
+        }
+    else:
+        return False
+    return cls
 
 
 async def delete_classroom(token, classroom_name):
