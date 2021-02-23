@@ -28,7 +28,7 @@ def course_enroll(user_uid: str, course_uid: str):
         '''
         Mongo_CONN[DB_NAME][user_uid].update_one(
             {'user_id': user_uid},
-            {$push: {'enrolledIn': course_uid}
+            {'$push': {'enrolledIn': course_uid}
              }
         )
         '''

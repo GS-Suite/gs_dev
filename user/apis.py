@@ -26,5 +26,4 @@ async def delete_account(response: Response, password: user_schemas.DeleteUserSc
 
 @app.post('/enroll/')
 async def course_enroll(token: str, enroll: user_schemas.UserCourseEnroll, response: Response):
-    print(course_uid, enroll)
-    # return await user_routes.course_enroll(course_uid, enroll)
+    return await user_routes.course_enroll(token, enroll)

@@ -45,6 +45,11 @@ class UserSignIn(BaseModel):
 
 # print(UserSignIn.schema())
 
+class UserCourseEnroll(BaseModel):
+    course_id: str = Field(...)
+
+    class Config:
+        orm_mode = True
 
 class DeleteUserSchema(BaseModel):
     password: str = Field(...)

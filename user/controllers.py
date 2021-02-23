@@ -63,7 +63,11 @@ async def delete_account(password, token):
         return status.HTTP_400_BAD_REQUEST
 
 
-async def enroll_user(user_id: str, course_uid: str):
+async def enroll_user(token:str, course_uid: str):
+    '''
+    1. Get user_id from token model
+    2. pass to mongo.course.enroll
+    '''
     try:
         mongo.course_enroll(user_uid=user_id, course_uid=course_uid)
         return status.HTTP_200_OK

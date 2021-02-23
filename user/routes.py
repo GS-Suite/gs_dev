@@ -43,4 +43,27 @@ async def delete_account(password, token, response):
     elif status == 401:
         return {"success": False, "message": "Invalid token or password"}
     return {"success": False, "message": "Error. Could not delete account"}
-    
+
+async def course_enroll(token, enroll):
+    val_token = await token_controllers.validate_token(token)
+    if type(val_token) == bool and val_token == True:
+        status = await user_controllers.enroll_user(token = token, course_uid = enroll.course_uid)
+        if status == 200:
+            return {"success": True, "message": "You have been enrolled successfully"}
+        else:
+            return {"success": False, "message": "Sorry! Couldn't enroll"}
+    elif type(val_token) == bool and val_token == False:
+        return {
+            "success": False, "message": "Your account is invalid"
+        }
+    elif type(val_token) == str:
+        status = await user_controllers.enroll_user(token = val_token, course_uid = enroll.course_uid)
+        if status == 200:
+            return {"success": True, "message": "You have been enrolled successfully"}
+        else:
+            return {"success": False, "message": "Sorry! Couldn't enroll"}
+    else:
+        return {
+            "success": False, "message": "Oops! "
+        }
+        

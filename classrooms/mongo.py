@@ -1,7 +1,6 @@
 from mongo_setup import Mongo_CONN
 from datetime import datetime
 
-from classrooms.mongo import enroll_classroom
 
 DB_NAME = 'Classrooms'
 
@@ -31,7 +30,7 @@ def enroll_classroom(user_uid: str, course_uid: str):
         '''
         Mongo_CONN[DB_NAME][course_uid].update_one(
             {'user_id': user_uid},
-            {$push: {'enrolled': user_uid}
+            {'$push': {'enrolled': user_uid}
              }
         )
         return True
