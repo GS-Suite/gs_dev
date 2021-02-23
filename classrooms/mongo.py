@@ -1,12 +1,39 @@
 from mongo_setup import Mongo_CONN
 from datetime import datetime
 
+from classrooms.mongo import enroll_classroom
 
-def create_monogo_class(classroom_id):
-    db = Mongo_CONN[classroom_id]
+DB_NAME = 'Classrooms'
 
-    for collection in ['Enrolled', 'Attendance']:
-        col = db[collection]
-        dummy = {'datetime': datetime.now()}
-        col.insert_one(dummy)
-        col.delete_many({})
+
+def create_monogo_class(classroom_uid: str):
+    try:
+        for collection in ['Enrolled', 'Attendance']:
+            if collection != 'Attendance':
+                Mongo_CONN[DB_NAME][classroom_uid].insert_one(
+                    {
+                        'classroom_uid': classroom_uid,
+                        'enrolled': []
+                    }
+                )
+            else:
+                col.insert_one({'datetime': datetime.now()})
+                col.delete_many({})
+        return True
+    except Exception as e:
+        raise e
+
+
+def enroll_classroom(user_uid: str, course_uid: str):
+    try:
+        '''
+            Updating classroom enrolled array in mongo
+        '''
+        Mongo_CONN[DB_NAME][course_uid].update_one(
+            {'user_id': user_uid},
+            {$push: {'enrolled': user_uid}
+             }
+        )
+        return True
+    except Exception as e:
+        raise e

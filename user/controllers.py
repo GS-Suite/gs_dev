@@ -3,10 +3,12 @@ from user import helpers as user_helpers
 from user import models as user_models
 from fastapi import status
 
+from user import mongo
+
 
 async def sign_up(user):
     check = await user_models.get_user_by_username(user.username)
-    if check == None:    
+    if check == None:
         user.password = user_helpers.hash_password(user.password)
         uid = await user_helpers.generate_uid()
         #print(user, uid)
@@ -42,7 +44,7 @@ async def delete_account(password, token):
         user = await user_models.get_user_by_id(token.user_id)
         if user == None:
             return status.HTTP_401_UNAUTHORIZED
-        
+
         '''check password'''
         if not user_helpers.check_password(password, user.password):
             return status.HTTP_401_UNAUTHORIZED
@@ -51,12 +53,20 @@ async def delete_account(password, token):
         await token_controllers.delete_user_tokens(user.id)
 
         ''' delete other data'''
-        
+
         '''delete user'''
         await user_models.delete_user(user)
         return status.HTTP_200_OK
-    
+
     except Exception as e:
         print(e)
         return status.HTTP_400_BAD_REQUEST
 
+
+async def enroll_user(user_id: str, course_uid: str):
+    try:
+        mongo.course_enroll(user_uid=user_id, course_uid=course_uid)
+        return status.HTTP_200_OK
+    except Exception as e:
+        print(e)
+        return status.HTTP_400_BAD_REQUEST

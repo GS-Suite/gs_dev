@@ -3,6 +3,7 @@ from models import SessionLocal
 from models import Base
 import datetime
 
+from user import mongo
 
 db = SessionLocal()
 
@@ -19,7 +20,6 @@ class User(Base):
     first_name = Column(String)
     last_name = Column(String)
     date_joined = Column(DateTime)
-    enrolled = Column(ARRAY(String), default=[])
 
 
 async def create_user(user: dict, uid: str):
@@ -35,6 +35,10 @@ async def create_user(user: dict, uid: str):
     try:
         db.add(db_user)
         db.commit()
+        '''
+            Create Mongo User id insert
+        '''
+        resp_mongo = mongo.create_user_mongo(uid=uid)
         db.refresh(db_user)
         return True
     except Exception as e:
