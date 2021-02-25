@@ -15,7 +15,7 @@ async def sign_in(user: user_schemas.UserSignIn, response: Response):
 
 
 @app.post("/sign_out/")
-async def sign_out(token: str, response: Response, background_tasks: BackgroundTasks):
+async def sign_out(response: Response, background_tasks: BackgroundTasks, token: str = Header(None)):
     return await user_routes.sign_out(token, response, background_tasks)
 
 
