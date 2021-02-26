@@ -31,4 +31,5 @@ async def course_enroll(token: str, enroll: user_schemas.UserCourseEnroll, respo
 
 @app.post('/get_user_dashboard/')
 async def get_user_dashboard(response: Response, token: str = Header(None)):
+    print(token)
     return await user_routes.get_user_dashboard(token, response)
