@@ -44,6 +44,7 @@ async def delete_account(password, token, response):
         return {"success": False, "message": "Invalid token or password"}
     return {"success": False, "message": "Error. Could not delete account"}
 
+
 async def course_enroll(token, enroll):
     val_token = await token_controllers.validate_token(token)
     if type(val_token) == bool and val_token == True:
@@ -66,4 +67,21 @@ async def course_enroll(token, enroll):
         return {
             "success": False, "message": "Oops! "
         }
+
+
+async def get_user_dashboard(token, response):
+    tkn = await token_controllers.validate_token(token)
+
+    if tkn:
+        tkn = await token_controllers.get_token_by_value(tkn)
+        response.headers["token"] = tkn.token_value
         
+        details = await user_controllers.get_user_dashboard(tkn.user_id)
+        if details:
+            response.status_code = 200
+            return {"success": True, "message": "Details fetched", "data": details }, 200
+        response.status_code = 400
+        return {"success": False, "message": "Details not fetched", "data": details }, 400
+    else:
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return {"success": False, "message": "Non-existent user"}, status.HTTP_401_UNAUTHORIZED

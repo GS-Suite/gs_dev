@@ -74,3 +74,22 @@ async def enroll_user(token:str, course_uid: str):
     except Exception as e:
         print(e)
         return status.HTTP_400_BAD_REQUEST
+
+
+async def get_user_dashboard(uid):
+    print(uid)
+    ### get user from uid
+    user = await user_models.get_user_by_uid(uid)
+    if user:
+        response = {
+            "first_name": user.first_name,
+            "last_name": user.last_name, 
+            "username": user.username,
+            "email": user.email
+        }
+        ### get mongo details
+        response["enrolled"] = []
+        response["classrooms"] = []
+
+        return response
+    return False
