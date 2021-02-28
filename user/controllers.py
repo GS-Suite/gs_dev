@@ -69,6 +69,7 @@ async def enroll_user(token:str, course_uid: str):
     2. pass to mongo.course.enroll
     '''
     try:
+        user_id = await token_controllers.get_token_by_value(token_value=token)
         mongo.course_enroll(user_uid=user_id, course_uid=course_uid)
         return status.HTTP_200_OK
     except Exception as e:
