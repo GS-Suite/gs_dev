@@ -15,7 +15,7 @@ async def sign_in(user: user_schemas.UserSignIn, response: Response):
 
 
 @app.post("/sign_out/")
-async def sign_out(token: str, response: Response, background_tasks: BackgroundTasks):
+async def sign_out(response: Response, background_tasks: BackgroundTasks, token: str = Header(None)):
     return await user_routes.sign_out(token, response, background_tasks)
 
 
@@ -27,3 +27,9 @@ async def delete_account(response: Response, password: user_schemas.DeleteUserSc
 @app.post('/enroll/')
 async def course_enroll(token: str, enroll: user_schemas.UserCourseEnroll, response: Response):
     return await user_routes.course_enroll(token, enroll)
+
+
+@app.post('/get_user_dashboard/')
+async def get_user_dashboard(response: Response, token: str = Header(None)):
+    print(token)
+    return await user_routes.get_user_dashboard(token, response)
