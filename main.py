@@ -5,7 +5,7 @@ load_dotenv()
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi import FastAPI
-from models import Base, engine
+from pg_setup import Base, engine
 import uvicorn
 
 Base.metadata.create_all(bind = engine)

@@ -5,13 +5,25 @@ from main import app
 
 
 @app.post("/create_classroom/")
-async def create_classroom(classroom: classroom_schemas.CreateClassroomSchema, response: Response, token: str = Header(None)):
-    return await classroom_routes.create_classroom(classroom, response, token)
+async def create_classroom(classroom: classroom_schemas.CreateClassroomSchema, token: str = Header(None)):
+    return await classroom_routes.create_classroom(classroom, token)
 
-@app.post("/get_classrooms/")
-async def get_classrooms(response: Response, token: str = Header(None)):
-    return await classroom_routes.get_classrooms(token, response)
+
+@app.post("/get_user_classrooms/")
+async def get_user_classrooms(token: str = Header(None)):
+    return await classroom_routes.get_user_classrooms(token)
+
+
+@app.post("/get_user_enrolled/")
+async def get_user_enrolled(token: str = Header(None)):
+    return await classroom_routes.get_user_enrolled(token)
+
 
 @app.post("/get_classroom_details/")
-async def get_classroom_details(classroom: classroom_schemas.CreateClassroomSchema, response: Response, token: str = Header(None)):
-    return await classroom_routes.get_classroom_details(classroom, response, token)
+async def get_classroom_details(classroom: classroom_schemas.CreateClassroomSchema, token: str = Header(None)):
+    return await classroom_routes.get_classroom_details(classroom, token)
+
+
+@app.post('/enroll/')
+async def course_enroll(classroom_uid: classroom_schemas.UserCourseEnroll, token: str = Header(None)):
+    return await classroom_routes.course_enroll(token, classroom_uid)

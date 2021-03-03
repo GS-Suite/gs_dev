@@ -2,35 +2,33 @@ from classrooms import helpers as classroom_helpers
 from tokens import controllers as token_controllers
 from classrooms import models as classroom_model
 from user import models as user_models
+from classrooms import mongo
 from fastapi import status
+
+
+async def get_user_classrooms(user_uid):
+    classrooms = await classroom_model.get_classrooms_by_user(user_uid)
+    return classrooms
+
+
+async def get_user_enrolled(user_uid):
+    print(user_uid)
+    classrooms = await mongo.get_user_enrolled(user_uid)
+    return classrooms
 
 
 async def create_class(token, class_name):
     # GET USER FROM TOKEN, PASS user id while creating class
-    res = await token_controllers.get_token_by_value(token)
-    if res != None:
-        # check if classroom with same name exists
-        classrooms = await classroom_model.get_classrooms_by_user(res.user_id)
-        for c in classrooms:
-            # print(c.name)
-            if c.name == class_name:
-                return status.HTTP_409_CONFLICT
+    
+    # check if classroom with same name exists
+    classrooms = await classroom_model.get_classrooms_by_user(token.user_id)
+    for c in classrooms:
+        # print(c.name)
+        if c.name == class_name:
+            return "exists", c
 
-        uid = await classroom_helpers.generate_uid()
-        resp = await classroom_model.create_classroom(res.user_id, class_name, uid)
-        # print(resp)
-        if resp:
-            return status.HTTP_200_OK
-        else:
-            return status.HTTP_400_BAD_REQUEST
-    else:
-        # invalid token
-        return status.HTTP_401_UNAUTHORIZED
-
-
-async def get_classrooms_by_user(user_uid):
-    classrooms = await classroom_model.get_classrooms_by_user(user_uid)
-    return classrooms
+    uid = await classroom_helpers.generate_uid()
+    return await classroom_model.create_classroom(token.user_id, class_name, uid)
 
 
 async def get_classroom_details(user_id, name):
@@ -60,3 +58,30 @@ async def get_classroom_details(user_id, name):
 
 async def delete_classroom(token, classroom_name):
     pass
+
+
+async def enroll_user(user_uid, classroom_uid):
+    '''
+    1. Get user_id from token model
+    2. pass to mongo.course.enroll
+    '''
+    
+    ### check if user already enrolled
+    x = await mongo.get_classroom_enrolled(classroom_uid)
+    if user_uid in x:
+        return "exists"
+    else:
+        ### enroll user
+        try:
+            ### Updating user's enrolled array in mongo
+            if mongo.enroll_user(user_uid, classroom_uid):
+                ### Updating classroom enrolled array in mongo
+                if mongo.enroll_classroom(user_uid, classroom_uid):
+                    return True
+            ### undo stuff
+            #
+            #
+            #
+            return False
+        except Exception as e:
+            return False

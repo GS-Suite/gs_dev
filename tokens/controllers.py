@@ -49,7 +49,7 @@ async def get_token_by_value(token_value):
 
 async def delete_user_tokens(uid):
     tokens = await token_model.get_token_by_user(uid)
-    await token_model.delete_token(tokens)
+    return await token_model.delete_token(tokens)
 
 
 async def delete_token(token_value):

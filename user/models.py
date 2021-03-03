@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime, ARRAY
-from models import SessionLocal
-from models import Base
+from pg_setup import SessionLocal, Base
 import datetime
 
 from user import mongo
@@ -34,17 +33,17 @@ async def create_user(user: dict, uid: str):
     )
     try:
         db.add(db_user)
-        db.commit()
         '''
             Create Mongo User id insert
         '''
-        resp_mongo = mongo.create_user_mongo(uid=uid)
-        db.refresh(db_user)
-        return True
+        if mongo.create_user_mongo(uid=uid): ### returns True
+            db.commit()
+            db.refresh(db_user)
+            return True
     except Exception as e:
         print(e)
-        db.rollback()
-        return False
+    db.rollback()
+    return False
 
 
 async def get_user_by_username(username: str):
@@ -63,7 +62,7 @@ async def delete_user(user: User):
     try:
         db.delete(user)
         db.commit()
-        db.refresh(user)
+        return True
     except Exception as e:
         print(e)
         db.rollback()

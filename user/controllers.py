@@ -14,10 +14,10 @@ async def sign_up(user):
         #print(user, uid)
         res = await user_models.create_user(user, uid)
         if res:
-            return status.HTTP_200_OK
+            return True
         else:
-            return status.HTTP_400_BAD_REQUEST
-    return status.HTTP_409_CONFLICT
+            return False
+    return "exists"
 
 
 async def sign_in(user):
@@ -36,45 +36,29 @@ async def sign_out(token_value):
 
 
 async def delete_account(password, token):
-    token = await token_controllers.get_token_by_value(token)
-    if token == None:
-        return status.HTTP_401_UNAUTHORIZED
     try:
         '''get user'''
-        user = await user_models.get_user_by_id(token.user_id)
+        user = await user_models.get_user_by_uid(token.user_id)
         if user == None:
-            return status.HTTP_401_UNAUTHORIZED
+            return False
 
         '''check password'''
+        print(password, user.password)
         if not user_helpers.check_password(password, user.password):
-            return status.HTTP_401_UNAUTHORIZED
+            return False
+        else:
+            '''delete tokens'''
+            await token_controllers.delete_user_tokens(user.uid)
+            
+            ''' delete other data'''
 
-        '''delete tokens'''
-        await token_controllers.delete_user_tokens(user.id)
-
-        ''' delete other data'''
-
-        '''delete user'''
-        await user_models.delete_user(user)
-        return status.HTTP_200_OK
+            '''delete user'''
+            await user_models.delete_user(user)
+            return True
 
     except Exception as e:
         print(e)
-        return status.HTTP_400_BAD_REQUEST
-
-
-async def enroll_user(token:str, course_uid: str):
-    '''
-    1. Get user_id from token model
-    2. pass to mongo.course.enroll
-    '''
-    try:
-        user_id = await token_controllers.get_token_by_value(token_value=token)
-        mongo.course_enroll(user_uid=user_id, course_uid=course_uid)
-        return status.HTTP_200_OK
-    except Exception as e:
-        print(e)
-        return status.HTTP_400_BAD_REQUEST
+        return False
 
 
 async def get_user_dashboard(uid):
@@ -82,15 +66,5 @@ async def get_user_dashboard(uid):
     ### get user from uid
     user = await user_models.get_user_by_uid(uid)
     if user:
-        response = {
-            "first_name": user.first_name,
-            "last_name": user.last_name, 
-            "username": user.username,
-            "email": user.email
-        }
-        ### get mongo details
-        response["enrolled"] = []
-        response["classrooms"] = []
-
-        return response
+        return user
     return False

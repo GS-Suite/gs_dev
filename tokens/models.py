@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from user.models import User
 from sqlalchemy.orm import Session
-from models import Base, SessionLocal
+from pg_setup import Base, SessionLocal
 import datetime
 
 
@@ -49,7 +49,6 @@ async def delete_token(token):
     try:
         db.delete(token)
         db.commit()
-        db.refresh(token)
         return True
     except Exception as e:
         print(e)

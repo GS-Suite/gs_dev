@@ -12,3 +12,10 @@ class CreateClassroomSchema(BaseModel):
         assert re.match("^[A-Za-z0-9_ ]*$", v), 'Class name must contain alphabets, numbers, spaces and underscores only'
         assert len(v) >= 5, 'Class name must contain 5 characters or more'
         return v
+
+
+class UserCourseEnroll(BaseModel):
+    classroom_uid: str = Field(...)
+
+    class Config:
+        orm_mode = True

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from models import Base, SessionLocal
+from pg_setup import Base, SessionLocal
 from user.models import User
 import datetime
 
@@ -22,8 +22,6 @@ class Classroom(Base):
 async def get_classrooms_by_user(uid: str):
     return db.query(Classroom).filter(
         Classroom.creator_uid == uid
-    ).with_entities(
-        Classroom.name
     ).all()
 
 
@@ -53,14 +51,14 @@ async def create_classroom(creator_uid: str, name: str, uid: str):
         '''
             Creating Mongo classroom
         '''
-        mongo_resp = mongo.create_monogo_class(uid)
+        mongo_resp = mongo.create_mongo_classroom(uid)
 
         db.refresh(classroom)
-        return True
+        return True, classroom
     except Exception as e:
         print(e)
         db.rollback()
-        return False
+        return False, False
 
 
 async def delete_classroom(classroom: Classroom):
