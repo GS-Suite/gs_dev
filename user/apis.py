@@ -11,7 +11,7 @@ async def sign_up(user: user_schemas.UserSignUp):
 
 @app.post("/sign_in/")
 async def sign_in(user: user_schemas.UserSignIn):
-    return await user_routes.sign_in(user, )
+    return await user_routes.sign_in(user)
 
 
 @app.post("/sign_out/")

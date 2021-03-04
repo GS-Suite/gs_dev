@@ -20,9 +20,11 @@ class Classroom(Base):
 
 
 async def get_classrooms_by_user(uid: str):
-    return db.query(Classroom).filter(
+    x = db.query(Classroom.name, Classroom.uid).filter(
         Classroom.creator_uid == uid
     ).all()
+    print(x[0])
+    return x
 
 
 async def get_classroom_by_uid(uid: str):

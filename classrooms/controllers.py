@@ -31,19 +31,20 @@ async def create_class(token, class_name):
     return await classroom_model.create_classroom(token.user_id, class_name, uid)
 
 
-async def get_classroom_details(user_id, name):
+async def get_classroom_details(user_id, uid):
     ### check user role (teacher, student, owner, etc)
     ### accordingly retrieve data
-    classroom = await classroom_model.get_classroom_by_name(user_id, name)
+    classroom = await classroom_model.get_classroom_by_uid(uid)
     
     ### get mongo rows, check users and classrooms
-    role = await classroom_helpers.get_user_role(user_id, classroom.uid)
+    role = await classroom_helpers.get_user_role(user_id, uid)
 
     if role == "teacher":
         creator = await user_models.get_user_by_uid(classroom.creator_uid)
         cls = {
             "name": classroom.name,
-            "created_by": creator.username
+            "created_by": creator.username,
+            "uid": classroom.uid
         }
     elif role == "student":
         creator = await user_models.get_user_by_uid(classroom.creator_uid)

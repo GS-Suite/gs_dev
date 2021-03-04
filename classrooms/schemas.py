@@ -13,6 +13,10 @@ class CreateClassroomSchema(BaseModel):
         assert len(v) >= 5, 'Class name must contain 5 characters or more'
         return v
 
+class ClassroomUidSchema(BaseModel):
+    classroom_uid: str = Field(...)
+    class Config:
+        orm = True
 
 class UserCourseEnroll(BaseModel):
     classroom_uid: str = Field(...)

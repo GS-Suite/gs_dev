@@ -1,3 +1,4 @@
+from pydantic import Field
 from classrooms import schemas as classroom_schemas
 from classrooms import routes as classroom_routes
 from fastapi import Response, Header
@@ -20,10 +21,10 @@ async def get_user_enrolled(token: str = Header(None)):
 
 
 @app.post("/get_classroom_details/")
-async def get_classroom_details(classroom: classroom_schemas.CreateClassroomSchema, token: str = Header(None)):
-    return await classroom_routes.get_classroom_details(classroom, token)
+async def get_classroom_details(classroom: classroom_schemas.ClassroomUidSchema, token: str = Header(None)):
+    return await classroom_routes.get_classroom_details(classroom.classroom_uid, token)
 
 
 @app.post('/enroll/')
-async def course_enroll(classroom_uid: classroom_schemas.UserCourseEnroll, token: str = Header(None)):
-    return await classroom_routes.course_enroll(token, classroom_uid)
+async def course_enroll(classroom: classroom_schemas.ClassroomUidSchema, token: str = Header(None)):
+    return await classroom_routes.course_enroll(token, classroom.classroom_uid)

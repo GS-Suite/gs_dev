@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, ARRAY
 from pg_setup import SessionLocal, Base
+from sqlalchemy.orm import load_only
 import datetime
 
 from user import mongo
@@ -53,6 +54,12 @@ async def get_user_by_username(username: str):
 
 
 async def get_user_by_uid(uid: str):
+    return db.query(User).filter(
+        User.uid == uid
+    ).first()
+
+
+async def get_user_for_dashboard(uid: str):
     return db.query(User).filter(
         User.uid == uid
     ).first()

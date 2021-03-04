@@ -1,9 +1,8 @@
+from starlette.responses import JSONResponse
 from user import controllers as user_controllers
 from tokens import controllers as token_controllers
 from fastapi import status
 from responses.standard_response_body import StandardResponseBody
-from responses.token_response_body import TokenResponseBody
-from responses.dashboard_response_body import DashboardResponseBody
 
 
 async def sign_up(user):
@@ -22,12 +21,12 @@ async def sign_up(user):
 
 
 async def sign_in(user):
-    res = await user_controllers.sign_in(user)
-    if res:
+    token = await user_controllers.sign_in(user)
+    if token:
         #print(res)
-        return TokenResponseBody(
-            True, "Successfully logged in", res
-        )
+        return StandardResponseBody(
+                True, "Successfully logged in", token
+            )
     return StandardResponseBody(
         False, "Invalid username or password"
     )
@@ -59,8 +58,8 @@ async def get_user_dashboard(token):
         
         user_data = await user_controllers.get_user_dashboard(tkn.user_id)
         if user_data:
-            return DashboardResponseBody(
-                True, "Details fetched", user_data
+            return StandardResponseBody(
+                True, "Details fetched", tkn.token_value, user_data
             )
         return StandardResponseBody(False, "Details not fetched")
     else:

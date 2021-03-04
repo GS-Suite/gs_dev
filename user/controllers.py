@@ -62,9 +62,14 @@ async def delete_account(password, token):
 
 
 async def get_user_dashboard(uid):
-    print(uid)
+    #print(uid)
     ### get user from uid
-    user = await user_models.get_user_by_uid(uid)
+    user = await user_models.get_user_for_dashboard(uid)
     if user:
-        return user
+        return {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "username": user.username,
+            "email": user.email
+        }
     return False
