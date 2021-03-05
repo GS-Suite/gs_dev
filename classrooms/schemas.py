@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field, validator
 import re
 
+from sqlalchemy.sql.schema import ForeignKey
+
 class CreateClassroomSchema(BaseModel):
     class_name: str = Field(...)
 
@@ -18,8 +20,9 @@ class ClassroomUidSchema(BaseModel):
     class Config:
         orm = True
 
-class UserCourseEnroll(BaseModel):
+class UserClassroomEnroll(BaseModel):
     classroom_uid: str = Field(...)
+    entry_code: str = Field(...)
 
     class Config:
         orm_mode = True

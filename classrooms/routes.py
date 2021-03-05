@@ -101,13 +101,33 @@ async def get_classroom_details(uid, token):
         )
 
 
-async def course_enroll(token, classroom_uid):
+async def generate_classroom_entry_code(uid, token):
     val_token = await token_controllers.validate_token(token)
 
     if val_token:
         tkn = await token_controllers.get_token_by_value(token)
 
-        res = await classroom_controllers.enroll_user(tkn.user_id, classroom_uid)
+        res = await classroom_controllers.generate_classroom_entry_code(tkn.user_id, uid)
+        if res:
+            return StandardResponseBody(
+                True, "Entry code generated", tkn.token_value, res
+            )
+        return StandardResponseBody(
+            False, "Sorry! Couldn't generate entry code", tkn.token_value
+        )
+    else:
+        return StandardResponseBody (
+            False, "Your account is invalid"
+        )
+
+
+async def course_enroll(token, classroom_uid, entry_code):
+    val_token = await token_controllers.validate_token(token)
+
+    if val_token:
+        tkn = await token_controllers.get_token_by_value(token)
+
+        res = await classroom_controllers.enroll_user(tkn.user_id, classroom_uid, entry_code)
         if res == True:
             return StandardResponseBody(
                 True, "You have been enrolled successfully", tkn.token_value
@@ -115,6 +135,10 @@ async def course_enroll(token, classroom_uid):
         elif res == "exists":
             return StandardResponseBody(
                 False, "User already enrolled", tkn.token_value
+            )
+        elif res == "code_error":
+            return StandardResponseBody(
+                False, "Invalid entry code", tkn.token_value
             )
         return StandardResponseBody(
             False, "Sorry! Couldn't enroll", tkn.token_value

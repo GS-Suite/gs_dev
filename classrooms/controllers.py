@@ -45,29 +45,17 @@ async def create_class(token, class_name):
         }
     return res, c
 
+
 async def get_classroom_details(user_id, uid):
     ### check user role (teacher, student, owner, etc)
     ### accordingly retrieve data
     classroom = await classroom_model.get_classroom_by_uid(uid)
     
-    ### get mongo rows, check users and classrooms
-    role = await classroom_helpers.get_user_role(user_id, uid)
-
-    if role == "teacher":
-        creator = await user_models.get_user_by_uid(classroom.creator_uid)
-        cls = {
-            "name": classroom.name,
-            "created_by": creator.username,
-            "uid": classroom.uid
-        }
-    elif role == "student":
-        creator = await user_models.get_user_by_uid(classroom.creator_uid)
-        cls = {
-            "name": classroom.name,
-            "created_by": creator.username
-        }
-    else:
-        return False
+    cls = {
+        "name": classroom.name,
+        "uid": classroom.uid,
+        "entry_code": classroom.entry_code
+    }
     return cls
 
 
@@ -75,11 +63,34 @@ async def delete_classroom(token, classroom_name):
     pass
 
 
-async def enroll_user(user_uid, classroom_uid):
+async def generate_classroom_entry_code(user_uid, classroom_uid):
+    print(user_uid, classroom_uid)
+    ### get classroom, check if user authorized
+    classroom = await classroom_model.get_classroom_by_uid(classroom_uid)
+    
+    if classroom.creator_uid == user_uid:
+        ### generate code, store it
+        code = await classroom_helpers.generate_entry_code()
+        classroom = await classroom_model.generate_entry_code(classroom, code)
+        if classroom:
+            classroom = {
+                "name": classroom.name,
+                "uid": classroom.uid,
+                "entry_code": classroom.entry_code
+            }
+            return classroom
+    return False
+
+
+async def enroll_user(user_uid, classroom_uid, entry_code):
     '''
     1. Get user_id from token model
     2. pass to mongo.course.enroll
     '''
+
+    ### check code for validity
+    if not await classroom_model.get_classroom_by_entry_code(entry_code):
+        return "code_error"
     
     ### check if user already enrolled
     x = await mongo.get_classroom_enrolled(classroom_uid)
@@ -104,3 +115,8 @@ async def enroll_user(user_uid, classroom_uid):
 
 async def delete_user_classrooms(uid):
     return await classroom_model.delete_user_classrooms(uid)
+
+
+
+async def generate_join_link():
+    return x

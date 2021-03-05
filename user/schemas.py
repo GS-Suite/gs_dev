@@ -27,7 +27,8 @@ class UserSignUp(BaseModel):
     @validator('email')
     def email_valid(cls, v):
         assert re.match(
-            r"\b[\w.-]+?@\w+?\.\w+?\b", v), 'Email invalid'
+            r"\b[\w.-]+?@\w+?\.\w+?\b", v
+        ), 'Email invalid'
         return v
 
 
