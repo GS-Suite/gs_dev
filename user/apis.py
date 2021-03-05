@@ -26,5 +26,4 @@ async def delete_account(password: user_schemas.DeleteUserSchema, token: str = H
 
 @app.post('/get_user_dashboard/')
 async def get_user_dashboard(token: str = Header(None)):
-    print(token)
     return await user_routes.get_user_dashboard(token)

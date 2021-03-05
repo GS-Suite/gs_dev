@@ -23,7 +23,6 @@ async def get_classrooms_by_user(uid: str):
     x = db.query(Classroom.name, Classroom.uid).filter(
         Classroom.creator_uid == uid
     ).all()
-    print(x[0])
     return x
 
 
@@ -68,6 +67,19 @@ async def delete_classroom(classroom: Classroom):
         db.delete(classroom)
         db.commit()
         db.refresh(classroom)
+        return True
+    except Exception as e:
+        print(e)
+        db.rollback()
+        return False
+
+
+async def delete_user_classrooms(user_uid: str):
+    try:
+        db.query(Classroom).filter(
+            Classroom.creator_uid == user_uid
+        ).delete()
+        db.commit()
         return True
     except Exception as e:
         print(e)

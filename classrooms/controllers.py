@@ -8,7 +8,13 @@ from fastapi import status
 
 async def get_user_classrooms(user_uid):
     classrooms = await classroom_model.get_classrooms_by_user(user_uid)
-    return classrooms
+    c = [
+        {
+            "name": i.name,
+            "uid": i.uid
+        } for i in classrooms
+    ]
+    return c
 
 
 async def get_user_enrolled(user_uid):
@@ -25,11 +31,19 @@ async def create_class(token, class_name):
     for c in classrooms:
         # print(c.name)
         if c.name == class_name:
-            return "exists", c
+            return "exists", {
+                "name": c.name,
+                "uid": c.uid
+            }
 
     uid = await classroom_helpers.generate_uid()
-    return await classroom_model.create_classroom(token.user_id, class_name, uid)
-
+    res, c = await classroom_model.create_classroom(token.user_id, class_name, uid)
+    if c:
+        c = {
+            "name": c.name,
+            "uid": c.uid
+        }
+    return res, c
 
 async def get_classroom_details(user_id, uid):
     ### check user role (teacher, student, owner, etc)
@@ -86,3 +100,7 @@ async def enroll_user(user_uid, classroom_uid):
             return False
         except Exception as e:
             return False
+
+
+async def delete_user_classrooms(uid):
+    return await classroom_model.delete_user_classrooms(uid)

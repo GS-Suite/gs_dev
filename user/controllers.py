@@ -1,3 +1,4 @@
+from classrooms import controllers as classroom_controllers
 from tokens import controllers as token_controllers
 from user import helpers as user_helpers
 from user import models as user_models
@@ -47,14 +48,13 @@ async def delete_account(password, token):
         if not user_helpers.check_password(password, user.password):
             return False
         else:
-            '''delete tokens'''
-            await token_controllers.delete_user_tokens(user.uid)
-            
             ''' delete other data'''
-
-            '''delete user'''
-            await user_models.delete_user(user)
-            return True
+            if await classroom_controllers.delete_user_classrooms(user.uid):
+                '''delete tokens'''
+                if await token_controllers.delete_user_tokens(user.uid):
+                    '''delete user'''
+                    if await user_models.delete_user(user):
+                        return True
 
     except Exception as e:
         print(e)
@@ -67,6 +67,7 @@ async def get_user_dashboard(uid):
     user = await user_models.get_user_for_dashboard(uid)
     if user:
         return {
+            "uid": user.uid,
             "first_name": user.first_name,
             "last_name": user.last_name,
             "username": user.username,
