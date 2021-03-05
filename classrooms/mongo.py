@@ -1,11 +1,7 @@
-from re import T
-from mongo_setup import Mongo_CONN
-from datetime import datetime
-from classrooms import mongo
+from db_setup.mongo_setup import Mongo_CONN
 
 
 DB_NAME = 'Classrooms'
-
 
 def create_mongo_classroom(classroom_uid: str):
     try:

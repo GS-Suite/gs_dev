@@ -1,13 +1,11 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from pg_setup import Base, SessionLocal
+from db_setup.pg_setup import Base, SessionLocal
+from classrooms import mongo
 from user.models import User
 import datetime
 
-from classrooms import mongo
 
 db = SessionLocal()
-
-
 class Classroom(Base):
 
     __tablename__ = "classrooms"

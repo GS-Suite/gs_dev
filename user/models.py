@@ -1,13 +1,10 @@
-from sqlalchemy import Column, Integer, String, DateTime, ARRAY
-from pg_setup import SessionLocal, Base
-from sqlalchemy.orm import load_only
+from sqlalchemy import Column, Integer, String, DateTime
+from db_setup.pg_setup import SessionLocal, Base
+from user import mongo
 import datetime
 
-from user import mongo
 
 db = SessionLocal()
-
-
 class User(Base):
 
     __tablename__ = "user"

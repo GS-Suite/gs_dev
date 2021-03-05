@@ -13,7 +13,7 @@ async def validate_token(token):
         False, "Invalid token"
         )
 
-
+'''
 async def refresh_token(token):
     res = await token_controllers.refresh_token_by_token(token)
     if res:
@@ -22,4 +22,4 @@ async def refresh_token(token):
         )
     return StandardResponseBody(
         False, "Token not refreshed"
-    )
+    )'''

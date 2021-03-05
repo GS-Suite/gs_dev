@@ -1,11 +1,7 @@
-import pymongo
-from mongo_setup import Mongo_CONN
-
-from classrooms import mongo
+from db_setup.mongo_setup import Mongo_CONN
 
 
 DB_NAME = 'Users'
-
 
 def create_user_mongo(uid: str):
 

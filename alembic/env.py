@@ -27,7 +27,7 @@ fileConfig(config.config_file_name)
 from user import models as user_models
 from tokens import models as token_models
 from classrooms import models as classroom_models
-from pg_setup import Base
+from db_setup.pg_setup import Base
 
 target_metadata = Base.metadata
 #target_metadata = None

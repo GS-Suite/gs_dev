@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from db_setup.pg_setup import Base, SessionLocal
 from user.models import User
-from sqlalchemy.orm import Session
-from pg_setup import Base, SessionLocal
 import datetime
 
 
