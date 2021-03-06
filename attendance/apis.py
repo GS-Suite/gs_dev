@@ -5,5 +5,5 @@ from main import app
 
 
 @app.post('/take_attendance/')
-async def take_attendance(token: str = Header(None), classroom_uid: attendance_schemas.TakeAttendance):
+async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, token: str = Header(None)):
     return await attendance_routes.take_attendance(token=token, classroom_uid=classroom_uid)
