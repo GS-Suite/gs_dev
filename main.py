@@ -1,7 +1,3 @@
-# from attendance.apis import *
-from classrooms.apis import *
-from tokens.apis import *
-from user.apis import *
 import uvicorn
 from fastapi import FastAPI
 from db_setup.pg_setup import Base, engine
@@ -28,6 +24,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from attendance.apis import *
+from classrooms.apis import *
+from tokens.apis import *
+from user.apis import *
 
 
 @app.get("/", include_in_schema=False)
