@@ -8,7 +8,6 @@ class UserSignUp(BaseModel):
     email: str = Field(...)
     first_name: str = Field(...)
     last_name: str = Field(...)
-
     class Config:
         orm_mode = True
 
@@ -35,7 +34,6 @@ class UserSignUp(BaseModel):
 class UserSignIn(BaseModel):
     username: str = Field(...)
     password: str = Field(...)
-
     class Config:
         orm_mode = True
 
@@ -45,13 +43,37 @@ class UserSignIn(BaseModel):
             "^[A-Za-z0-9_]*$", v), 'Username must contain alphabets, numbers and underscores only'
         #assert len(v) >= 5, 'Username must contain 5 characters or more'
         return v
-    
 
     @validator('password')
     def password_length(cls, v):
         assert len(v) > 8, 'Password must contain 8 characters or more'
         return v
 
+class UpdateProfileSchema(BaseModel):
+    first_name: str = Field(...)
+    last_name: str = Field(...)
+    email: str = Field(...)
+    class Config:
+        orm_mode = True
+
+class UpdatePasswordSchema(BaseModel):
+    current_password: str = Field(...)
+    new_password: str = Field(...)
+    class Config:
+        orm_mode = True
+
+    @validator('current_password')
+    def current_password_length(cls, v):
+        assert len(v) > 8, 'Password must contain 8 characters or more'
+        return v
+
+    @validator('new_password')
+    def new_password_length(cls, v):
+        assert len(v) > 8, 'Password must contain 8 characters or more'
+        return v
 
 class DeleteUserSchema(BaseModel):
     password: str = Field(...)
+    class Config:
+        orm_mode = True
+

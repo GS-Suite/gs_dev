@@ -30,10 +30,12 @@ app.add_middleware(
 async def home_to_doc():
     return RedirectResponse("/docs")
 
-from attendance.apis import *
-from classrooms.apis import *
-from tokens.apis import *
+
 from user.apis import *
+from tokens.apis import *
+from classrooms.apis import *
+from attendance.apis import *
+
 
 if __name__ == "__main__":
     uvicorn.run(
