@@ -23,8 +23,13 @@ async def take_attendance(token, classroom_id):
 
             response = attendance_controllers.add_attendance_token_mongo(
                 classroom_uid=classroom_id.classroom_uid, attendance_token=attendance_token)
-
-            if response:
+            
+            if type(response) == list:
+                return StandardResponseBody(
+                    False, 'Could not generate new attendance token for classroom, click delete and take_attendance for new code', 
+                    tkn.token_value, {'attendance_token': response[-1]}
+                )
+            elif response == True:
                 return StandardResponseBody(
                     True, 'Attendance code generated', tkn.token_value, attendance_token
                 )

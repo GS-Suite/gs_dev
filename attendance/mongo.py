@@ -15,9 +15,21 @@ def attendance_token_mongo(classroom_uid: str, attendance_token: str):
         )
         mongo_obj_list = [i for i in mongo_resp]
 
-        if len(mongo_obj_list) > 1:
-            return True
+        if len(mongo_obj_list) >= 1:
+            return [True, mongo_obj_list[0]['attendance_token']]
         else:
+            # Creating current datetime dict inside mongo.classroom.attenance dictionary
+            Mongo_CONN[DB_NAME][classroom_uid].update(
+                {'classroom_uid': classroom_uid},
+                {
+                    '$set': {
+                        'attendance': {
+                        str(datetime.datetime.today()): {}
+                        }
+                    }
+                }
+            )
+            # Inserting attendance_token in mongo
             Mongo_CONN[DB_NAME][classroom_uid].insert_one(
                 {
                     'attendance_token': attendance_token,
