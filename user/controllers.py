@@ -1,3 +1,4 @@
+from types import new_class
 from classrooms import controllers as classroom_controllers
 from tokens import controllers as token_controllers
 from user import helpers as user_helpers
@@ -34,6 +35,27 @@ async def sign_in(user):
 
 async def sign_out(token_value):
     await token_controllers.delete_token(token_value)
+
+
+async def update_profile(uid, details):
+    user = await user_models.get_user_by_uid(uid)
+    if user:
+        res = await user_models.update_profile(user, details)
+        if res:
+            return await user_helpers.user_object_response(user)
+    return False
+
+
+async def update_password(uid, password):
+    user = await user_models.get_user_by_uid(uid)
+    if user:
+        if user_helpers.check_password(password.current_password, user.password):
+            return await user_models.update_password(
+                user,
+                user_helpers.hash_password(password.new_password)
+            )
+        return "invalid_password"
+    return False
 
 
 async def delete_account(password, token):

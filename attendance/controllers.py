@@ -10,7 +10,11 @@ async def check_user_if_creator(classroom_id, user_id):
         return False
 
 
-async def add_attendance_token_mongo(classroom_uid: str, attendance_token: str):
+def add_attendance_token_mongo(classroom_uid: str, attendance_token: str):
     attendance_mongo_resp = attendance_mongo.attendance_token_mongo(
         classroom_uid=classroom_uid, attendance_token=attendance_token)
     return attendance_mongo_resp
+
+def delete_attendance_token_from_mongo(classroom_uid: str):
+    delete_token_rep = attendance_mongo.delete_attendance_token_mongo(classroom_uid=classroom_uid)
+    return delete_token_rep

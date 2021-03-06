@@ -39,26 +39,50 @@ async def sign_out(token, background_tasks):
     )
 
 
+async def update_profile(token, details):
+    tkn = await token_controllers.validate_token(token)
+    if tkn:
+        res = await user_controllers.update_profile(tkn.user_id, details)
+        if res:
+            return StandardResponseBody(
+                True, "Profile updated", tkn.token_value, res
+            )
+        return StandardResponseBody(False, "Profile not updated")
+    return StandardResponseBody(False, "Invalid token")
+
+
+async def update_password(token, details):
+    tkn = await token_controllers.validate_token(token)
+    if tkn:
+        res = await user_controllers.update_password(tkn.user_id, details)
+        if res == True:
+            return StandardResponseBody(
+                True, "Password updated", tkn.token_value
+            )
+        elif res == "invalid_password":
+            return StandardResponseBody(False, "Invalid current password")
+        return StandardResponseBody(False, "Profile not updated")
+    return StandardResponseBody(False, "Invalid token")
+
+
 async def delete_account(password, token):
     token = await token_controllers.validate_token(token)
     if token:
-        print(password.password)
+        #print(password.password)
         status = await user_controllers.delete_account(password.password, token)
         if status:
             return StandardResponseBody(True, "Your account has been deleted")
         return StandardResponseBody(False, "Error. Could not delete account")
-    else:
-        return StandardResponseBody(False, "Invalid token")
+    return StandardResponseBody(False, "Invalid token")
 
 
 async def get_user_dashboard(token):
-    token = await token_controllers.validate_token(token)
-    if token:
+    tkn = await token_controllers.validate_token(token)
+    if tkn:
         user_data = await user_controllers.get_user_dashboard(tkn.user_id)
         if user_data:
             return StandardResponseBody(
                 True, "Details fetched", tkn.token_value, user_data
             )
         return StandardResponseBody(False, "Details not fetched")
-    else:
-        return StandardResponseBody(False, "Non-existent user")
+    return StandardResponseBody(False, "Non-existent user")

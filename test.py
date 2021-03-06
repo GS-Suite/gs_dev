@@ -1,6 +1,16 @@
-import uuid
+'''
+    Use this file for checks
 
 
-x = uuid.uuid4()
+'''
+from bson import ObjectId
+from db_setup.mongo_setup import Mongo_CONN
 
-print(x, x.hex)
+
+
+obj = x.find({'attendance_token': {'$exists': True}})
+
+ll = [i for i in obj]
+print(ll[0]['_id'])
+
+x.delete_one({'_id': ObjectId(ll[0]['_id'])})

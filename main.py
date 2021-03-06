@@ -25,15 +25,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from attendance.apis import *
-from classrooms.apis import *
-from tokens.apis import *
-from user.apis import *
-
-
 @app.get("/", include_in_schema=False)
 async def home_to_doc():
     return RedirectResponse("/docs")
+
+
+from user.apis import *
+from tokens.apis import *
+from classrooms.apis import *
+from attendance.apis import *
 
 
 if __name__ == "__main__":

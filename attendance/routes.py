@@ -21,7 +21,7 @@ async def take_attendance(token, classroom_id):
             '''
             attendance_token = attendance_helpers.generate_attendance_code()
 
-            response = await attendance_controllers.add_attendance_token_mongo(
+            response = attendance_controllers.add_attendance_token_mongo(
                 classroom_uid=classroom_id.classroom_uid, attendance_token=attendance_token)
 
             if response:
@@ -32,6 +32,39 @@ async def take_attendance(token, classroom_id):
                 return StandardResponseBody(
                     False, 'Could not generate attendance token for classroom', tkn.token_value
                 )
+        else:
+            return StandardResponseBody(
+                False, 'You are not the owner of the classroom', tkn.token_value
+            )
+    else:
+        return StandardResponseBody(
+            False, 'Invalid user'
+        )
+
+async def stop_attendance(token, classroom_id):
+    tkn = await token_controllers.validate_token(token)
+
+    if tkn:
+        if_creator_bool = await attendance_controllers.check_user_if_creator(classroom_id=classroom_id.classroom_uid,
+                                                                             user_id=tkn.user_id)
+
+        if if_creator_bool == True:
+                '''
+                    1. Delete attendance token document from Mongo
+                    2. Send response
+                '''
+
+                response = attendance_controllers.delete_attendance_token_from_mongo(
+                    classroom_uid=classroom_id.classroom_uid)
+
+                if response ==  True:
+                    return StandardResponseBody(
+                        True, 'Attendance has been stopped', tkn.token_value
+                    )
+                else:
+                    return StandardResponseBody(
+                        False, 'Could not stop attendance', tkn.token_value
+                    )
         else:
             return StandardResponseBody(
                 False, 'You are not the owner of the classroom', tkn.token_value

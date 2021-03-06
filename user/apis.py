@@ -19,6 +19,16 @@ async def sign_out(background_tasks: BackgroundTasks, token: str = Header(None))
     return await user_routes.sign_out(token, background_tasks)
 
 
+@app.post("/update_profile/")
+async def update_profile(details: user_schemas.UpdateProfileSchema, token: str = Header(None)):
+    return await user_routes.update_profile(token, details)
+
+
+@app.post("/update_password/")
+async def update_password(details: user_schemas.UpdatePasswordSchema, token: str = Header(None)):
+    return await user_routes.update_password(token, details)
+
+
 @app.post("/delete_account/")
 async def delete_account(password: user_schemas.DeleteUserSchema, token: str = Header(None)):
     return await user_routes.delete_account(password, token)
