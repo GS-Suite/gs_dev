@@ -1,14 +1,17 @@
+from attendance.apis import *
+from classrooms.apis import *
+from tokens.apis import *
+from user.apis import *
+import uvicorn
+from fastapi import FastAPI
+from db_setup.pg_setup import Base, engine
+from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 load_dotenv()
 
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
-from db_setup.pg_setup import Base, engine
-from fastapi import FastAPI
-import uvicorn
 
-
-Base.metadata.create_all(bind = engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -20,21 +23,16 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = origins,
-    allow_credentials = True,
-    allow_methods = ["*"],
-    allow_headers = ["*"],
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
-@app.get("/", include_in_schema = False)
+@app.get("/", include_in_schema=False)
 async def home_to_doc():
     return RedirectResponse("/docs")
-
-
-from user.apis import *
-from tokens.apis import *
-from classrooms.apis import *
 
 
 if __name__ == "__main__":
