@@ -1,4 +1,4 @@
-from attendance.apis import *
+# from attendance.apis import *
 from classrooms.apis import *
 from tokens.apis import *
 from user.apis import *
