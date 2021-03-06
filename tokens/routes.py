@@ -4,10 +4,10 @@ from fastapi import status
 
 
 async def validate_token(token):
-    res = await token_controllers.validate_token(token)
-    if res:
+    token = await token_controllers.validate_token(token)
+    if token:
         return StandardResponseBody(
-            True, "Valid token", res
+            True, "Valid token", token.token_value
             )
     return StandardResponseBody(
         False, "Invalid token"

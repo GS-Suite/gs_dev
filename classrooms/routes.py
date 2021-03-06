@@ -9,21 +9,18 @@ from fastapi import status
 async def create_classroom(classroom, token):
     tkn = await token_controllers.validate_token(token)
     if tkn:
-
-        tkn = await token_controllers.get_token_by_value(tkn)
-        if tkn:       
-            res, cls = await classroom_controllers.create_class(tkn, classroom.class_name)
-            if res == True:
-                return StandardResponseBody(
-                    True, "Classroom created", tkn.token_value, cls
-                )
-            elif res == "exists":
-                return StandardResponseBody(
-                    False, "Classroom already exists", tkn.token_value, cls
-                )
+        res, cls = await classroom_controllers.create_class(tkn, classroom.class_name)
+        if res == True:
             return StandardResponseBody(
-                False, "Classroom not created"
+                True, "Classroom created", tkn.token_value, cls
             )
+        elif res == "exists":
+            return StandardResponseBody(
+                False, "Classroom already exists", tkn.token_value, cls
+            )
+        return StandardResponseBody(
+            False, "Classroom not created"
+        )
     else:
         return StandardResponseBody(
             False, "Non-existent user"
@@ -34,8 +31,6 @@ async def get_user_classrooms(token):
     tkn = await token_controllers.validate_token(token)
 
     if tkn:
-        tkn = await token_controllers.get_token_by_value(tkn)
-
         res = await classroom_controllers.get_user_classrooms(tkn.user_id)
         if res == []:
             return StandardResponseBody(
@@ -55,12 +50,9 @@ async def get_user_classrooms(token):
 
 async def get_user_enrolled(token):
     tkn = await token_controllers.validate_token(token)
-
     if tkn:
-        tkn = await token_controllers.get_token_by_value(tkn)
-
         res = await classroom_controllers.get_user_enrolled(tkn.user_id)
-        print(res)
+        #print(res)
         if res == []:
             return StandardResponseBody(
                 True, "You aren't enrolled in any classroom", tkn.token_value
@@ -80,13 +72,10 @@ async def get_user_enrolled(token):
 
 async def get_classroom_details(uid, token):
     tkn = await token_controllers.validate_token(token)
-
     if tkn:
-        tkn = await token_controllers.get_token_by_value(tkn)
-        
         #print(tkn)
         res = await classroom_controllers.get_classroom_details(tkn.user_id, uid)
-        print(res)
+        #print(res)
         if res:
             return StandardResponseBody(
                 True, "Classroom details retrieved", tkn.token_value, res
@@ -102,11 +91,9 @@ async def get_classroom_details(uid, token):
 
 
 async def generate_classroom_entry_code(uid, token):
-    val_token = await token_controllers.validate_token(token)
+    tkn = await token_controllers.validate_token(token)
 
-    if val_token:
-        tkn = await token_controllers.get_token_by_value(token)
-
+    if tkn:
         res = await classroom_controllers.generate_classroom_entry_code(tkn.user_id, uid)
         if res:
             return StandardResponseBody(
@@ -122,11 +109,9 @@ async def generate_classroom_entry_code(uid, token):
 
 
 async def course_enroll(token, classroom_uid, entry_code):
-    val_token = await token_controllers.validate_token(token)
+    tkn = await token_controllers.validate_token(token)
 
-    if val_token:
-        tkn = await token_controllers.get_token_by_value(token)
-
+    if tkn:
         res = await classroom_controllers.enroll_user(tkn.user_id, classroom_uid, entry_code)
         if res == True:
             return StandardResponseBody(

@@ -19,7 +19,7 @@ async def validate_token(token):
         elif time_left < REFRESH_TIMEOUT:
             return await refresh_token(res.user_id)
         else:
-            return res.token_value
+            return res
     else:
         return False
 
@@ -30,7 +30,7 @@ async def refresh_token(uid):
     res = await token_model.refresh_token(uid, token_value)
     # print(res.user_id)
     if res:
-        return res.token_value
+        return res
     return False
 
 '''

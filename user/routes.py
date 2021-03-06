@@ -25,7 +25,7 @@ async def sign_in(user):
     if token:
         #print(res)
         return StandardResponseBody(
-                True, "Successfully logged in", token
+                True, "Successfully logged in", token.token_value
             )
     return StandardResponseBody(
         False, "Invalid username or password"
@@ -40,22 +40,20 @@ async def sign_out(token, background_tasks):
 
 
 async def delete_account(password, token):
-    token = await token_controllers.get_token_by_value(token)
-    if token == None:
+    token = await token_controllers.validate_token(token)
+    if token:
+        print(password.password)
+        status = await user_controllers.delete_account(password.password, token)
+        if status:
+            return StandardResponseBody(True, "Your account has been deleted")
+        return StandardResponseBody(False, "Error. Could not delete account")
+    else:
         return StandardResponseBody(False, "Invalid token")
-
-    print(password.password)
-    status = await user_controllers.delete_account(password.password, token)
-    if status:
-        return StandardResponseBody(True, "Your account has been deleted")
-    return StandardResponseBody(False, "Error. Could not delete account")
 
 
 async def get_user_dashboard(token):
-    tkn = await token_controllers.validate_token(token)
-    if tkn:
-        tkn = await token_controllers.get_token_by_value(tkn)
-        
+    token = await token_controllers.validate_token(token)
+    if token:
         user_data = await user_controllers.get_user_dashboard(tkn.user_id)
         if user_data:
             return StandardResponseBody(

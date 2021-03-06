@@ -5,6 +5,8 @@ from fastapi import Response, Header
 from main import app
 
 
+''' TEACHER APIS '''
+
 @app.post("/create_classroom/")
 async def create_classroom(classroom: classroom_schemas.CreateClassroomSchema, token: str = Header(None)):
     return await classroom_routes.create_classroom(classroom, token)
@@ -24,6 +26,8 @@ async def get_classroom_details(classroom: classroom_schemas.ClassroomUidSchema,
 async def generate_classroom_entry_code(classroom_uid: classroom_schemas.ClassroomUidSchema, token: str = Header(None)):
     return await classroom_routes.generate_classroom_entry_code(classroom_uid.classroom_uid, token)
 
+
+''' STUDENT APIS '''
 
 @app.post('/enroll/')
 async def course_enroll(classroom: classroom_schemas.UserClassroomEnroll, token: str = Header(None)):
