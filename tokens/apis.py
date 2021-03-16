@@ -7,8 +7,7 @@ from main import app
 async def validate_token(token: str = Header(None)):
     return await token_routes.validate_token(token)
 
-'''
+
 @app.post("/refresh_token/")
 async def refresh_token(token: str = Header(None)):
     return await token_routes.refresh_token(token)
-'''

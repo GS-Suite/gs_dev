@@ -33,14 +33,14 @@ async def refresh_token(uid):
         return res
     return False
 
-'''
+
 async def refresh_token_by_token(token_value):
     token = await get_token_by_value(token_value)
     if token:
         res = await refresh_token(token.user_id)
         if res:
             return res
-    return False'''
+    return False
 
 
 async def get_token_by_value(token_value):
