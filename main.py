@@ -25,7 +25,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/", include_in_schema=False)
 async def home_to_doc():
     return RedirectResponse("/docs")
