@@ -18,6 +18,7 @@ gunicorn = "*"
 motor = "*"
 dnspython = "*"
 pymongo = "*"
+dropbox = "*"
 
 [dev-packages]
 

@@ -16,9 +16,10 @@ async def validate_token(token):
 
 async def refresh_token(token):
     res = await token_controllers.refresh_token_by_token(token)
+    print(res)
     if res:
         return StandardResponseBody(
-            True, "Token refreshed", res
+            True, "Token refreshed", res.token_value
         )
     return StandardResponseBody(
         False, "Token not refreshed"
