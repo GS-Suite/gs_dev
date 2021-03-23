@@ -18,3 +18,24 @@ def add_attendance_token_mongo(classroom_uid: str, attendance_token: str):
 def delete_attendance_token_from_mongo(classroom_uid: str):
     delete_token_rep = attendance_mongo.delete_attendance_token_mongo(classroom_uid=classroom_uid)
     return delete_token_rep
+
+
+def if_user_enrolled(classroom_uid, user_id):
+    classroom_enrolled_resp = attendance_mongo.check_enrolled_in_classroom(classroom_uid, user_id)
+    user_enrolled_resp = attendance_mongo.check_enrolled_in_user_enrolled(classroom_uid, user_id)
+
+    print('classroom_enrolled_resp: ', classroom_enrolled_resp)
+    print('user_enrolled_resp: ', user_enrolled_resp)
+
+    if classroom_enrolled_resp ==  True and user_enrolled_resp == True:
+        return True
+    
+    return False
+
+def log_attendance(classroom_uid, user_id, attendance_token):
+    logged_attendance_resp = attendance_mongo.give_attendance(classroom_uid, user_id, attendance_token)
+
+    if logged_attendance_resp ==  True:
+        return True
+    return False
+

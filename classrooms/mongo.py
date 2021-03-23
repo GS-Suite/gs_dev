@@ -49,8 +49,6 @@ def enroll_user(user_uid, classroom_uid):
         print(e)
         return False
 
-
-
 def enroll_classroom(user_uid, classroom_uid):
     try:
         Mongo_CONN[DB_NAME][classroom_uid].update(
@@ -62,3 +60,19 @@ def enroll_classroom(user_uid, classroom_uid):
     except Exception as e:
         print(e)
         return False
+
+def classroom_add_entry_code(classroom_uid: str, code: str):
+    try:
+        Mongo_CONN[DB_NAME][classroom_uid].update(
+            {"join_code": {"$exists": True}},
+            {
+                '$set': {
+                    "join_code": code
+                }
+            }
+        )
+        return True
+    except Exception as e:
+        print(e)
+        return False
+

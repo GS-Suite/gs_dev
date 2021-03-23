@@ -31,7 +31,7 @@ async def take_attendance(token, classroom_id):
                 )
             elif response == True:
                 return StandardResponseBody(
-                    True, 'Attendance code generated', tkn.token_value, attendance_token
+                    True, 'Attendance code generated', tkn.token_value, {'attendance_token': attendance_token}
                 )
             else:
                 return StandardResponseBody(
@@ -77,4 +77,32 @@ async def stop_attendance(token, classroom_id):
     else:
         return StandardResponseBody(
             False, 'Invalid user'
+        )
+
+async def give_attendance(token, classroom_uid, attendance_token):
+    tkn = await token_controllers.validate_token(token)
+
+    if tkn:
+        if_user_enrolled = attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid.classroom_uid, user_id=tkn.user_id)
+
+        if if_user_enrolled:
+
+            response = attendance_controllers.log_attendance(classroom_uid=classroom_uid.classroom_uid, user_id=tkn.user_id, \
+                attendance_token=attendance_token)
+            
+            if response == True:
+                return StandardResponseBody(
+                    True, 'Your attendance has been logged!', tkn.token_value
+                )
+            else:
+                return StandardResponseBody(
+                    False, 'Your attendance could not be logged.', tkn.token_value
+                )
+        else:
+            return StandardResponseBody(
+                    False, 'You have not enrolled in this classroom', tkn.token_value
+                )
+    else:
+        return StandardResponseBody(
+            False, 'Chal bhak hacker!'
         )

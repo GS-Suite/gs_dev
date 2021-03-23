@@ -72,13 +72,21 @@ async def generate_classroom_entry_code(user_uid, classroom_uid):
         ### generate code, store it
         code = await classroom_helpers.generate_entry_code()
         classroom = await classroom_model.generate_entry_code(classroom, code)
-        if classroom:
-            classroom = {
-                "name": classroom.name,
-                "uid": classroom.uid,
-                "entry_code": classroom.entry_code
-            }
-            return classroom
+        ''' 
+            Add Code to Mongo entry
+
+        '''
+        mongo_resp = mongo.classroom_add_entry_code(classroom_uid = classroom_uid, code = code)
+        if mongo_resp:
+            if classroom:
+                classroom = {
+                    "name": classroom.name,
+                    "uid": classroom.uid,
+                    "entry_code": classroom.entry_code,
+                    "classroom_owner_id": user_uid
+                }
+                return classroom
+
     return False
 
 
