@@ -37,3 +37,8 @@ async def course_enroll(classroom: classroom_schemas.UserClassroomEnroll, token:
 @app.post("/get_user_enrolled/")
 async def get_user_enrolled(token: str = Header(None)):
     return await classroom_routes.get_user_enrolled(token)
+
+
+@app.post("/get_classroom_uid/")
+async def get_classroom_uid(entry_code: str, token: str = Header(None)):
+    return await classroom_routes.get_classroom_uid_by_entry_code(entry_code, token)

@@ -132,3 +132,22 @@ async def course_enroll(token, classroom_uid, entry_code):
         return StandardResponseBody (
             False, "Your account is invalid"
         )
+
+async def get_classroom_uid_by_entry_code(entry_code, token):
+    tkn = await token_controllers.validate_token(token)
+
+    if tkn:
+        res = await classroom_controllers.getClassroomUid(entry_code)
+
+        if res['status'] == True:
+            return StandardResponseBody(
+                True, "Classroom ID aquired", tkn.token_value, {"classroom_uid": res['classroom_uid'], "classroom_name": res['classroom_name']}
+            )
+        else:
+            return StandardResponseBody(
+                False, "Could not get classroom ID", tkn.token_value
+            )
+    else:
+        return StandardResponseBody(
+                False, "Invalid User"
+            )

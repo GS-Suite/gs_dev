@@ -120,6 +120,18 @@ async def enroll_user(user_uid, classroom_uid, entry_code):
         except Exception as e:
             return False
 
+async def getClassroomUid(entry_code):
+    try:
+        classroom_uid = await classroom_model.get_classroom_by_entry_code(entry_code)
+        return {
+            'status': True,
+            'classroom_uid': classroom_uid.uid,
+            'classroom_name': classroom_uid.name
+        }
+    except Exception as e:
+        print(e)
+        return {'status': False}
+
 
 async def delete_user_classrooms(uid):
     return await classroom_model.delete_user_classrooms(uid)
