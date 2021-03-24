@@ -10,8 +10,13 @@ load_dotenv()
 
         # default = 86400
 
+
+
     # t = 3
     r = redis.Redis(blah blah blah)
+
+    ex -> seconds
+    px -> milliseconds
 
     # r.set('uid', 'b2hj430', ex=t)
 
