@@ -1,0 +1,1 @@
+from forum import mongo as forum_mongo

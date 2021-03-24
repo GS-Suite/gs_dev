@@ -19,6 +19,7 @@ motor = "*"
 dnspython = "*"
 pymongo = "*"
 dropbox = "*"
+redis = "*"
 
 [dev-packages]
 

@@ -34,6 +34,7 @@ from user.apis import *
 from tokens.apis import *
 from classrooms.apis import *
 from attendance.apis import *
+from forum.apis import *
 
 
 if __name__ == "__main__":

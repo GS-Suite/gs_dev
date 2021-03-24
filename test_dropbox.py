@@ -25,15 +25,15 @@ print(x)'''
 
 
 
-from db_setup.mongo_setup import Mongo_CONN
-from bson import ObjectId
-import datetime
+# from db_setup.mongo_setup import Mongo_CONN
+# from bson import ObjectId
+# import datetime
 
-from typing import NamedTuple
+# from typing import NamedTuple
 
-DB_NAME = 'Classrooms'
+# DB_NAME = 'Classrooms'
 
-classroom_uid = '334de992305740f7ad29a9bf9bc493cf'
+# classroom_uid = '334de992305740f7ad29a9bf9bc493cf'
 
 
 
@@ -50,5 +50,14 @@ classroom_uid = '334de992305740f7ad29a9bf9bc493cf'
 #         }
 #     )
 
-y = Mongo_CONN[DB_NAME][classroom_uid].find_one({'attendance_token': {'$exists': True}})
-print(y['attendance_token'])
+# y = Mongo_CONN.list_database_names()
+# print(y)
+
+
+# import pymongo
+
+# forum = pymongo.MongoClient("mongodb+srv://gs_suite:Keanebish123@forumcluster.1ossz.mongodb.net/")
+# c = forum['yoyo_db']
+# print(forum.list_database_names())
+
+

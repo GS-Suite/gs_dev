@@ -24,8 +24,8 @@ def if_user_enrolled(classroom_uid, user_id):
     classroom_enrolled_resp = attendance_mongo.check_enrolled_in_classroom(classroom_uid, user_id)
     user_enrolled_resp = attendance_mongo.check_enrolled_in_user_enrolled(classroom_uid, user_id)
 
-    print('classroom_enrolled_resp: ', classroom_enrolled_resp)
-    print('user_enrolled_resp: ', user_enrolled_resp)
+    # print('classroom_enrolled_resp: ', classroom_enrolled_resp)
+    # print('user_enrolled_resp: ', user_enrolled_resp)
 
     if classroom_enrolled_resp ==  True and user_enrolled_resp == True:
         return True
