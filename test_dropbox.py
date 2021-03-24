@@ -54,10 +54,16 @@ print(x)'''
 # print(y)
 
 
-# import pymongo
+import pymongo
 
-# forum = pymongo.MongoClient("mongodb+srv://gs_suite:Keanebish123@forumcluster.1ossz.mongodb.net/")
-# c = forum['yoyo_db']
-# print(forum.list_database_names())
+forum = pymongo.MongoClient("mongodb+srv://gs_suite:Keanebish123@forumcluster.1ossz.mongodb.net/")
+c = forum['yoyo_db']['some_coll']
+c.insert_one({"dummy": "dummy"})
+print(c.find())
+# forum["yoyo_db"]['some_coll'].delete_many({})
+
+
+
+
 
 
