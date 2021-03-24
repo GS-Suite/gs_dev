@@ -26,6 +26,8 @@ load_dotenv()
     r.flushall()
     # r.delete("uid")
     print(r.get("uid"))
+
+    ttl -> time to live
     # print(r.ttl("uid"))
 
 
