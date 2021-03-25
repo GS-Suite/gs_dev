@@ -1,7 +1,6 @@
 from classrooms import helpers as classroom_helpers
 from tokens import controllers as token_controllers
 from classrooms import models as classroom_model
-from user import models as user_models
 from classrooms import mongo
 from fastapi import status
 
@@ -18,9 +17,14 @@ async def get_user_classrooms(user_uid):
 
 
 async def get_user_enrolled(user_uid):
-    print(user_uid)
+    #print(user_uid)
     classrooms = await mongo.get_user_enrolled(user_uid)
     return classrooms
+
+
+async def get_classroom_enrolled(classroom_uid):
+    enrolled = await mongo.get_classroom_enrolled(classroom_uid)
+    return enrolled
 
 
 async def create_class(token, class_name):
@@ -76,16 +80,16 @@ async def generate_classroom_entry_code(user_uid, classroom_uid):
             Add Code to Mongo entry
 
         '''
-        mongo_resp = mongo.classroom_add_entry_code(classroom_uid = classroom_uid, code = code)
-        if mongo_resp:
-            if classroom:
-                classroom = {
-                    "name": classroom.name,
-                    "uid": classroom.uid,
-                    "entry_code": classroom.entry_code,
-                    "classroom_owner_id": user_uid
-                }
-                return classroom
+        #mongo_resp = mongo.classroom_add_entry_code(classroom_uid = classroom_uid, code = code)
+        #if mongo_resp:
+        if classroom:
+            classroom = {
+                "name": classroom.name,
+                "uid": classroom.uid,
+                "entry_code": classroom.entry_code,
+                "classroom_owner_id": user_uid
+            }
+            return classroom
 
     return False
 
@@ -137,6 +141,6 @@ async def delete_user_classrooms(uid):
     return await classroom_model.delete_user_classrooms(uid)
 
 
-
+'''
 async def generate_join_link():
-    return x
+    return x'''
