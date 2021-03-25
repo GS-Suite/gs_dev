@@ -57,7 +57,7 @@ async def create_classroom(creator_uid: str, name: str, uid: str):
         '''
             Creating Mongo classroom
         '''
-        mongo_resp = mongo.create_mongo_classroom(uid)
+        #mongo_resp = mongo.create_mongo_classroom(uid)
 
         db.refresh(classroom)
         return True, classroom
@@ -96,7 +96,6 @@ async def generate_entry_code(classroom, code):
     try:
         classroom.entry_code = code
         db.commit()
-        db.refresh(classroom)
         return classroom
     except Exception as e:
         print(e)

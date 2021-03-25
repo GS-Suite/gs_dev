@@ -69,6 +69,23 @@ async def get_user_enrolled(token):
         False, "Non-existent user"
     )
 
+async def get_classroom_enrolled(classroom_uid, token):
+    tkn = await token_controllers.validate_token(token)
+    if tkn:
+        res = await classroom_controllers.get_classroom_enrolled(classroom_uid)
+        #print(res)
+        if res:
+            return StandardResponseBody(
+                True, "Enrolled students", tkn.token_value, {"enrolled" : res}
+            )
+        else:
+            return StandardResponseBody(
+                False, "Could not retrieve data"
+            )
+    return StandardResponseBody(
+        False, "Non-existent user"
+    )
+
 
 async def get_classroom_details(uid, token):
     tkn = await token_controllers.validate_token(token)
