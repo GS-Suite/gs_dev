@@ -7,11 +7,10 @@ async def check_user_if_creator(classroom_id, user_id):
     classroom_obj = await classroom_models.get_classroom_by_uid(classroom_id)
     if user_id == classroom_obj.creator_uid:
         return True
-    else:
-        return False
+    return False
 
 
-def add_attendance_token_redis(classroom_uid, token, timeout = None):
+def add_attendance_token_redis(classroom_uid, token, timeout):
     resp = attendance_redis.set_token(
         token, classroom_uid, timeout
     )

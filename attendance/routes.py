@@ -7,7 +7,7 @@ from attendance import helpers as attendance_helpers
 from fastapi import status
 
 
-async def take_attendance(token, classroom_uid):
+async def take_attendance(token, classroom_uid, timeout):
     tkn = await token_controllers.validate_token(token)
     if tkn:
         if_creator_bool = await attendance_controllers.check_user_if_creator(
@@ -26,7 +26,9 @@ async def take_attendance(token, classroom_uid):
             ### add token to redis
             response = attendance_controllers.add_attendance_token_redis(
                 classroom_uid = classroom_uid, 
-                token = attendance_token)
+                token = attendance_token,
+                timeout = timeout
+            )
             
             ### add object to mongo
             if response:
@@ -62,10 +64,12 @@ async def stop_attendance(token, attendance_token, classroom_uid):
     tkn = await token_controllers.validate_token(token)
 
     if tkn:
-        if_creator_bool = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid,
-                                                                             user_id=tkn.user_id)
+        creator_bool = await attendance_controllers.check_user_if_creator(
+            classroom_id=classroom_uid,
+            user_id=tkn.user_id
+        )
 
-        if if_creator_bool == True:
+        if creator_bool:
                 '''
                     1. Delete attendance token document from Mongo
                     2. Send response

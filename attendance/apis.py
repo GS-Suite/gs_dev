@@ -5,11 +5,14 @@ from main import app
 
 
 ''' TEACHER API '''
+ATTENDANCE_DEFAULT_TOKEN_TIMEOUT = 30 * 60
 
 
 @app.post('/take_attendance/')
-async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, token: str = Header(None)):
-    return await attendance_routes.take_attendance(token=token, classroom_uid=classroom_uid.classroom_uid)
+async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, timeout: int, token: str = Header(None)):
+    if timeout == "" or not timeout:
+        timeout = ATTENDANCE_DEFAULT_TOKEN_TIMEOUT
+    return await attendance_routes.take_attendance(token=token, classroom_uid=classroom_uid.classroom_uid, timeout = timeout)
 
 
 @app.post('/stop_attendance/')
