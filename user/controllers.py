@@ -1,11 +1,9 @@
-from types import new_class
 from classrooms import controllers as classroom_controllers
 from tokens import controllers as token_controllers
+from user import dropbox as user_dropbox
 from user import helpers as user_helpers
 from user import models as user_models
-from fastapi import status
 from user import mongo
-import storage_setup
 
 
 async def sign_up(user):
@@ -99,6 +97,11 @@ async def get_user_dashboard(uid):
 
 
 async def change_profile_picture(user_uid, picture):
-    pic = picture.file.read()
-    x = await storage_setup.change_profile_picture(user_uid, pic, picture.filename)
-    return x
+    ### delete previous pictures
+    await user_dropbox.delete_profile_pictures(user_uid)
+
+    if picture != None:
+        pic = picture.file.read()
+        x = await user_dropbox.change_profile_picture(user_uid, pic, picture.filename)
+        return x
+    return "deleted"

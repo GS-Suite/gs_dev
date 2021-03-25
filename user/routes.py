@@ -92,7 +92,11 @@ async def change_profile_picture(token, picture):
     tkn = await token_controllers.validate_token(token)
     if tkn:
         resp = await user_controllers.change_profile_picture(tkn.user_id, picture)
-        if resp:
+        if resp == "deleted":
+            return StandardResponseBody(
+                True, "Profile picture deleted", tkn.token_value
+            )
+        elif resp:
             return StandardResponseBody(
                 True, "Profile picture updated", tkn.token_value
             )
