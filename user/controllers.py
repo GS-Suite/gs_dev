@@ -4,8 +4,8 @@ from tokens import controllers as token_controllers
 from user import helpers as user_helpers
 from user import models as user_models
 from fastapi import status
-
 from user import mongo
+import storage_setup
 
 
 async def sign_up(user):
@@ -96,3 +96,9 @@ async def get_user_dashboard(uid):
             "email": user.email
         }
     return False
+
+
+async def change_profile_picture(user_uid, picture):
+    pic = picture.file.read()
+    x = await storage_setup.change_profile_picture(user_uid, pic, picture.filename)
+    return x

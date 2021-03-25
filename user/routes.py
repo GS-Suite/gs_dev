@@ -86,3 +86,15 @@ async def get_user_dashboard(token):
             )
         return StandardResponseBody(False, "Details not fetched")
     return StandardResponseBody(False, "Non-existent user")
+
+
+async def change_profile_picture(token, picture):
+    tkn = await token_controllers.validate_token(token)
+    if tkn:
+        resp = await user_controllers.change_profile_picture(tkn.user_id, picture)
+        if resp:
+            return StandardResponseBody(
+                True, "Profile picture updated", tkn.token_value
+            )
+        return StandardResponseBody(False, "Could not update profile picture")
+    return StandardResponseBody(False, "Non-existent user")

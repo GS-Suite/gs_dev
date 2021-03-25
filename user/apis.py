@@ -1,4 +1,6 @@
-from fastapi import Response, BackgroundTasks, Header, Depends
+from typing import Optional
+from fastapi import Response, BackgroundTasks, Header, Depends, UploadFile
+from fastapi.param_functions import File
 from user import schemas as user_schemas
 from user import routes as user_routes
 from main import app
@@ -37,3 +39,8 @@ async def delete_account(password: user_schemas.DeleteUserSchema, token: str = H
 @app.post('/get_user_dashboard/')
 async def get_user_dashboard(token: str = Header(None)):
     return await user_routes.get_user_dashboard(token)
+
+
+@app.post("/change_profile_picture")
+async def change_profile_picture(token: str = Header(None), picture: Optional[UploadFile] = File(None)):
+    return await user_routes.change_profile_picture(token, picture)
