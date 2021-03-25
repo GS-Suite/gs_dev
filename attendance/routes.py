@@ -70,23 +70,22 @@ async def stop_attendance(token, attendance_token, classroom_uid):
         )
 
         if creator_bool:
-                '''
-                    1. Delete attendance token document from Mongo
-                    2. Send response
-                '''
+            '''
+                1. Delete attendance token document from Mongo
+                2. Send response
+            '''
+            response = attendance_controllers.delete_attendance_token_redis(
+                token = attendance_token
+            )
 
-                response = attendance_controllers.delete_attendance_token_redis(
-                    token = attendance_token
+            if response ==  True:
+                return StandardResponseBody(
+                    True, 'Attendance has been stopped', tkn.token_value
                 )
-
-                if response ==  True:
-                    return StandardResponseBody(
-                        True, 'Attendance has been stopped', tkn.token_value
-                    )
-                else:
-                    return StandardResponseBody(
-                        False, 'Could not stop attendance', tkn.token_value
-                    )
+            else:
+                return StandardResponseBody(
+                    False, 'Could not stop attendance', tkn.token_value
+                )
         else:
             return StandardResponseBody(
                 False, 'You are not the owner of the classroom', tkn.token_value
