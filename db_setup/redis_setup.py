@@ -33,4 +33,8 @@ load_dotenv()
 
 '''
 
-REDIS_CONN = redis.Redis(host=os.getenv("REDIS_URL"), password=os.getenv("REDIS_PORT"), port=os.getenv("REDIS_PORT"))
+REDIS_CONN = redis.Redis(
+    host = str(os.getenv("REDIS_URL")), 
+    password = str(os.getenv("REDIS_PASSWORD")), 
+    port = int(os.getenv("REDIS_PORT"))
+)

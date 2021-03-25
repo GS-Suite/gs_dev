@@ -3,37 +3,26 @@ from bson import ObjectId
 import datetime
 
 
-DB_NAME = 'Classrooms'
+DB_NAME = 'Attendance'
+DB_ENROLLED = "Enrolled"
 
-
-def attendance_token_mongo(classroom_uid: str, attendance_token: str):
+def add_attendance_mongo(classroom_uid: str, attendance_token: str):
     try:
-        mongo_resp = Mongo_CONN[DB_NAME][classroom_uid].find(
+        mongo_resp = Mongo_CONN[DB_NAME][classroom_uid].find_one(
                 {
-                'attendance_token': {'$exists': True}
+                'attendance_token': attendance_token
                 }
         )
-        mongo_obj_list = [i for i in mongo_resp]
-
-        if len(mongo_obj_list) >= 1:
-            return [True, mongo_obj_list[0]['attendance_token']]
+        if mongo_resp:
+            return "exists"
         else:
             # Creating current datetime dict inside mongo.classroom.attenance dictionary
-            Mongo_CONN[DB_NAME][classroom_uid].update(
-                {'classroom_uid': classroom_uid},
-                {
-                    '$set': {
-                        'attendance': {
-                        str(datetime.datetime.today()): {}
-                        }
-                    }
-                }
-            )
-            # Inserting attendance_token in mongo
             Mongo_CONN[DB_NAME][classroom_uid].insert_one(
                 {
-                    'attendance_token': attendance_token,
-                    'created_time': datetime.datetime.now()
+                    "classroom_uid": classroom_uid,
+                    "token": attendance_token,
+                    "students": [],
+                    "created_timestamp": datetime.datetime.now()
                 }
             )
             return True
@@ -41,19 +30,14 @@ def attendance_token_mongo(classroom_uid: str, attendance_token: str):
         print(e)
         return False
 
-def delete_attendance_token_mongo(classroom_uid: str):
+
+def delete_attendance_mongo(classroom_uid: str, token: str):
     try:
-        mongo_resp = Mongo_CONN[DB_NAME][classroom_uid].find(
-                {
-                'attendance_token': {'$exists': True}
-                }
+        mongo_resp = Mongo_CONN[DB_NAME][classroom_uid]
+        if mongo_resp:
+            mongo_resp.delete_one(
+                {"token": token}
             )
-        mongo_obj_list = [i for i in mongo_resp]
-        for i in range(len(mongo_obj_list)):
-            Mongo_CONN[DB_NAME][classroom_uid].delete_one(
-                {
-                    '_id': ObjectId(mongo_obj_list[i]['_id'])}
-                )
         return True
     except Exception as e:
         # print(e)
@@ -62,12 +46,16 @@ def delete_attendance_token_mongo(classroom_uid: str):
 
 def check_enrolled_in_classroom(classroom_uid, user_id):
     try:
-        x = Mongo_CONN[DB_NAME][classroom_uid].find_one()
-        if user_id in x['enrolled']:
+        x = Mongo_CONN[DB_ENROLLED][classroom_uid].find_one(
+            {"uid": user_id}
+        )
+        if x:
             return True
+        return False
     except Exception as e:
         print(e)
         return False
+
 
 def check_enrolled_in_user_enrolled(classroom_uid, user_id):
     try:
@@ -79,29 +67,18 @@ def check_enrolled_in_user_enrolled(classroom_uid, user_id):
         print(e)
         return False
 
+
 def give_attendance(classroom_uid, user_id, attendance_token):
-
     try:
-        get_attendance_token_from_mongo = Mongo_CONN[DB_NAME][classroom_uid].find_one({'attendance_token': {'$exists': True}})
-        print(get_attendance_token_from_mongo['attendance_token'])
 
-        if attendance_token == get_attendance_token_from_mongo['attendance_token']:
-            print(attendance_token, user_id)
-            x = Mongo_CONN[DB_NAME][classroom_uid].update_one(
-                {'attendance': {'$exists': True}},
+        x = Mongo_CONN[DB_NAME][classroom_uid].update_one(
+                {'token': attendance_token},
                 { 
-                    '$set': {
-                        'attendance': {   
-                        str(datetime.datetime.today()): {
-                            '$set': {
-                                str(user_id): str(datetime.datetime.today())
-                            }}
-                        }
-                        
+                    '$push': {
+                        'students': {user_id: datetime.datetime.now()}                        
                     }
                 }
             )
-        
         return True
     except Exception as e:
         print(e)

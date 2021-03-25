@@ -7,11 +7,13 @@ from attendance import helpers as attendance_helpers
 from fastapi import status
 
 
-async def take_attendance(token, classroom_id):
+async def take_attendance(token, classroom_uid):
     tkn = await token_controllers.validate_token(token)
     if tkn:
-        if_creator_bool = await attendance_controllers.check_user_if_creator(classroom_id=classroom_id.classroom_uid,
-                                                                             user_id=tkn.user_id)
+        if_creator_bool = await attendance_controllers.check_user_if_creator(
+            classroom_id = classroom_uid,
+            user_id=tkn.user_id
+        )
 
         if if_creator_bool == True:
             '''
@@ -21,17 +23,26 @@ async def take_attendance(token, classroom_id):
             '''
             attendance_token = attendance_helpers.generate_attendance_code()
 
-            response = attendance_controllers.add_attendance_token_mongo(
-                classroom_uid=classroom_id.classroom_uid, attendance_token=attendance_token)
+            ### add token to redis
+            response = attendance_controllers.add_attendance_token_redis(
+                classroom_uid = classroom_uid, 
+                token = attendance_token)
             
-            if type(response) == list:
-                return StandardResponseBody(
-                    False, 'Could not generate new attendance token for classroom, click delete and take_attendance for new code', 
-                    tkn.token_value, {'attendance_token': response[-1]}
+            ### add object to mongo
+            if response:
+                response = attendance_controllers.add_attendance_mongo(
+                    classroom_uid = classroom_uid,
+                    token = attendance_token
                 )
-            elif response == True:
+
+            
+            if response == True:
                 return StandardResponseBody(
                     True, 'Attendance code generated', tkn.token_value, {'attendance_token': attendance_token}
+                )
+            elif response == "exists":
+                return StandardResponseBody(
+                    False, 'Exists', tkn.token_value, {'attendance_token': attendance_token}
                 )
             else:
                 return StandardResponseBody(
@@ -46,11 +57,12 @@ async def take_attendance(token, classroom_id):
             False, 'Invalid user'
         )
 
-async def stop_attendance(token, classroom_id):
+
+async def stop_attendance(token, attendance_token, classroom_uid):
     tkn = await token_controllers.validate_token(token)
 
     if tkn:
-        if_creator_bool = await attendance_controllers.check_user_if_creator(classroom_id=classroom_id.classroom_uid,
+        if_creator_bool = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid,
                                                                              user_id=tkn.user_id)
 
         if if_creator_bool == True:
@@ -59,8 +71,9 @@ async def stop_attendance(token, classroom_id):
                     2. Send response
                 '''
 
-                response = attendance_controllers.delete_attendance_token_from_mongo(
-                    classroom_uid=classroom_id.classroom_uid)
+                response = attendance_controllers.delete_attendance_token_redis(
+                    token = attendance_token
+                )
 
                 if response ==  True:
                     return StandardResponseBody(
@@ -79,6 +92,47 @@ async def stop_attendance(token, classroom_id):
             False, 'Invalid user'
         )
 
+
+async def delete_attendance(token, attendance_token, classroom_uid):
+    tkn = await token_controllers.validate_token(token)
+
+    if tkn:
+        if_creator_bool = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid,
+                                                                             user_id=tkn.user_id)
+
+        if if_creator_bool == True:
+                '''
+                    1. Delete attendance token document from Mongo
+                    2. Send response
+                '''
+
+                response = attendance_controllers.delete_attendance_token_redis(
+                    token = attendance_token
+                )
+
+                if response:
+                    response = attendance_controllers.delete_attendance_mongo(
+                        classroom_uid, attendance_token
+                    )
+
+                if response ==  True:
+                    return StandardResponseBody(
+                        True, 'Attendance has been deleted', tkn.token_value
+                    )
+                else:
+                    return StandardResponseBody(
+                        False, 'Could not delete attendance', tkn.token_value
+                    )
+        else:
+            return StandardResponseBody(
+                False, 'You are not the owner of the classroom', tkn.token_value
+            )
+    else:
+        return StandardResponseBody(
+            False, 'Invalid user'
+        )
+
+
 async def give_attendance(token, classroom_uid, attendance_token):
     tkn = await token_controllers.validate_token(token)
 
@@ -87,8 +141,10 @@ async def give_attendance(token, classroom_uid, attendance_token):
 
         if if_user_enrolled:
 
-            response = attendance_controllers.log_attendance(classroom_uid=classroom_uid.classroom_uid, user_id=tkn.user_id, \
-                attendance_token=attendance_token)
+            response = attendance_controllers.log_attendance(
+                classroom_uid = classroom_uid.classroom_uid, 
+                user_id = tkn.user_id,
+                attendance_token = attendance_token)
             
             if response == True:
                 return StandardResponseBody(
