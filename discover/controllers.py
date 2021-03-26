@@ -5,7 +5,6 @@ from discover import models as discover_models
 async def search(query, filter):
 
     query = query.split(" ")
-    print(query)
 
     ### process query
     results = set()
