@@ -1,5 +1,5 @@
 from classrooms import controllers as classroom_controllers
-from mail.controllers import send_email_verification_email
+from mail.helpers import send_verify_mail
 from tokens import controllers as token_controllers
 from user import dropbox as user_dropbox
 from user import helpers as user_helpers
@@ -18,7 +18,7 @@ async def sign_up(user):
 
             ### generate token
             token = await user_helpers.generate_verify_email_token()
-            await send_email_verification_email(user.email, token)
+            await send_verify_mail(user.email, token)
 
             return True
         else:
