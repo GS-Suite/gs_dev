@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import Response, Header
 from attendance import schemas as attendance_schemas
 from attendance import routes as attendance_routes
@@ -9,7 +10,7 @@ ATTENDANCE_DEFAULT_TOKEN_TIMEOUT = 30 * 60
 
 
 @app.post('/take_attendance/')
-async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, timeout_minutes: int, token: str = Header(None)):
+async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, timeout_minutes: Optional[int] = 30, token: str = Header(None)):
     if timeout_minutes == "" or not timeout_minutes:
         timeout_minutes = ATTENDANCE_DEFAULT_TOKEN_TIMEOUT
     else:

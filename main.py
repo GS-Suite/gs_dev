@@ -35,6 +35,7 @@ from tokens.apis import *
 from classrooms.apis import *
 from attendance.apis import *
 from forum.apis import *
+from discover.apis import *
 
 
 if __name__ == "__main__":
