@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql.sqltypes import Boolean
 from db_setup.pg_setup import SessionLocal, Base
 from user import mongo
 import datetime
@@ -17,6 +18,7 @@ class User(Base):
     first_name = Column(String)
     last_name = Column(String)
     date_joined = Column(DateTime)
+    verified = Column(Boolean, default = False)
 
 
 async def create_user(user: dict, uid: str):
@@ -88,6 +90,20 @@ async def update_password(user: User, new_password):
 async def delete_user(user: User):
     try:
         db.delete(user)
+        db.commit()
+        return True
+    except Exception as e:
+        print(e)
+        db.rollback()
+        return False
+
+
+async def set_verified(email):
+    try:
+        x = db.query(User).filter(
+            User.email == email
+        ).first()
+        x.verified = True
         db.commit()
         return True
     except Exception as e:

@@ -1,8 +1,10 @@
 from classrooms import controllers as classroom_controllers
+from mail.controllers import send_email_verification_email
 from tokens import controllers as token_controllers
 from user import dropbox as user_dropbox
 from user import helpers as user_helpers
 from user import models as user_models
+from user import redis as user_redis
 
 
 async def sign_up(user):
@@ -13,6 +15,11 @@ async def sign_up(user):
         #print(user, uid)
         res = await user_models.create_user(user, uid)
         if res:
+
+            ### generate token
+            token = await user_helpers.generate_verify_email_token()
+            await send_email_verification_email(user.email, token)
+
             return True
         else:
             return False
@@ -32,6 +39,16 @@ async def sign_in(user):
 
 async def sign_out(token_value):
     await token_controllers.delete_token(token_value)
+
+
+async def verify_email(token):
+    email = user_redis.get_token(token)
+    if email:
+        res = user_models.set_verified(email)
+        if res:
+            user_redis.delete_token(token)
+        return res 
+    return False
 
 
 async def update_profile(uid, details):

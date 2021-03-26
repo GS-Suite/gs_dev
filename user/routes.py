@@ -1,5 +1,6 @@
 from responses.standard_response_body import StandardResponseBody
 from user import controllers as user_controllers
+from fastapi.responses import HTMLResponse
 
 
 async def sign_up(user):
@@ -84,3 +85,14 @@ async def change_profile_picture(token, picture):
             True, "Profile picture updated", token.token_value
         )
     return StandardResponseBody(False, "Could not update profile picture")
+
+
+async def verify_email(token):
+    res = await user_controllers.verify_email(token)
+    if res:
+        return HTMLResponse(
+            "<p>Email Verified</p>"
+        )
+    return HTMLResponse(
+            "<p>Email could not be verified</p>"
+        )

@@ -1,5 +1,7 @@
 from user.models import get_user_by_uid
 from uuid import uuid4
+import random
+import string
 import bcrypt
 
 
@@ -34,3 +36,16 @@ async def user_object_response(user):
         "last_name": user.last_name,
         "email": user.email
     }
+
+
+async def generate_verify_email_token():
+    N = 17
+    gen_code = ''.join(
+        random.choices(
+            string.ascii_uppercase +
+            string.digits +
+            string.ascii_lowercase,
+            k = N
+        )
+    )
+    return gen_code

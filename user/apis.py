@@ -46,3 +46,9 @@ async def get_user_dashboard(token: dict = Depends(token_validation)):
 @router.post("/change_profile_picture")
 async def change_profile_picture(token: dict = Depends(token_validation), picture: Optional[UploadFile] = File(None)):
     return await user_routes.change_profile_picture(token, picture)
+    
+
+@router.get("/verify_email")
+async def change_profile_picture(token: dict = Depends(token_validation), picture: Optional[UploadFile] = File(None)):
+    return await user_routes.change_profile_picture(token, picture)
+
