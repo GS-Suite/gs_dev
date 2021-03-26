@@ -6,7 +6,7 @@ import datetime
 DB_NAME = 'Attendance'
 DB_ENROLLED = "Enrolled"
 
-def add_attendance_mongo(classroom_uid: str, attendance_token: str):
+async def add_attendance_mongo(classroom_uid: str, attendance_token: str):
     try:
         mongo_resp = Mongo_CONN[DB_NAME][classroom_uid].find_one(
                 {
@@ -31,7 +31,7 @@ def add_attendance_mongo(classroom_uid: str, attendance_token: str):
         return False
 
 
-def delete_attendance_mongo(classroom_uid: str, token: str):
+async def delete_attendance_mongo(classroom_uid: str, token: str):
     try:
         mongo_resp = Mongo_CONN[DB_NAME][classroom_uid]
         if mongo_resp:
@@ -44,7 +44,7 @@ def delete_attendance_mongo(classroom_uid: str, token: str):
         return False
 
 
-def check_enrolled_in_classroom(classroom_uid, user_id):
+async def check_enrolled_in_classroom(classroom_uid, user_id):
     try:
         x = Mongo_CONN[DB_ENROLLED][classroom_uid].find_one(
             {"uid": user_id}
@@ -57,7 +57,7 @@ def check_enrolled_in_classroom(classroom_uid, user_id):
         return False
 
 
-def check_enrolled_in_user_enrolled(classroom_uid, user_id):
+async def check_enrolled_in_user_enrolled(classroom_uid, user_id):
     try:
         x = Mongo_CONN['Users'][user_id].find_one()
 
@@ -68,7 +68,7 @@ def check_enrolled_in_user_enrolled(classroom_uid, user_id):
         return False
 
 
-def give_attendance(classroom_uid, user_id, attendance_token):
+async def give_attendance(classroom_uid, user_id, attendance_token):
     try:
 
         x = Mongo_CONN[DB_NAME][classroom_uid].update_one(
