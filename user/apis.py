@@ -48,7 +48,8 @@ async def change_profile_picture(token: dict = Depends(token_validation), pictur
     return await user_routes.change_profile_picture(token, picture)
     
 
-@router.get("/verify_email")
-async def change_profile_picture(token: dict = Depends(token_validation), picture: Optional[UploadFile] = File(None)):
-    return await user_routes.change_profile_picture(token, picture)
+@router.get("/verify_email/{token}")
+async def verify_email(token):
+    print(token)
+    return await user_routes.verify_email(token)
 
