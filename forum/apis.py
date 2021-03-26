@@ -1,4 +1,4 @@
-from fastapi import Response, Header, Body
+from fastapi import Response, Header, Body, O
 from forum import routes as forum_routes
 from main import app
 
@@ -11,5 +11,5 @@ async def get_forum_chat():
     pass
 
 @app.post('/send_message/')
-async def send_message(classroom_uid: str = Body(...), message: str = Body(...), token: str = Header(None), ):
+async def send_message(classroom_uid: str = Body(...), message: str = Body(...), reply_id: str = Body(...),token: str = Header(None), ):
     return await forum_routes.send_message(classroom_uid=classroom_uid, message=message, token=token)
