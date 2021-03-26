@@ -47,12 +47,12 @@ async def send_message(classroom_uid, message, reply_user_id, reply_msg_id, tkn)
     reply_user_id_username = ''
 
     if tkn:
-        user_enrolled_status = attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=tkn.user_id)
+        user_enrolled_status = await attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=tkn.user_id)
         if_user_is_creator = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=tkn.user_id)
         
         '''For reply id'''
-        if reply_user_id is not None:
-            reply_user_id_enrolled_status = attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=reply_user_id)
+        if reply_user_id != '':
+            reply_user_id_enrolled_status = await attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=reply_user_id)
             reply_user_id_creator_status = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=reply_user_id)
 
             if reply_user_id_enrolled_status == True or reply_user_id_creator_status == True:

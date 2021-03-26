@@ -33,9 +33,9 @@ def post_message_to_forum(classroom_id, message_id, reply_user_id, reply_usernam
         resp.insert_one(
                 {
                     "message_id": message_id,
-                    "reply_user_id" = reply_user_id,
-                    "reply_username" = reply_user_id_username,
-                    "reply_msg_id" = reply_msg_id,
+                    "reply_user_id": reply_user_id,
+                    "reply_username": reply_username,
+                    "reply_msg_id": reply_msg_id,
                     "datetimestamp": datetimestamp,
                     "user_id": user_id,
                     "username": username,
