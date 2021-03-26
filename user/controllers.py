@@ -111,6 +111,12 @@ async def get_user_dashboard(uid):
         }
     return False
 
+async def get_user_username(uid):
+    user = await user_models.get_user_for_dashboard(uid)
+    if user:
+        return user.username
+    return False
+
 
 async def change_profile_picture(user_uid, picture):
     ### delete previous pictures
