@@ -26,15 +26,17 @@ def create_forum(classroom_uid):
         return False
 
 
-def post_message_to_forum(classroom_id, message_id, date, time, user_id, username, message):
+def post_message_to_forum(classroom_id, message_id, reply_user_id, reply_username, reply_msg_id, datetimestamp, user_id, username, message):
     forum_id = classroom_id + '-F'
     try:
         resp = FORUM_MONGO_CONN[forum_id]['main']
         resp.insert_one(
                 {
                     "message_id": message_id,
-                    "date": date,
-                    "time": time,
+                    "reply_user_id" = reply_user_id,
+                    "reply_username" = reply_user_id_username,
+                    "reply_msg_id" = reply_msg_id,
+                    "datetimestamp": datetimestamp,
                     "user_id": user_id,
                     "username": username,
                     "message": message
@@ -44,3 +46,13 @@ def post_message_to_forum(classroom_id, message_id, date, time, user_id, usernam
     except Exception as e:
         print(e)
         return False
+
+#  classroom_id=classroom_uid,
+#                     message_id = message_id,
+#                     reply_user_id = reply_user_id,
+#                     reply_username = reply_user_id_username,
+#                     reply_msg_id = reply_msg_id,
+#                     datetimestamp = datetime.datetime.utcnow(),
+#                     user_id = tkn.user_id,
+#                     username = username,
+#                     message = message

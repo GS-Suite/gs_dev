@@ -15,6 +15,8 @@ async def get_forum_chat():
     pass
 
 @router.post('/send_message/')
-async def send_message(classroom_uid: str = Body(...), message: str = Body(...), token: dict = Depends(token_validation)):
-    return await forum_routes.send_message(classroom_uid=classroom_uid, message=message, tkn=token)
+async def send_message(classroom_uid: str = Body(...), message: str = Body(...), reply_user_id: str = Body(None), 
+                    reply_msg_id: str = Body(None),token: dict = Depends(token_validation)):
+    return await forum_routes.send_message(classroom_uid=classroom_uid, message=message, reply_user_id=reply_user_id, 
+                    reply_msg_id=reply_msg_id, tkn=token)
 

@@ -42,11 +42,28 @@ async def create_forum(classroom_uid, token):
     )
 
 
-async def send_message(classroom_uid, message, tkn):
+async def send_message(classroom_uid, message, reply_user_id, reply_msg_id, tkn):
+    reply_user_id_valid_status = False
+    reply_user_id_username = ''
 
     if tkn:
         user_enrolled_status = attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=tkn.user_id)
         if_user_is_creator = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=tkn.user_id)
+        
+        '''For reply id'''
+        if reply_user_id is not None:
+            reply_user_id_enrolled_status = attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=reply_user_id)
+            reply_user_id_creator_status = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=reply_user_id)
+
+            if reply_user_id_enrolled_status == True or reply_user_id_creator_status == True:
+                reply_user_id_valid_status = True
+                reply_user_id_username = await user_controllers.get_user_username(uid=reply_user_id)
+
+            else:
+                return StandardResponseBody(
+                    False, 'You cannot reply to mentioned user', tkn.token_value
+                )
+
         
         if user_enrolled_status == True or if_user_is_creator ==  True:
 
@@ -57,13 +74,15 @@ async def send_message(classroom_uid, message, tkn):
 
                 ''' to get username '''
                 username = await user_controllers.get_user_username(uid=tkn.user_id)
-
-
+                
                 message_id = forum_helpers.generate_message_code()
 
                 send_message_status = forum_controllers.send_message(
                     classroom_id=classroom_uid,
                     message_id = message_id,
+                    reply_user_id = reply_user_id,
+                    reply_username = reply_user_id_username,
+                    reply_msg_id = reply_msg_id,
                     datetimestamp = datetime.datetime.utcnow(),
                     user_id = tkn.user_id,
                     username = username,
