@@ -15,39 +15,30 @@ async def create_forum(classroom_uid, token):
             message
         4. Create forum if does not exist, return forum id, name, 'Forum created' message
     '''
-    tkn = await token_controllers.validate_token(token)
+    if_user_creator = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
-    if tkn:
+    if if_user_creator == True:
+        if_forum_exists = forum_mongo.check_if_forum_exists(classroom_uid)
 
-        if_user_creator = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=tkn.user_id)
-
-        if if_user_creator == True:
-            if_forum_exists = forum_mongo.check_if_forum_exists(classroom_uid)
-    
-            if if_forum_exists['forum_exists'] == True:
+        if if_forum_exists['forum_exists'] == True:
+            return StandardResponseBody(
+                False, 'Forum already exists', token.token_value
+            )
+        else:
+            forum_creation_status = forum_controllers.create_forum(classroom_uid)
+            if forum_creation_status == True:
                 return StandardResponseBody(
-                    False, 'Forum already exists', tkn.token_value
+                    True, 'Forum has been created', token.token_value
                 )
             else:
-                forum_creation_status = forum_controllers.create_forum(classroom_uid)
-                if forum_creation_status == True:
-                    return StandardResponseBody(
-                        True, 'Forum has been created', tkn.token_value
-                    )
-                else:
-                    return StandardResponseBody(
-                        True, 'Forum could not be created', tkn.token_value
-                    )
-        else:
-            return StandardResponseBody(
-            False, 'You are not the creator of the classroom', tkn.token_value
-        )
-    return InvalidTokenResponseBody()
+                return StandardResponseBody(
+                    True, 'Forum could not be created', token.token_value
+                )
+    else:
+        return StandardResponseBody(
+        False, 'You are not the creator of the classroom', token.token_value
+    )
 
 
 async def send_message(classroom_uid, message, token):
-    tkn = await token_controllers.validate_token(token)
-
-    if tkn:
-        pass
-    return InvalidTokenResponseBody()
+    pass
