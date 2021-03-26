@@ -1,6 +1,11 @@
-class InvalidTokenResponseBody:
+from fastapi import HTTPException
+
+class InvalidTokenResponseBody(HTTPException):
     
     def __init__(self):
-        self.success = False
-        self.message = "Invalid token or non-existent user"
+        self.status_code = 200
+        self.detail = {
+            "success": False,
+            "message": "Invalid token or non-existent user"
+        }
         

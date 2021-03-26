@@ -1,6 +1,8 @@
 from attendance import schemas as attendance_schemas
 from attendance import routes as attendance_routes
-from fastapi import Response, Header, APIRouter
+from tokens.controllers import token_validation
+from fastapi.param_functions import Depends
+from fastapi import APIRouter
 from typing import Optional
 
 
@@ -10,8 +12,8 @@ ATTENDANCE_DEFAULT_TOKEN_TIMEOUT = 30 * 60
 
 router = APIRouter()
 
-@router.post('/take_attendance/', tags = ["attendance"])
-async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, timeout_minutes: Optional[int] = 30, token: str = Header(None)):
+@router.post('/take_attendance/')
+async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, timeout_minutes: Optional[int] = 30, token: dict = Depends(token_validation)):
     if timeout_minutes == "" or not timeout_minutes:
         timeout_minutes = ATTENDANCE_DEFAULT_TOKEN_TIMEOUT
     else:
@@ -19,19 +21,19 @@ async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, time
     return await attendance_routes.take_attendance(token = token, classroom_uid=classroom_uid.classroom_uid, timeout = timeout_minutes)
 
 
-@router.post('/stop_attendance/', tags = ["attendance"])
-async def stop_attendance(classroom_uid: attendance_schemas.TakeAttendance, attendance_token: str, token:str = Header(None)):
+@router.post('/stop_attendance/')
+async def stop_attendance(classroom_uid: attendance_schemas.TakeAttendance, attendance_token: str, token: dict = Depends(token_validation)):
     return await attendance_routes.stop_attendance(token=token, classroom_uid=classroom_uid.classroom_uid, attendance_token=attendance_token)
 
 
-@router.post('/delete_attendance/', tags = ["attendance"])
-async def delete_attendance(classroom_uid: attendance_schemas.TakeAttendance, attendance_token: str, token:str = Header(None)):
+@router.post('/delete_attendance/')
+async def delete_attendance(classroom_uid: attendance_schemas.TakeAttendance, attendance_token: str, token: dict = Depends(token_validation)):
     return await attendance_routes.delete_attendance(token=token, classroom_uid=classroom_uid.classroom_uid, attendance_token=attendance_token)
 
 
 ''' Student API '''
 
-@router.post('/give_attendance/', tags = ["attendance"])
-async def give_attendance(classroom_uid: attendance_schemas.TakeAttendance, attendance_token: str, token:str = Header(None)):
+@router.post('/give_attendance/')
+async def give_attendance(classroom_uid: attendance_schemas.TakeAttendance, attendance_token: str, token: dict = Depends(token_validation)):
     return await attendance_routes.give_attendance(token=token, classroom_uid=classroom_uid, attendance_token=attendance_token)
 

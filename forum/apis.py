@@ -4,14 +4,14 @@ from forum import routes as forum_routes
 
 router = APIRouter()
 
-@router.post('/create_forum/', tags = ["forum"])
+@router.post('/create_forum/')
 async def create_forum(classroom_uid: str, token: str = Header(None)):
     return await forum_routes.create_forum(classroom_uid, token)
 
-@router.post('/get_forum_chat/', tags = ["forum"])
+@router.post('/get_forum_chat/')
 async def get_forum_chat():
     pass
 
-@router.post('/send_message/', tags = ["forum"])
+@router.post('/send_message/')
 async def send_message(classroom_uid: str = Body(...), message: str = Body(...), token: str = Header(None), ):
     return await forum_routes.send_message(classroom_uid=classroom_uid, message=message, token=token)

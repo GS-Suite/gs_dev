@@ -5,13 +5,10 @@ from tokens import controllers as token_controllers
 
 
 async def search(token, query, filter):
-    tkn = await token_controllers.validate_token(token)
-    if tkn:
-        resp = await discover_controllers.search(query, filter)
-        if resp:
-            return StandardResponseBody(
-                True, "Search results", tkn.token_value, {"results": resp}
-            )
-        return StandardResponseBody(False, "No search results available", tkn.token_value)
-    return InvalidTokenResponseBody()
+    resp = await discover_controllers.search(query, filter)
+    if resp:
+        return StandardResponseBody(
+            True, "Search results", token.token_value, {"results": resp}
+        )
+    return StandardResponseBody(False, "No search results available", token.token_value)
 
