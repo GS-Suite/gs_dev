@@ -1,8 +1,7 @@
-from starlette.responses import JSONResponse
-from user import controllers as user_controllers
-from tokens import controllers as token_controllers
-from fastapi import status
+from responses.invalid_token_response_body import InvalidTokenResponseBody
 from responses.standard_response_body import StandardResponseBody
+from tokens import controllers as token_controllers
+from user import controllers as user_controllers
 
 
 async def sign_up(user):
@@ -48,7 +47,7 @@ async def update_profile(token, details):
                 True, "Profile updated", tkn.token_value, res
             )
         return StandardResponseBody(False, "Profile not updated")
-    return StandardResponseBody(False, "Invalid token")
+    return InvalidTokenResponseBody()
 
 
 async def update_password(token, details):
@@ -62,7 +61,7 @@ async def update_password(token, details):
         elif res == "invalid_password":
             return StandardResponseBody(False, "Invalid current password")
         return StandardResponseBody(False, "Profile not updated")
-    return StandardResponseBody(False, "Invalid token")
+    return InvalidTokenResponseBody()
 
 
 async def delete_account(password, token):
@@ -73,7 +72,7 @@ async def delete_account(password, token):
         if status:
             return StandardResponseBody(True, "Your account has been deleted")
         return StandardResponseBody(False, "Error. Could not delete account")
-    return StandardResponseBody(False, "Invalid token")
+    return InvalidTokenResponseBody()
 
 
 async def get_user_dashboard(token):
@@ -85,7 +84,7 @@ async def get_user_dashboard(token):
                 True, "Details fetched", tkn.token_value, user_data
             )
         return StandardResponseBody(False, "Details not fetched")
-    return StandardResponseBody(False, "Non-existent user")
+    return InvalidTokenResponseBody()
 
 
 async def change_profile_picture(token, picture):
@@ -101,4 +100,4 @@ async def change_profile_picture(token, picture):
                 True, "Profile picture updated", tkn.token_value
             )
         return StandardResponseBody(False, "Could not update profile picture")
-    return StandardResponseBody(False, "Non-existent user")
+    return InvalidTokenResponseBody()

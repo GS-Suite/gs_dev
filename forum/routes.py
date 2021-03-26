@@ -1,12 +1,10 @@
+from responses.invalid_token_response_body import InvalidTokenResponseBody
 from responses.standard_response_body import StandardResponseBody
-from starlette.status import HTTP_200_OK
 
+from attendance import controllers as attendance_controllers
 from tokens import controllers as token_controllers
 from forum import controllers as forum_controllers
 from forum import mongo as forum_mongo
-from attendance import controllers as attendance_controllers
-
-from fastapi import status
 
 
 async def create_forum(classroom_uid, token):
@@ -44,10 +42,7 @@ async def create_forum(classroom_uid, token):
             return StandardResponseBody(
             False, 'You are not the creator of the classroom', tkn.token_value
         )
-    else:
-        return StandardResponseBody(
-            False, 'Invalid user'
-        )
+    return InvalidTokenResponseBody()
 
 
 async def send_message(classroom_uid, message, token):
@@ -55,7 +50,4 @@ async def send_message(classroom_uid, message, token):
 
     if tkn:
         pass
-    else:
-        return StandardResponseBody(
-            False, 'Invalid User'
-        )
+    return InvalidTokenResponseBody()

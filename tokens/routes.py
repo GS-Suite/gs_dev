@@ -1,6 +1,6 @@
+from responses.invalid_token_response_body import InvalidTokenResponseBody
 from responses.standard_response_body import StandardResponseBody
 from tokens import controllers as token_controllers
-from fastapi import status
 
 
 async def validate_token(token):
@@ -9,9 +9,8 @@ async def validate_token(token):
         return StandardResponseBody(
             True, "Valid token", token.token_value
             )
-    return StandardResponseBody(
-        False, "Invalid token"
-        )
+    return InvalidTokenResponseBody()
+
 
 
 async def refresh_token(token):

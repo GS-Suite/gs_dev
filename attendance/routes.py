@@ -1,10 +1,9 @@
+from responses.invalid_token_response_body import InvalidTokenResponseBody
 from responses.standard_response_body import StandardResponseBody
-from starlette.status import HTTP_200_OK
 
-from tokens import controllers as token_controllers
 from attendance import controllers as attendance_controllers
+from tokens import controllers as token_controllers
 from attendance import helpers as attendance_helpers
-from fastapi import status
 
 
 async def take_attendance(token, classroom_uid, timeout):
@@ -54,10 +53,7 @@ async def take_attendance(token, classroom_uid, timeout):
             return StandardResponseBody(
                 False, 'You are not the owner of the classroom', tkn.token_value
             )
-    else:
-        return StandardResponseBody(
-            False, 'Invalid user'
-        )
+    return InvalidTokenResponseBody()
 
 
 async def stop_attendance(token, attendance_token, classroom_uid):
@@ -90,10 +86,8 @@ async def stop_attendance(token, attendance_token, classroom_uid):
             return StandardResponseBody(
                 False, 'You are not the owner of the classroom', tkn.token_value
             )
-    else:
-        return StandardResponseBody(
-            False, 'Invalid user'
-        )
+    return InvalidTokenResponseBody()
+
 
 
 async def delete_attendance(token, attendance_token, classroom_uid):
@@ -130,10 +124,8 @@ async def delete_attendance(token, attendance_token, classroom_uid):
             return StandardResponseBody(
                 False, 'You are not the owner of the classroom', tkn.token_value
             )
-    else:
-        return StandardResponseBody(
-            False, 'Invalid user'
-        )
+    return InvalidTokenResponseBody()
+
 
 
 async def give_attendance(token, classroom_uid, attendance_token):
@@ -161,7 +153,5 @@ async def give_attendance(token, classroom_uid, attendance_token):
             return StandardResponseBody(
                     False, 'You have not enrolled in this classroom', tkn.token_value
                 )
-    else:
-        return StandardResponseBody(
-            False, 'Chal bhak hacker!'
-        )
+    return InvalidTokenResponseBody()
+

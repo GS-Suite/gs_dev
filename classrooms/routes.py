@@ -1,13 +1,12 @@
-from re import T
+from responses.invalid_token_response_body import InvalidTokenResponseBody
 from responses.standard_response_body import StandardResponseBody
-from starlette.status import HTTP_200_OK
 from classrooms import controllers as classroom_controllers
 from tokens import controllers as token_controllers
-from fastapi import status
 
 
 async def create_classroom(classroom, token):
     tkn = await token_controllers.validate_token(token)
+
     if tkn:
         res, cls = await classroom_controllers.create_class(tkn, classroom.class_name)
         if res == True:
@@ -21,10 +20,8 @@ async def create_classroom(classroom, token):
         return StandardResponseBody(
             False, "Classroom not created"
         )
-    else:
-        return StandardResponseBody(
-            False, "Non-existent user"
-        )
+
+    return InvalidTokenResponseBody()
 
 
 async def get_user_classrooms(token):
@@ -44,8 +41,7 @@ async def get_user_classrooms(token):
             return StandardResponseBody(
                 False, "Could not retrieve data", tkn.token_value
             )
-    else:
-        return {"success": False, "message": "Non-existent user"}
+    return InvalidTokenResponseBody()
 
 
 async def get_user_enrolled(token):
@@ -65,9 +61,8 @@ async def get_user_enrolled(token):
             return StandardResponseBody(
                 False, "Could not retrieve data"
             )
-    return StandardResponseBody(
-        False, "Non-existent user"
-    )
+    return InvalidTokenResponseBody()
+
 
 async def get_classroom_enrolled(classroom_uid, token):
     tkn = await token_controllers.validate_token(token)
@@ -82,9 +77,8 @@ async def get_classroom_enrolled(classroom_uid, token):
             return StandardResponseBody(
                 False, "Could not retrieve data"
             )
-    return StandardResponseBody(
-        False, "Non-existent user"
-    )
+    return InvalidTokenResponseBody()
+
 
 
 async def get_classroom_details(uid, token):
@@ -101,10 +95,8 @@ async def get_classroom_details(uid, token):
             return StandardResponseBody(
                 False, "Could not retrieve data", tkn.token_value
             )
-    else:
-        return StandardResponseBody(
-            False, "Non-existent user"
-        )
+    return InvalidTokenResponseBody()
+
 
 
 async def generate_classroom_entry_code(uid, token):
@@ -119,10 +111,8 @@ async def generate_classroom_entry_code(uid, token):
         return StandardResponseBody(
             False, "Sorry! Couldn't generate entry code", tkn.token_value
         )
-    else:
-        return StandardResponseBody (
-            False, "Your account is invalid"
-        )
+    return InvalidTokenResponseBody()
+
 
 
 async def course_enroll(token, classroom_uid, entry_code):
@@ -145,10 +135,8 @@ async def course_enroll(token, classroom_uid, entry_code):
         return StandardResponseBody(
             False, "Sorry! Couldn't enroll", tkn.token_value
         )
-    else:
-        return StandardResponseBody (
-            False, "Your account is invalid"
-        )
+    return InvalidTokenResponseBody()
+
 
 async def get_classroom_uid_by_entry_code(entry_code, token):
     tkn = await token_controllers.validate_token(token)
@@ -164,7 +152,4 @@ async def get_classroom_uid_by_entry_code(entry_code, token):
             return StandardResponseBody(
                 False, "Could not get classroom ID", tkn.token_value
             )
-    else:
-        return StandardResponseBody(
-                False, "Invalid User"
-            )
+    return InvalidTokenResponseBody()
