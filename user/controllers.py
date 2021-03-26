@@ -3,7 +3,6 @@ from tokens import controllers as token_controllers
 from user import dropbox as user_dropbox
 from user import helpers as user_helpers
 from user import models as user_models
-from user import mongo
 
 
 async def sign_up(user):

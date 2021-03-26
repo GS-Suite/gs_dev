@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from db_setup.pg_setup import Base, SessionLocal
-from classrooms import mongo
 from user.models import User
 import datetime
 

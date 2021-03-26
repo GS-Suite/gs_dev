@@ -1,7 +1,6 @@
 from pydantic import BaseModel, Field, validator
 import re
 
-from sqlalchemy.sql.schema import ForeignKey
 
 class CreateClassroomSchema(BaseModel):
     class_name: str = Field(...)

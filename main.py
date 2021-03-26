@@ -1,8 +1,7 @@
 from fastapi.middleware.cors import CORSMiddleware
-from tokens.controllers import token_validation
 from fastapi.responses import RedirectResponse
 from db_setup.pg_setup import Base, engine
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 import uvicorn
 
 from attendance.apis import router as attendance_router
@@ -11,9 +10,6 @@ from discover.apis import router as discover_router
 from tokens.apis import router as token_router
 from forum.apis import router as forum_router
 from user.apis import router as user_router
-
-from dotenv import load_dotenv
-load_dotenv()
 
 
 Base.metadata.create_all(bind=engine)

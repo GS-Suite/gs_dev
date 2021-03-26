@@ -1,4 +1,3 @@
-import re
 from discover import models as discover_models
 
 

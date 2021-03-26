@@ -1,9 +1,9 @@
+from fastapi import BackgroundTasks, Depends, UploadFile, APIRouter
 from tokens.controllers import token_validation
-from typing import Optional
-from fastapi import Response, BackgroundTasks, Header, Depends, UploadFile, APIRouter
 from fastapi.param_functions import File
 from user import schemas as user_schemas
 from user import routes as user_routes
+from typing import Optional
 
 
 router = APIRouter()

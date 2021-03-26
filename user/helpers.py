@@ -1,5 +1,5 @@
-from uuid import uuid4
 from user.models import get_user_by_uid
+from uuid import uuid4
 import bcrypt
 
 

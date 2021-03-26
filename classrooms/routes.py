@@ -1,7 +1,6 @@
 from responses.invalid_token_response_body import InvalidTokenResponseBody
 from responses.standard_response_body import StandardResponseBody
 from classrooms import controllers as classroom_controllers
-from tokens import controllers as token_controllers
 
 
 async def create_classroom(classroom, tkn):

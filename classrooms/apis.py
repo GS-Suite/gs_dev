@@ -1,8 +1,8 @@
-from tokens.controllers import token_validation
-from fastapi.param_functions import Depends
 from classrooms import schemas as classroom_schemas
 from classrooms import routes as classroom_routes
-from fastapi import Response, Header, APIRouter
+from tokens.controllers import token_validation
+from fastapi.param_functions import Depends
+from fastapi import APIRouter
 
 
 router = APIRouter()

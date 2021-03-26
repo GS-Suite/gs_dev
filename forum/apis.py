@@ -1,7 +1,7 @@
-from fastapi import Response, Header, Body, APIRouter
 from tokens.controllers import token_validation
 from fastapi.param_functions import Depends
 from forum import routes as forum_routes
+from fastapi import Body, APIRouter
 
 
 router = APIRouter()

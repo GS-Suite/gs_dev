@@ -1,4 +1,3 @@
-from re import U
 from db_setup.pg_setup import SessionLocal, Base
 from user.models import User
 
