@@ -1,10 +1,10 @@
-from typing import Optional
 from discover import routes as discover_routes
-from pydantic import Field
-from fastapi import Header
-from main import app
+from fastapi import Header, APIRouter
+from typing import Optional
 
 
-@app.post("/search/")
+router = APIRouter()
+
+@router.post("/search/", tags = ["discover"])
 async def search(query: str, filter: Optional[str] = None, token: str = Header(None)):
     return await discover_routes.search(token, query, filter)

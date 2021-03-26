@@ -1,15 +1,17 @@
-from fastapi import Response, Header, Body
+from fastapi import Response, Header, Body, APIRouter
 from forum import routes as forum_routes
-from main import app
 
-@app.post('/create_forum/')
+
+router = APIRouter()
+
+@router.post('/create_forum/', tags = ["forum"])
 async def create_forum(classroom_uid: str, token: str = Header(None)):
     return await forum_routes.create_forum(classroom_uid, token)
 
-@app.post('/get_forum_chat/')
+@router.post('/get_forum_chat/', tags = ["forum"])
 async def get_forum_chat():
     pass
 
-@app.post('/send_message/')
+@router.post('/send_message/', tags = ["forum"])
 async def send_message(classroom_uid: str = Body(...), message: str = Body(...), token: str = Header(None), ):
     return await forum_routes.send_message(classroom_uid=classroom_uid, message=message, token=token)
