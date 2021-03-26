@@ -1,8 +1,8 @@
-"""reset 5678
+"""verified account
 
-Revision ID: f3d55ea64d82
+Revision ID: 7e458ded911e
 Revises: 
-Create Date: 2021-03-03 19:02:44.726355
+Create Date: 2021-03-26 16:47:38.896747
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f3d55ea64d82'
+revision = '7e458ded911e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,6 +27,7 @@ def upgrade():
     sa.Column('first_name', sa.String(), nullable=True),
     sa.Column('last_name', sa.String(), nullable=True),
     sa.Column('date_joined', sa.DateTime(), nullable=True),
+    sa.Column('verified', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('username')
     )
@@ -38,6 +39,7 @@ def upgrade():
     sa.Column('creator_uid', sa.String(), nullable=True),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('date_created', sa.DateTime(), nullable=True),
+    sa.Column('entry_code', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['creator_uid'], ['user.uid'], ),
     sa.PrimaryKeyConstraint('id')
     )
