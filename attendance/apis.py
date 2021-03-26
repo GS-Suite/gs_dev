@@ -9,10 +9,12 @@ ATTENDANCE_DEFAULT_TOKEN_TIMEOUT = 30 * 60
 
 
 @app.post('/take_attendance/')
-async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, timeout: int, token: str = Header(None)):
-    if timeout == "" or not timeout:
-        timeout = ATTENDANCE_DEFAULT_TOKEN_TIMEOUT
-    return await attendance_routes.take_attendance(token=token, classroom_uid=classroom_uid.classroom_uid, timeout = timeout)
+async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, timeout_minutes: int, token: str = Header(None)):
+    if timeout_minutes == "" or not timeout_minutes:
+        timeout_minutes = ATTENDANCE_DEFAULT_TOKEN_TIMEOUT
+    else:
+        timeout_minutes = timeout_minutes * 60
+    return await attendance_routes.take_attendance(token = token, classroom_uid=classroom_uid.classroom_uid, timeout = timeout_minutes)
 
 
 @app.post('/stop_attendance/')
