@@ -26,7 +26,12 @@ async def search(query, filter):
             x = await discover_models.search_username(q)
             results = results.union(x)
     
-    print(results)
+    #print(results)
 
     ### search
-    return results 
+    return [{
+        "username": result.username,
+        "first_name": result.first_name,
+        "last_name": result.last_name,
+        "email": result.email
+    } for result in results] 
