@@ -1,9 +1,11 @@
+from dotenv import load_dotenv
 import dropbox
+import os
 
 
-dbx_access_token = "nWV4J7tifZEAAAAAAAAAAbUK4zh2bIY9oqOJfYZ-VLWvt4yVTGksAKVZ5Ko3juT_"
-DBX = dropbox.Dropbox(dbx_access_token)
+load_dotenv()
 
+DBX = dropbox.Dropbox(os.getenv("DBX_ACCESS_TOKEN"))
 
 '''
 db_path = "/upload test/test.jpg"

@@ -3,7 +3,6 @@ from tokens import controllers as token_controllers
 from user import dropbox as user_dropbox
 from user import helpers as user_helpers
 from user import models as user_models
-from user import mongo
 
 
 async def sign_up(user):
@@ -93,6 +92,12 @@ async def get_user_dashboard(uid):
             "username": user.username,
             "email": user.email
         }
+    return False
+
+async def get_user_username(uid):
+    user = await user_models.get_user_for_dashboard(uid)
+    if user:
+        return user.username
     return False
 
 

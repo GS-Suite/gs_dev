@@ -1,5 +1,4 @@
 from db_setup.redis_setup import REDIS_CONN as RED
-import json
 
 
 def set_token(token, classroom_uid, timeout):

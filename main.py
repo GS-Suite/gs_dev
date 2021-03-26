@@ -1,10 +1,15 @@
-import uvicorn
-from fastapi import FastAPI
-from db_setup.pg_setup import Base, engine
-from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-load_dotenv()
+from fastapi.responses import RedirectResponse
+from db_setup.pg_setup import Base, engine
+from fastapi import FastAPI
+import uvicorn
+
+from attendance.apis import router as attendance_router
+from classrooms.apis import router as classroom_router
+from discover.apis import router as discover_router
+from tokens.apis import router as token_router
+from forum.apis import router as forum_router
+from user.apis import router as user_router
 
 
 Base.metadata.create_all(bind=engine)
@@ -25,16 +30,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/", include_in_schema=False)
+
+@app.get("/", include_in_schema = False)
 async def home_to_doc():
     return RedirectResponse("/docs")
 
 
-from user.apis import *
-from tokens.apis import *
-from classrooms.apis import *
-from attendance.apis import *
-from forum.apis import *
+app.include_router(user_router,         tags = ["users"])
+app.include_router(token_router,        tags = ["tokens"])
+app.include_router(classroom_router,    tags = ["classrooms"])
+app.include_router(attendance_router,   tags = ["attendance"])
+app.include_router(forum_router,        tags = ["forums"])
+app.include_router(discover_router,     tags = ["discover"])
 
 
 if __name__ == "__main__":

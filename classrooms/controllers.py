@@ -1,8 +1,6 @@
 from classrooms import helpers as classroom_helpers
-from tokens import controllers as token_controllers
 from classrooms import models as classroom_model
 from classrooms import mongo
-from fastapi import status
 
 
 async def get_user_classrooms(user_uid):

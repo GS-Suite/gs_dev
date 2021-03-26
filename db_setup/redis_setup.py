@@ -5,6 +5,13 @@ import os
 load_dotenv()
 
 
+REDIS_CONN = redis.Redis(
+    host = str(os.getenv("REDIS_URL")), 
+    password = str(os.getenv("REDIS_PASSWORD")), 
+    port = int(os.getenv("REDIS_PORT"))
+)
+
+
 '''
         LISTEN UP
 
@@ -32,9 +39,3 @@ load_dotenv()
 
 
 '''
-
-REDIS_CONN = redis.Redis(
-    host = str(os.getenv("REDIS_URL")), 
-    password = str(os.getenv("REDIS_PASSWORD")), 
-    port = int(os.getenv("REDIS_PORT"))
-)

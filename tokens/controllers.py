@@ -1,3 +1,5 @@
+from fastapi.param_functions import Header
+from responses.invalid_token_response_body import InvalidTokenResponseBody
 from tokens import helpers as token_helpers
 from tokens import models as token_model
 import settings
@@ -57,3 +59,10 @@ async def delete_token(token_value):
     if token:
         return await token_model.delete_token(token)
     return True
+
+
+async def token_validation(token : str = Header(None)):
+    x = await validate_token(token)
+    if not x:
+        raise InvalidTokenResponseBody()
+    return x
