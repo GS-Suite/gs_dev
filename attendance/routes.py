@@ -16,10 +16,10 @@ async def take_attendance(token, classroom_uid, timeout):
             2. Add code to Mongo
             3. Send code in response
         '''
-        attendance_token = attendance_helpers.generate_attendance_code()
+        attendance_token = await attendance_helpers.generate_attendance_code()
 
         ### add token to redis
-        response = attendance_controllers.add_attendance_token_redis(
+        response = await attendance_controllers.add_attendance_token_redis(
             classroom_uid = classroom_uid, 
             token = attendance_token,
             timeout = timeout
@@ -27,7 +27,7 @@ async def take_attendance(token, classroom_uid, timeout):
         
         ### add object to mongo
         if response:
-            response = attendance_controllers.add_attendance_mongo(
+            response = await attendance_controllers.add_attendance_mongo(
                 classroom_uid = classroom_uid,
                 token = attendance_token
             )
@@ -62,7 +62,7 @@ async def stop_attendance(token, attendance_token, classroom_uid):
             1. Delete attendance token document from Mongo
             2. Send response
         '''
-        response = attendance_controllers.delete_attendance_token_redis(
+        response = await attendance_controllers.delete_attendance_token_redis(
             token = attendance_token
         )
 
@@ -90,12 +90,12 @@ async def delete_attendance(token, attendance_token, classroom_uid):
                 2. Send response
             '''
 
-            response = attendance_controllers.delete_attendance_token_redis(
+            response = await attendance_controllers.delete_attendance_token_redis(
                 token = attendance_token
             )
 
             if response:
-                response = attendance_controllers.delete_attendance_mongo(
+                response = await attendance_controllers.delete_attendance_mongo(
                     classroom_uid, attendance_token
                 )
 
@@ -114,13 +114,13 @@ async def delete_attendance(token, attendance_token, classroom_uid):
 
 
 async def give_attendance(token, classroom_uid, attendance_token):
-    if_user_enrolled = attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid.classroom_uid, user_id=token.user_id)
+    if_user_enrolled = await attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid.classroom_uid, user_id=token.user_id)
 
     if if_user_enrolled:
 
-        response = attendance_controllers.log_attendance(
+        response = await attendance_controllers.log_attendance(
             classroom_uid = classroom_uid.classroom_uid, 
-            user_id = tkn.user_id,
+            user_id = token.user_id,
             attendance_token = attendance_token)
         
         if response == True:
