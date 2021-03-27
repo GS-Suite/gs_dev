@@ -46,6 +46,10 @@ async def get_classroom_enrolled(classroom_uid: classroom_schemas.ClassroomUidSc
     return await classroom_routes.get_classroom_enrolled(classroom_uid.classroom_uid, token)
 
 
-@router.post("/get_classroom_uid/")
-async def get_classroom_uid(entry_code: str, token: dict = Depends(token_validation)):
+@router.post("/get_classroom_uid_from_entry_code/")
+async def get_classroom_uid(entry_code: str = Body(..., embed=True), token: dict = Depends(token_validation)):
     return await classroom_routes.get_classroom_uid_by_entry_code(entry_code, token)
+
+@router.post('/get_classroom_owner_from_class_uid/')
+async def get_classroom_owner_from_class_uid(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
+    return await classroom_routes.get_classroom_owner_from_class_uid(classroom_uid, token)

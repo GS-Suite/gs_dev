@@ -121,3 +121,20 @@ async def get_classroom_uid_by_entry_code(entry_code, token):
         return StandardResponseBody(
             False, "Could not get classroom ID", token.token_value
         )
+
+
+async def get_classroom_owner_from_class_uid(classroom_uid, token):
+    res = await classroom_controllers.get_classroom_owner_from_class_uid(classroom_uid)
+
+    if res['status'] == True:
+        return StandardResponseBody(
+            True, "Classroom owner ID aquired", token.token_value, {
+                'classroom_uid': res['classroom_uid'],
+                'classroom_name': res['classroom_name'],
+                'classroom_owner_id': res['classroom_owner_id']
+            }
+        )
+    else:
+        return StandardResponseBody(
+            False, "Could not get classroom owner ID", token.token_value
+        )

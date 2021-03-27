@@ -2,7 +2,7 @@ from attendance import schemas as attendance_schemas
 from attendance import routes as attendance_routes
 from tokens.controllers import token_validation
 from fastapi.param_functions import Depends
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
 from typing import Optional
 
 
@@ -22,8 +22,8 @@ async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, time
 
 
 @router.post('/stop_attendance/')
-async def stop_attendance(classroom_uid: attendance_schemas.TakeAttendance, attendance_token: str, token: dict = Depends(token_validation)):
-    return await attendance_routes.stop_attendance(token=token, classroom_uid=classroom_uid.classroom_uid, attendance_token=attendance_token)
+async def stop_attendance(classroom_uid: str = Body(...), attendance_token: str = Body(...), token: dict = Depends(token_validation)):
+    return await attendance_routes.stop_attendance(token=token, classroom_uid=classroom_uid, attendance_token=attendance_token)
 
 
 @router.post('/delete_attendance/')

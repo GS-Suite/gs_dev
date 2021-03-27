@@ -34,7 +34,7 @@ async def get_classroom_by_entry_code(code):
     return db.query(Classroom).filter(
         Classroom.entry_code == code
     ).first()
-
+    
 
 async def get_classroom_by_name(uid: str, name: str):
     return db.query(Classroom).filter(
