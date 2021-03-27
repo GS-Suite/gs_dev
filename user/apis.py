@@ -52,7 +52,6 @@ async def change_profile_picture(token: dict = Depends(token_validation), pictur
 async def get_username_from_user_id(user_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
     return await user_routes.get_username_from_user_id(user_uid = user_uid, token = token)
 
-    
 
 @router.get("/verify_email/{token}")
 async def verify_email(token):

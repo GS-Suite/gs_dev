@@ -18,7 +18,7 @@ async def take_attendance(classroom_uid: str = Body(...), timeout_minutes: Optio
         timeout_minutes = ATTENDANCE_DEFAULT_TOKEN_TIMEOUT
     else:
         timeout_minutes = timeout_minutes * 60
-    return await attendance_routes.take_attendance(token = token, classroom_uid=classroom_uid.classroom_uid, timeout = timeout_minutes)
+    return await attendance_routes.take_attendance(token = token, classroom_uid=classroom_uid, timeout = timeout_minutes)
 
 
 @router.post('/stop_attendance/')
