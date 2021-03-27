@@ -7,7 +7,7 @@ from fastapi import Body, APIRouter
 router = APIRouter()
 
 @router.post('/create_forum/')
-async def create_forum(classroom_uid: str, token: dict = Depends(token_validation)):
+async def create_forum(classroom_uid: str = Body(...), token: dict = Depends(token_validation)):
     return await forum_routes.create_forum(classroom_uid, token)
 
 @router.post('/get_forum_chat/')
