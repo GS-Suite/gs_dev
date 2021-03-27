@@ -1,13 +1,13 @@
 from tokens.controllers import token_validation
 from fastapi.param_functions import Depends
 from forum import routes as forum_routes
-from fastapi import Body, APIRouter
+from fastapi import Body, APIRouter, Header
 
 
 router = APIRouter()
 
 @router.post('/create_forum/')
-async def create_forum(classroom_uid: str = Body(...), token: dict = Depends(token_validation)):
+async def create_forum(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
     return await forum_routes.create_forum(classroom_uid, token)
 
 @router.post('/get_forum_chat/')
