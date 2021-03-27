@@ -2,7 +2,7 @@ from classrooms import schemas as classroom_schemas
 from classrooms import routes as classroom_routes
 from tokens.controllers import token_validation
 from fastapi.param_functions import Depends
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
 
 
 router = APIRouter()
@@ -32,7 +32,7 @@ async def generate_classroom_entry_code(classroom_uid: classroom_schemas.Classro
 ''' STUDENT APIS '''
 
 @router.post('/enroll/')
-async def course_enroll(classroom: classroom_schemas.UserClassroomEnroll, token: dict = Depends(token_validation)):
+async def course_enroll(classroom: classroom_schemas.UserClassroomEnroll = Body(...), token: dict = Depends(token_validation)):
     return await classroom_routes.course_enroll(token, classroom.classroom_uid, classroom.entry_code)
 
 
