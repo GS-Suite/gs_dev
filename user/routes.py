@@ -86,6 +86,20 @@ async def change_profile_picture(token, picture):
         )
     return StandardResponseBody(False, "Could not update profile picture")
 
+async def get_username_from_user_id(user_uid, token):
+    resp = await user_controllers.get_user_username(uid=user_uid)
+
+    if resp:
+        return StandardResponseBody(
+            True, 'Username acquired from given user uid', token.token_value, {
+                'user_uid': user_uid,
+                'username': resp
+            }
+        )
+    else:
+       return StandardResponseBody(
+            False, 'Username could not be aquired from given user uid', token.token_value
+        ) 
 
 async def verify_email(token):
     res = await user_controllers.verify_email(token)

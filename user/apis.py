@@ -1,4 +1,4 @@
-from fastapi import BackgroundTasks, Depends, UploadFile, APIRouter
+from fastapi import BackgroundTasks, Depends, UploadFile, APIRouter, Body
 from tokens.controllers import token_validation
 from fastapi.param_functions import File
 from user import schemas as user_schemas
@@ -46,6 +46,12 @@ async def get_user_dashboard(token: dict = Depends(token_validation)):
 @router.post("/change_profile_picture")
 async def change_profile_picture(token: dict = Depends(token_validation), picture: Optional[UploadFile] = File(None)):
     return await user_routes.change_profile_picture(token, picture)
+
+
+@router.post("/get_username_from_user_id/")
+async def get_username_from_user_id(user_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
+    return await user_routes.get_username_from_user_id(user_uid = user_uid, token = token)
+
     
 
 @router.get("/verify_email/{token}")

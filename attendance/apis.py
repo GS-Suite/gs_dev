@@ -13,7 +13,7 @@ ATTENDANCE_DEFAULT_TOKEN_TIMEOUT = 30 * 60
 router = APIRouter()
 
 @router.post('/take_attendance/')
-async def take_attendance(classroom_uid: attendance_schemas.TakeAttendance, timeout_minutes: Optional[int] = 30, token: dict = Depends(token_validation)):
+async def take_attendance(classroom_uid: str = Body(...), timeout_minutes: Optional[int] = Body(30), token: dict = Depends(token_validation)):
     if timeout_minutes == "" or not timeout_minutes:
         timeout_minutes = ATTENDANCE_DEFAULT_TOKEN_TIMEOUT
     else:
