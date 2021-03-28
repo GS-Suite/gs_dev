@@ -12,6 +12,7 @@ class Token(Base):
     
     id = Column(Integer, primary_key = True, index = True)
     user_id = Column(String, ForeignKey(User.uid))
+    username = Column(String, ForeignKey(User.username))
     token_value = Column(String)
     date_issued = Column(DateTime, default = datetime.datetime.now())
 
