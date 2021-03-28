@@ -112,7 +112,7 @@ async def get_user_dashboard(uid):
     return False
 
 async def get_user_username(uid):
-    user = await user_models.get_user_for_dashboard(uid)
+    user = await user_models.get_user_by_uid(uid)
     if user:
         return user.username
     return False

@@ -56,7 +56,7 @@ async def get_classroom_details(user_id, uid):
     cls = {
         "name": classroom.name,
         "uid": classroom.uid,
-        "entry_code": classroom.entry_code
+        "entry_code": classroom.entry_code,
     }
     return cls
 
@@ -128,7 +128,7 @@ async def getClassroomUid(entry_code):
         return {
             'status': True,
             'classroom_uid': classroom_uid.uid,
-            'classroom_name': classroom_uid.name
+            'classroom_name': classroom_uid.name,
         }
     except Exception as e:
         print(e)
@@ -137,6 +137,21 @@ async def getClassroomUid(entry_code):
 
 async def delete_user_classrooms(uid):
     return await classroom_model.delete_user_classrooms(uid)
+
+
+async def get_classroom_owner_from_class_uid(classroom_uid):
+    try:
+        classroom = await classroom_model.get_classroom_by_uid(uid=classroom_uid)
+        return {
+            'status': True,
+            'classroom_uid': classroom.uid,
+            'classroom_name': classroom.name,
+            'classroom_owner_id': classroom.creator_uid
+        }
+    except Exception as e:
+        print(e)
+        return {'status': False}
+
 
 
 '''
