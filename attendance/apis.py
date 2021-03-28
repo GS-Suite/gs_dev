@@ -31,9 +31,14 @@ async def delete_attendance(classroom_uid: attendance_schemas.TakeAttendance, at
     return await attendance_routes.delete_attendance(token=token, classroom_uid=classroom_uid.classroom_uid, attendance_token=attendance_token)
 
 
-''' Student API '''
+''' Student APIs '''
 
 @router.post('/give_attendance/')
 async def give_attendance(classroom_uid: attendance_schemas.TakeAttendance, attendance_token: str, token: dict = Depends(token_validation)):
     return await attendance_routes.give_attendance(token=token, classroom_uid=classroom_uid, attendance_token=attendance_token)
 
+''' Common APIs '''
+
+@router.post("/view_student_attendance")
+async def view_student_attendance(classroom_uid: attendance_schemas.TakeAttendance, token: dict = Depends(token_validation)):
+    return await attendance_routes.view_student_attendance(token = token, classroom_uid = classroom_uid)

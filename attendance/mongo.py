@@ -21,7 +21,7 @@ async def add_attendance_mongo(classroom_uid: str, attendance_token: str):
                 {
                     "classroom_uid": classroom_uid,
                     "token": attendance_token,
-                    "students": [],
+                    "students": {},
                     "created_timestamp": datetime.datetime.now()
                 }
             )
@@ -71,11 +71,11 @@ async def check_enrolled_in_user_enrolled(classroom_uid, user_id):
 async def give_attendance(classroom_uid, user_id, attendance_token):
     try:
 
-        x = Mongo_CONN[DB_NAME][classroom_uid].update_one(
+        x = Mongo_CONN[DB_NAME][classroom_uid].update(
                 {'token': attendance_token},
                 { 
-                    '$push': {
-                        'students': {user_id: datetime.datetime.now()}                        
+                    '$set': {
+                        f'students.{user_id}': datetime.datetime.now()
                     }
                 }
             )
@@ -83,3 +83,21 @@ async def give_attendance(classroom_uid, user_id, attendance_token):
     except Exception as e:
         print(e)
         return False
+
+
+async def view_student_attendance(classroom_uid, user_uid):
+    #print(classroom_uid, user_uid)
+    results = {
+        "attended_count": 0,
+        "total_count": 0,
+        "details": {}
+    }
+    x = Mongo_CONN[DB_NAME][classroom_uid].find()
+    for i in x:
+        if user_uid in i["students"]:
+            results["details"][i["created_timestamp"]] = True
+            results["attended_count"] += 1
+        else:
+            results["details"][i["created_timestamp"]] = False
+        results["total_count"] += 1
+    return results

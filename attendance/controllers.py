@@ -61,3 +61,8 @@ async def log_attendance(classroom_uid, user_id, attendance_token):
             return True
     return False
 
+
+async def view_student_attendance(classroom_uid, user_uid):
+    ### calculate student attendance mongo
+    res = await attendance_mongo.view_student_attendance(classroom_uid, user_uid)
+    return res
