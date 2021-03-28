@@ -101,3 +101,21 @@ async def view_student_attendance(classroom_uid, user_uid):
             results["details"][i["created_timestamp"]] = False
         results["total_count"] += 1
     return results
+
+
+async def view_classroom_attendance(classroom_uid):
+    total_count = Mongo_CONN[DB_ENROLLED][classroom_uid].count()
+    
+    x = Mongo_CONN[DB_NAME][classroom_uid].find()
+
+    results = {}
+    for i in x:
+        print(i)
+        results[i["created_timestamp"]] = {
+            "attended_count": len(i["students"]),
+            "total_count": total_count,
+            "students": i["students"],
+            "token": i["token"]
+        }
+
+    return results

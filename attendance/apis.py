@@ -31,6 +31,10 @@ async def delete_attendance(classroom_uid: attendance_schemas.TakeAttendance, at
     return await attendance_routes.delete_attendance(token=token, classroom_uid=classroom_uid.classroom_uid, attendance_token=attendance_token)
 
 
+@router.post("/view_classroom_attendance/")
+async def view_classroom_attendance(classroom_uid: attendance_schemas.TakeAttendance, token: dict = Depends(token_validation)):
+    return await attendance_routes.view_classroom_attendance(token = token, classroom_uid = classroom_uid)
+
 ''' Student APIs '''
 
 @router.post('/give_attendance/')

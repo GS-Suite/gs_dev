@@ -66,3 +66,9 @@ async def view_student_attendance(classroom_uid, user_uid):
     ### calculate student attendance mongo
     res = await attendance_mongo.view_student_attendance(classroom_uid, user_uid)
     return res
+
+
+async def view_classroom_attendance(classroom_uid):
+    ### calculate classroom attendance mongo
+    res = await attendance_mongo.view_classroom_attendance(classroom_uid)
+    return res

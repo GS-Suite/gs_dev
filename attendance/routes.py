@@ -160,3 +160,25 @@ async def view_student_attendance(token, classroom_uid):
         return StandardResponseBody(
                 False, 'You have not enrolled in this classroom', token.token_value
             )
+
+
+async def view_classroom_attendance(token, classroom_uid):
+    check_creator = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid.classroom_uid, user_id=token.user_id)
+
+    if check_creator:
+        response = await attendance_controllers.view_classroom_attendance(
+            classroom_uid = classroom_uid.classroom_uid
+        )
+        
+        if response:
+            return StandardResponseBody(
+                True, 'Classroom attendance', token.token_value, response
+            )
+        else:
+            return StandardResponseBody(
+                False, 'Attendance could not be retrieved.', token.token_value
+            )
+    else:
+        return StandardResponseBody(
+                False, 'You are not the creator of this classroom', token.token_value
+            )
