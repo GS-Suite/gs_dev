@@ -32,7 +32,7 @@ async def sign_in(user):
     if res:
         ''' check password '''
         if user_helpers.check_password(user.password, res.password):
-            token_value = await token_controllers.refresh_token(res.uid)
+            token_value = await token_controllers.refresh_token(res.uid, res.username)
             return token_value
     return False
 

@@ -26,10 +26,10 @@ async def validate_token(token):
         return False
 
 
-async def refresh_token(uid):
+async def refresh_token(uid, username):
     # print("refreshing")
     token_value = await token_helpers.generate_token()
-    res = await token_model.refresh_token(uid, token_value)
+    res = await token_model.refresh_token(uid, username, token_value)
     # print(res.user_id)
     if res:
         return res

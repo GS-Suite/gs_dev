@@ -12,6 +12,7 @@ class Token(Base):
     
     id = Column(Integer, primary_key = True, index = True)
     user_id = Column(String, ForeignKey(User.uid))
+    username = Column(String, ForeignKey(User.username))
     token_value = Column(String)
     date_issued = Column(DateTime, default = datetime.datetime.now())
 
@@ -55,16 +56,15 @@ async def delete_token(token):
         return False
 
 
-async def refresh_token(user_id, new_token_value):
+async def refresh_token(user_id, username, new_token_value):
     ''' delete tokens '''
-    tokens = db.query(Token).filter(
+    token = db.query(Token).filter(
         Token.user_id == user_id,
-    ).all()
-    #print(tokens)
-    for i in tokens:
-        db.delete(i)
+    ).first()
+    db.delete(token)
     new_token = Token(
         user_id = user_id,
+        username = username,
         token_value = new_token_value,
         date_issued = datetime.datetime.now()
     )
