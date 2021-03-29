@@ -4,7 +4,7 @@ from attendance import redis as attendance_redis
 
 
 async def check_user_if_creator(classroom_id, user_id):
-    classroom_obj = await classroom_models.get_classroom_by_uid(classroom_id)
+    classroom_obj = await classroom_models.get_classroom_by_uid(uid = classroom_id)
     if user_id == classroom_obj.creator_uid:
         return True
     return False
