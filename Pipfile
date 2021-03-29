@@ -21,7 +21,6 @@ pymongo = "*"
 dropbox = "*"
 redis = "*"
 python-multipart = "*"
-fastapi-mail = "*"
 email-validator = "*"
 
 [dev-packages]
