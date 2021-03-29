@@ -18,7 +18,8 @@ async def sign_up(user):
 
             ### generate token
             token = await user_helpers.generate_verify_email_token()
-            await send_verify_mail(user.email, token)
+            x = await send_verify_mail(user.email, token)
+            print(x)
 
             return True
         else:
