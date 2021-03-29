@@ -19,7 +19,7 @@ def create_mongo_classroom(classroom_uid: str):
 
 async def get_classroom_enrolled(classroom_uid):
     x = Mongo_CONN[DB_ENROLLED][classroom_uid].find()
-    y = [i["uid"] for i in x]
+    y = [{"uid": i["uid"], "username": i["username"]} for i in x]
     if y != []:
         return y
     return []
@@ -39,8 +39,10 @@ def enroll_user(user_uid, classroom_uid):
     try:
         Mongo_CONN[DB_USERS][user_uid].update(
             {'user_id': user_uid},
-            {'$push': {'enrolled': classroom_uid}
-             }
+                {'$push': {
+                    'enrolled': classroom_uid
+                }
+            }
         )
         return True
     except Exception as e:
@@ -48,10 +50,13 @@ def enroll_user(user_uid, classroom_uid):
         return False
 
 
-def enroll_classroom(user_uid, classroom_uid):
+def enroll_classroom(user_uid, username, classroom_uid):
     try:
         Mongo_CONN[DB_ENROLLED][classroom_uid].insert_one(
-            {'uid': user_uid}
+            {
+                'uid': user_uid,
+                "username": username
+            }
         )
         return True
     except Exception as e:

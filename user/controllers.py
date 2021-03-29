@@ -41,16 +41,6 @@ async def sign_out(token_value):
     await token_controllers.delete_token(token_value)
 
 
-async def verify_email(token):
-    email = user_redis.get_token(token)
-    if email:
-        res = user_models.set_verified(email)
-        if res:
-            user_redis.delete_token(token)
-        return res 
-    return False
-
-
 async def update_profile(uid, details):
     user = await user_models.get_user_by_uid(uid)
     if user:
@@ -127,3 +117,13 @@ async def change_profile_picture(user_uid, picture):
         x = await user_dropbox.change_profile_picture(user_uid, pic, picture.filename)
         return x
     return "deleted"
+
+
+async def verify_email(token):
+    email = await user_redis.get_token(token)
+    if email:
+        res = await user_models.set_verified(email)
+        if res:
+            await user_redis.delete_token(token)
+        return res 
+    return False
