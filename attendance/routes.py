@@ -139,7 +139,7 @@ async def give_attendance(token, classroom_uid, attendance_token):
 
 
 async def view_student_attendance(token, classroom_uid):
-    if_user_enrolled = await attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid.classroom_uid, user_id=token.user_id)
+    if_user_enrolled = await attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=token.user_id)
 
     if if_user_enrolled:
 
