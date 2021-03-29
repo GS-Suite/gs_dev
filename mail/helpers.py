@@ -1,5 +1,4 @@
 from email.mime.multipart import MIMEMultipart
-from fastapi_mail import FastMail, MessageSchema,ConnectionConfig
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
 import smtplib
@@ -8,18 +7,9 @@ import os
 
 load_dotenv()
 
-
-conf = ConnectionConfig(
-    MAIL_USERNAME = os.getenv("SENDER_EMAIL"),
-    MAIL_PASSWORD = os.getenv("SENDER_PASSWORD"),
-    MAIL_FROM = os.getenv("SENDER_EMAIL"),
-    MAIL_PORT = 587,
-    MAIL_SERVER = "smtp.gmail.com",
-    MAIL_TLS = True,
-    MAIL_SSL = False
-)
-
 VERIFY_URL = os.getenv("VERIFY_EMAIL_URL")
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
 
 async def send_verify_mail(receiver, token):
     try:
@@ -48,16 +38,23 @@ async def send_verify_mail(receiver, token):
         </html>
         '''
 
-        message = MessageSchema(
-            subject = "Verify your email",
-            recipients = [receiver],  # List of recipients, as many as you can pass 
-            body = mail_content,
-            subtype = "html"
-        )
+        #Setup the MIME
+        message = MIMEMultipart()
+        message['From'] = SENDER_EMAIL
+        message['To'] = receiver
+        message['Subject'] = 'GS-Suite | Verify your Account'   #The subject line
 
-        fm = FastMail(conf)
-        await fm.send_message(message)
+        #The body and the attachments for the mail
+        message.attach(MIMEText(mail_content, 'html'))
 
+        #Create SMTP session for sending the mail
+        session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
+        session.starttls() #enable security
+        session.login(SENDER_EMAIL, SENDER_PASSWORD) #login with mail_id and password
+        
+        session.sendmail(SENDER_EMAIL, receiver, message.as_string())
+        
+        session.quit()
         return True
 
     except Exception as e:
