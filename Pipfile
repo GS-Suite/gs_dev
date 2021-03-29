@@ -8,7 +8,7 @@ fastapi-sqlalchemy = "*"
 fastapi = "*"
 sqlalchemy = {extras = ["postgres"], version = "*"}
 uvicorn = {extras = ["standard"], version = "*"}
-pydantic = "*"
+pydantic = {extras = ["email"], version = "*"}
 alembic = "*"
 asyncpg = "*"
 psycopg2 = "*"

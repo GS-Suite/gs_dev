@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "bd639fbe474681e5a4f70a06cf2e471b0e385e774a350a4742c0da5fe097fb1c"
+            "sha256": "cf8d96cefa9506b907df7d63fa83392c9f288beb6f3a88a09ac9ae0da7cf864c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -178,6 +178,7 @@
                 "sha256:094b1d1c60d790649989d38d34f69e1ef07792366277a2cf88684d03495d018f",
                 "sha256:1a13bd6050d1db4475f13e444e169b6fe872434922d38968c67cea9568cce2f0"
             ],
+            "markers": "extra == 'email'",
             "version": "==1.1.2"
         },
         "fakeredis": {
@@ -457,6 +458,9 @@
             "version": "==2.20"
         },
         "pydantic": {
+            "extras": [
+                "email"
+            ],
             "hashes": [
                 "sha256:0c40162796fc8d0aa744875b60e4dc36834db9f2a25dbf9ba9664b1915a23850",
                 "sha256:20d42f1be7c7acc352b3d09b0cf505a9fab9deb93125061b376fbe1f06a5459f",
