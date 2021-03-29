@@ -39,7 +39,7 @@ async def home_to_doc():
 app.include_router(user_router,         tags = ["users"])
 app.include_router(token_router,        tags = ["tokens"])
 app.include_router(classroom_router,    tags = ["classrooms"])
-app.include_router(attendance_router,   tags = ["attendance"])
+app.include_router(attendance_router)
 app.include_router(forum_router,        tags = ["forums"])
 app.include_router(discover_router,     tags = ["discover"])
 
