@@ -46,3 +46,24 @@ def post_message_to_forum(classroom_id, message_id, reply_user_id, reply_usernam
     except Exception as e:
         print(e)
         return False
+
+
+def get_all_messages(classroom_uid):
+    forum_id = classroom_uid + '-F'
+    msgs = []
+    
+    try:
+        resp = FORUM_MONGO_CONN[forum_id]['main'].find()
+
+
+        for i in resp:
+            i.pop('_id')
+            i['date'] = i['datetimestamp'].strftime('%d-%m-%Y')
+            i['time'] = i['datetimestamp'].strftime('%H:%M:%S')
+            i.pop('datetimestamp')
+            msgs.append(i)
+        return msgs   
+        
+    except Exception as e:
+        print(e)
+        return False

@@ -61,7 +61,8 @@ async def refresh_token(user_id, username, new_token_value):
     token = db.query(Token).filter(
         Token.user_id == user_id,
     ).first()
-    db.delete(token)
+    if token:
+        db.delete(token)
     new_token = Token(
         user_id = user_id,
         username = username,

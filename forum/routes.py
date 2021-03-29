@@ -48,7 +48,18 @@ async def get_forum_chat(classroom_uid, token):
         if_forum_exists = forum_mongo.check_if_forum_exists(classroom_uid=classroom_uid)
 
         if if_forum_exists['forum_exists'] == True:
-            get_all_messages = await forum_controllers.get_all_messages(classroom_uid = classroom_uid)
+            get_all_messages_response_dict = await forum_controllers.get_all_messages(classroom_uid = classroom_uid)
+
+            if 'status' in get_all_messages_response_dict.keys():
+                '''if status exists then mongo failed'''
+                return StandardResponseBody(
+                    False, get_all_messages_response_dict['message'], token.token_value
+                )
+            else:
+                return StandardResponseBody(
+                    True, 'Forum messages have been acquired', token.token_value, {'forum_stuff': get_all_messages_response_dict}
+                )
+        
         else:
             return StandardResponseBody(
                 False, 'Forum does not exist', token.token_value

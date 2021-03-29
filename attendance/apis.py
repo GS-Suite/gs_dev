@@ -27,12 +27,12 @@ async def stop_attendance(classroom_uid: str = Body(...), attendance_token: str 
 
 
 @router.post('/delete_attendance/', tags = ["attendance_teacher"])
-async def delete_attendance(classroom_uid: attendance_schemas.TakeAttendance, attendance_token: str, token: dict = Depends(token_validation)):
+async def delete_attendance(classroom_uid: str = Body(...), attendance_token: str = Body(...), token: dict = Depends(token_validation)):
     return await attendance_routes.delete_attendance(token=token, classroom_uid=classroom_uid.classroom_uid, attendance_token=attendance_token)
 
 
 @router.post("/view_classroom_attendance/", tags = ["attendance_teacher"])
-async def view_classroom_attendance(classroom_uid: attendance_schemas.TakeAttendance, token: dict = Depends(token_validation)):
+async def view_classroom_attendance(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
     return await attendance_routes.view_classroom_attendance(token = token, classroom_uid = classroom_uid)
 
 ''' Student APIs '''
@@ -44,5 +44,5 @@ async def give_attendance(classroom_uid: str = Body(...), attendance_token: str 
 ''' Common APIs '''
 
 @router.post("/view_student_attendance", tags = ["attendance_teacher", "attendance_student"])
-async def view_student_attendance(classroom_uid: attendance_schemas.TakeAttendance, token: dict = Depends(token_validation)):
+async def view_student_attendance(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
     return await attendance_routes.view_student_attendance(token = token, classroom_uid = classroom_uid)
