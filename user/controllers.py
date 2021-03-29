@@ -18,6 +18,9 @@ async def sign_up(user):
 
             ### generate token
             token = await user_helpers.generate_verify_email_token()
+            ### store in redis
+            x = await user_redis.set_token(token, user.email)
+            print(x)
             x = await send_verify_mail(user.email, token)
             print(x)
 
