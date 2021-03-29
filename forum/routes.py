@@ -57,7 +57,7 @@ async def get_forum_chat(classroom_uid, token):
                 )
             else:
                 return StandardResponseBody(
-                    True, 'Forum messages have been acquired', token.token_value, {get_all_messages_response_dict}
+                    True, 'Forum messages have been acquired', token.token_value, {'forum_stuff': get_all_messages_response_dict}
                 )
         
         else:

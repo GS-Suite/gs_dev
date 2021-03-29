@@ -15,7 +15,7 @@ def send_message(classroom_id, message_id, reply_user_id, reply_username, reply_
 
 async def get_all_messages(classroom_uid):
     classroom = await classroom_controllers.get_classroom_owner_from_class_uid(classroom_uid=classroom_uid)
-    owner_username = await user_controllers.get_user_username(uid=classroom.creator_uid)
+    owner_username = await user_controllers.get_user_username(uid=classroom['classroom_owner_id'])
     posts = forum_mongo.get_all_messages(classroom_uid=classroom_uid)
 
     if posts == []:
@@ -33,7 +33,7 @@ async def get_all_messages(classroom_uid):
     else:
         send = {
             'classroom_uid': classroom_uid,
-            'classroom_owner_uid': classroom.creator_uid,
+            'classroom_owner_uid': classroom['classroom_owner_id'],
             'classroom_owner_username': owner_username,
             'forum_id': classroom_uid + '-F',
             'thread': 'main',
