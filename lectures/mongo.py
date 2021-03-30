@@ -1,5 +1,6 @@
 from db_setup.mongo_setup import Mongo_CONN
-
+from bson import json_util
+import json
 
 
 DB_LECTURES = "Lectures"
@@ -20,3 +21,9 @@ async def add_lecture(classroom_uid, lecture):
         return True
     else:
         return False
+
+
+async def get_classroom_lectures(classroom_uid):
+    res = Mongo_CONN[DB_LECTURES][classroom_uid].find()
+    x = json.loads(json_util.dumps(res))
+    return x
