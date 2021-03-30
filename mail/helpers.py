@@ -18,19 +18,15 @@ async def send_verify_mail(receiver, token):
             <h1>Welcome to GS Suite!</h1>
             <h3>
                 <p>
-                    Your account has been created successfully, but you've got to confirm your email.
+                    Your account has been created successfully.
                     <br>
-                    Click the button below to verify your email.
+                    Click the link below to verify your email.
                 </p>
             </h3>
             
             <hr>
 
-            <a href="{VERIFY_URL}{token}">
-                <button style="padding:10px;background-color:#000000;color:#ffffff">
-                    Verify Email
-                </button>
-            </a>
+            <a href="{VERIFY_URL}?token={token}">{VERIFY_URL}?token={token}</a>
 
             <hr>
             
@@ -46,7 +42,7 @@ async def send_verify_mail(receiver, token):
         message = MIMEMultipart()
         message['From'] = SENDER_EMAIL
         message['To'] = receiver
-        message['Subject'] = 'Verify your Account'   #The subject line
+        message['Subject'] = 'GS-Suite | Verify your Account'   #The subject line
 
         #The body and the attachments for the mail
         message.attach(MIMEText(mail_content, 'html'))

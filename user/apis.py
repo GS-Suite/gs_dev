@@ -53,8 +53,8 @@ async def get_username_from_user_id(user_uid: str = Body(..., embed=True), token
     return await user_routes.get_username_from_user_id(user_uid = user_uid, token = token)
 
 
-@router.get("/verify_email/{token}")
-async def verify_email(token):
-    print(token)
+@router.get("/verify_email/")
+async def verify_email(token: str):
+    #print(token)
     return await user_routes.verify_email(token)
 

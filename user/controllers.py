@@ -18,7 +18,11 @@ async def sign_up(user):
 
             ### generate token
             token = await user_helpers.generate_verify_email_token()
-            await send_verify_mail(user.email, token)
+            ### store in redis
+            x = await user_redis.set_token(token, user.email)
+            print(x)
+            x = await send_verify_mail(user.email, token)
+            print(x)
 
             return True
         else:
@@ -32,23 +36,13 @@ async def sign_in(user):
     if res:
         ''' check password '''
         if user_helpers.check_password(user.password, res.password):
-            token_value = await token_controllers.refresh_token(res.uid, res.username)
+            token_value = await token_controllers.refresh_token(res.uid)
             return token_value
     return False
 
 
 async def sign_out(token_value):
     await token_controllers.delete_token(token_value)
-
-
-async def verify_email(token):
-    email = user_redis.get_token(token)
-    if email:
-        res = user_models.set_verified(email)
-        if res:
-            user_redis.delete_token(token)
-        return res 
-    return False
 
 
 async def update_profile(uid, details):
@@ -127,3 +121,13 @@ async def change_profile_picture(user_uid, picture):
         x = await user_dropbox.change_profile_picture(user_uid, pic, picture.filename)
         return x
     return "deleted"
+
+
+async def verify_email(token):
+    email = await user_redis.get_token(token)
+    if email:
+        res = await user_models.set_verified(email)
+        if res:
+            await user_redis.delete_token(token)
+        return res 
+    return False

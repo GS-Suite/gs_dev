@@ -92,7 +92,7 @@ async def generate_classroom_entry_code(user_uid, classroom_uid):
     return False
 
 
-async def enroll_user(user_uid, classroom_uid, entry_code):
+async def enroll_user(user_uid, username, classroom_uid, entry_code):
     '''
     1. Get user_id from token model
     2. pass to mongo.course.enroll
@@ -110,7 +110,7 @@ async def enroll_user(user_uid, classroom_uid, entry_code):
         ### enroll user
         try:
             ### Updating user's enrolled array in mongo
-            if mongo.enroll_user(user_uid, classroom_uid):
+            if mongo.enroll_user(user_uid, username, classroom_uid):
                 ### Updating classroom enrolled array in mongo
                 if mongo.enroll_classroom(user_uid, classroom_uid):
                     return True

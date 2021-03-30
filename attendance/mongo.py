@@ -110,7 +110,7 @@ async def view_classroom_attendance(classroom_uid):
 
     results = {}
     for i in x:
-        print(i)
+        #print(i)
         results[i["created_timestamp"]] = {
             "attended_count": len(i["students"]),
             "total_count": total_count,
