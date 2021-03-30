@@ -1,11 +1,12 @@
+from responses.not_owner_response_body import NotOwnerResponseBody
 from responses.standard_response_body import StandardResponseBody
-
 from attendance import controllers as attendance_controllers
+from classrooms import controllers as classroom_controllers
 from attendance import helpers as attendance_helpers
 
 
 async def take_attendance(token, classroom_uid, timeout):
-    if_creator_bool = await attendance_controllers.check_user_if_creator(
+    if_creator_bool = await classroom_controllers.check_user_if_creator(
         classroom_id=classroom_uid,
         user_id=token.user_id
     )
@@ -47,13 +48,11 @@ async def take_attendance(token, classroom_uid, timeout):
                 False, 'Could not generate attendance token for classroom', token.token_value
             )
     else:
-        return StandardResponseBody(
-            False, 'You are not the owner of the classroom', token.token_value
-        )
+        return NotOwnerResponseBody(token.token_value)
 
 
 async def stop_attendance(token, attendance_token, classroom_uid):
-    creator_bool = await attendance_controllers.check_user_if_creator(
+    creator_bool = await classroom_controllers.check_user_if_creator(
         classroom_id=classroom_uid,
         user_id=token.user_id
     )
@@ -76,13 +75,11 @@ async def stop_attendance(token, attendance_token, classroom_uid):
                 False, 'Could not stop attendance', token.token_value
             )
     else:
-        return StandardResponseBody(
-            False, 'You are not the owner of the classroom', token.token_value
-        )
+        return NotOwnerResponseBody(token.token_value)
 
 
 async def delete_attendance(token, attendance_token, classroom_uid):
-    if_creator_bool = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid,
+    if_creator_bool = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid,
                                                                          user_id=token.user_id)
 
     if if_creator_bool == True:
@@ -115,7 +112,7 @@ async def delete_attendance(token, attendance_token, classroom_uid):
 
 
 async def give_attendance(token, classroom_uid, attendance_token):
-    if_user_enrolled = await attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=token.user_id)
+    if_user_enrolled = await classroom_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=token.user_id)
 
     if if_user_enrolled:
 
@@ -139,7 +136,7 @@ async def give_attendance(token, classroom_uid, attendance_token):
 
 
 async def view_student_attendance(token, classroom_uid):
-    if_user_enrolled = await attendance_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=token.user_id)
+    if_user_enrolled = await classroom_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=token.user_id)
 
 
     if if_user_enrolled:
@@ -164,7 +161,7 @@ async def view_student_attendance(token, classroom_uid):
 
 
 async def view_classroom_attendance(token, classroom_uid):
-    check_creator = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
+    check_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
     if check_creator:
         response = await attendance_controllers.view_classroom_attendance(
@@ -180,6 +177,4 @@ async def view_classroom_attendance(token, classroom_uid):
                 False, 'Attendance could not be retrieved.', token.token_value
             )
     else:
-        return StandardResponseBody(
-                False, 'You are not the creator of this classroom', token.token_value
-            )
+        return NotOwnerResponseBody(token.token_value)
