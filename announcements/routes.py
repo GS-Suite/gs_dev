@@ -29,5 +29,5 @@ async def create_announcement_pane(classroom_uid, token):
         return NotOwnerResponseBody(token.token_value)
 
 
-async def post_announcement(classroom_uid, announcement, token):
+async def post_announcement(classroom_uid, announcement, background_tasks,token):
     pass
