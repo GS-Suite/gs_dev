@@ -1,3 +1,4 @@
+from responses.not_owner_response_body import NotOwnerResponseBody
 from responses.standard_response_body import StandardResponseBody
 from announcements import controllers as announcement_controllers
 from classrooms import controllers as classroom_controllers
@@ -25,9 +26,7 @@ async def create_announcement_pane(classroom_uid, token):
                     True, 'Announcement Pane could not be created', token.token_value
                 )
     else:
-        return StandardResponseBody(
-        False, 'You are not the creator of the classroom', token.token_value
-    )
+        return NotOwnerResponseBody(token.token_value)
 
 
 async def post_announcement(classroom_uid, announcement, token):

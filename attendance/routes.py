@@ -1,3 +1,4 @@
+from responses.not_owner_response_body import NotOwnerResponseBody
 from responses.standard_response_body import StandardResponseBody
 from attendance import controllers as attendance_controllers
 from classrooms import controllers as classroom_controllers
@@ -47,9 +48,7 @@ async def take_attendance(token, classroom_uid, timeout):
                 False, 'Could not generate attendance token for classroom', token.token_value
             )
     else:
-        return StandardResponseBody(
-            False, 'You are not the owner of the classroom', token.token_value
-        )
+        return NotOwnerResponseBody(token.token_value)
 
 
 async def stop_attendance(token, attendance_token, classroom_uid):
@@ -76,9 +75,7 @@ async def stop_attendance(token, attendance_token, classroom_uid):
                 False, 'Could not stop attendance', token.token_value
             )
     else:
-        return StandardResponseBody(
-            False, 'You are not the owner of the classroom', token.token_value
-        )
+        return NotOwnerResponseBody(token.token_value)
 
 
 async def delete_attendance(token, attendance_token, classroom_uid):
@@ -180,6 +177,4 @@ async def view_classroom_attendance(token, classroom_uid):
                 False, 'Attendance could not be retrieved.', token.token_value
             )
     else:
-        return StandardResponseBody(
-                False, 'You are not the creator of this classroom', token.token_value
-            )
+        return NotOwnerResponseBody(token.token_value)
