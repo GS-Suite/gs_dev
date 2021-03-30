@@ -13,6 +13,5 @@ async def create_annonuncement_pane(classroom_uid: str = Body(..., embed=True), 
     return await announcement_routes.create_announcement_pane(classroom_uid, token)
 
 @router.post('/post_announcement/')
-async def post_announcement(classroom_uid: str = Body(...), announcement: str = Body(...), 
-                background_tasks: BackgroundTasks, token: dict = Depends(token_validation)):
+async def post_announcement(background_tasks: BackgroundTasks, classroom_uid: str = Body(...), announcement: str = Body(...), token: dict = Depends(token_validation)):
     return await announcement_routes.post_announcement(classroom_uid, announcement, background_tasks, token)
