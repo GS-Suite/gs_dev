@@ -3,8 +3,8 @@ from user import controllers as user_controllers
 from fastapi.responses import HTMLResponse
 
 
-async def sign_up(user):
-    res = await user_controllers.sign_up(user)
+async def sign_up(user, url, bg):
+    res = await user_controllers.sign_up(user, url, bg)
     if res == True:
         return StandardResponseBody(
             True, "Your account has been created"
@@ -99,7 +99,8 @@ async def get_username_from_user_id(user_uid, token):
     else:
        return StandardResponseBody(
             False, 'Username could not be aquired from given user uid', token.token_value
-        ) 
+        )
+
 
 async def verify_email(token):
     res = await user_controllers.verify_email(token)

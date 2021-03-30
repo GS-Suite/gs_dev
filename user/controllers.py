@@ -1,5 +1,5 @@
 from classrooms import controllers as classroom_controllers
-from mail.helpers import send_verify_mail
+from mail.verify_email_mail import send_verify_email_mail
 from tokens import controllers as token_controllers
 from user import dropbox as user_dropbox
 from user import helpers as user_helpers
@@ -7,7 +7,7 @@ from user import models as user_models
 from user import redis as user_redis
 
 
-async def sign_up(user):
+async def sign_up(user, url, bg):
     check = await user_models.get_user_by_username(user.username)
     if check == None:
         user.password = user_helpers.hash_password(user.password)
@@ -19,11 +19,9 @@ async def sign_up(user):
             ### generate token
             token = await user_helpers.generate_verify_email_token()
             ### store in redis
-            x = await user_redis.set_token(token, user.email)
-            print(x)
-            x = await send_verify_mail(user.email, token)
-            print(x)
-
+            await user_redis.set_token(token, user.email)
+            ''' EMAIL VALIDATION MAIL, USE SPARINGLY '''
+            #await send_verify_email_mail(user, url, token, bg)
             return True
         else:
             return False
