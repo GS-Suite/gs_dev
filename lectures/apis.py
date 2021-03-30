@@ -19,6 +19,11 @@ async def add_lecture(lecture: lecture_schemas.CreateLectureSchema, classroom_ui
     return await lecture_routes.add_lecture(token, classroom_uid, lecture)
 
 
+@router.post("/edit_lecture/")
+async def add_lecture(lecture: lecture_schemas.CreateLectureSchema, lecture_uid: str = Body(..., embed = True), classroom_uid: str = Body(..., embed = True), token: dict = Depends(token_validation)):
+    return await lecture_routes.edit_lecture(token, classroom_uid, lecture_uid, lecture)
+
+
 @router.post("/delete_lecture/")
 async def delete_lecture(classroom_uid: str = Body(..., embed = True), lecture_uid: str = Body(..., embed = True), token: dict = Depends(token_validation)):
     return await lecture_routes.delete_lecture(token, classroom_uid, lecture_uid)

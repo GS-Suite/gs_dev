@@ -12,3 +12,14 @@ class CreateLectureSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+class UpdateLectureSchema(BaseModel):
+    lecture_uid: str = Field(...)
+    lecture_name: str = Field(...)
+    lecture_link: str = Field(...)
+    sections: list = []
+    lecture_description: str = Field(...)
+    lecture_resources: str = Field(...)
+
+    class Config:
+        orm_mode = True

@@ -45,6 +45,26 @@ async def add_lecture(token, classroom_uid, lecture):
         return NotOwnerResponseBody(token.token_value)
 
 
+async def edit_lecture(token, classroom_uid, lecture_uid, lecture):
+    check_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
+
+    if check_creator:
+        ### check if collection in mongo exists, else create
+        await lecture_controllers.add_classroom_to_lectures_mongo(classroom_uid)
+
+        response = await lecture_controllers.edit_lecture(classroom_uid, lecture_uid, lecture)
+        if response:
+            return StandardResponseBody(
+                True, 'Lecture changes saved.', token.token_value
+            )
+        else:
+            return StandardResponseBody(
+                False, 'Lecture changes could not be saved.', token.token_value
+            )
+    else:
+        return NotOwnerResponseBody(token.token_value)
+
+
 async def delete_lecture(token, classroom_uid, lecture_uid):
     check_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
@@ -52,7 +72,7 @@ async def delete_lecture(token, classroom_uid, lecture_uid):
         response = await lecture_controllers.delete_lecture(classroom_uid, lecture_uid)
         if response:
             return StandardResponseBody(
-                True, 'Lecture deleted.', token.token_value, response
+                True, 'Lecture deleted.', token.token_value
             )
         else:
             return StandardResponseBody(

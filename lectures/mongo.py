@@ -31,6 +31,17 @@ async def get_classroom_lectures(classroom_uid):
     return x
 
 
+async def edit_lecture(classroom_uid, lecture_uid, lecture):
+    print(lecture.__dict__)
+    res = Mongo_CONN[DB_LECTURES][classroom_uid].update_one(
+        {"_id": ObjectId(lecture_uid)}, {"$set": lecture.__dict__}
+    )
+    if res.acknowledged:
+        return True
+    else:
+        return False
+
+
 async def delete_lecture(classroom_uid, lecture_uid):
     res = Mongo_CONN[DB_LECTURES][classroom_uid].delete_one(
         {"_id": ObjectId(lecture_uid)}
