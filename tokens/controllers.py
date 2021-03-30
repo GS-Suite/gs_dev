@@ -16,9 +16,7 @@ async def validate_token(token):
     # print(res)
     if res:
         time_left = res.date_issued - datetime.datetime.now() + TOKEN_VALIDITY
-        if time_left < datetime.timedelta(seconds=0):
-            return False
-        elif time_left < REFRESH_TIMEOUT:
+        if time_left < REFRESH_TIMEOUT:
             return await refresh_token(res.user_id)
         else:
             return res
