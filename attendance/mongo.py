@@ -44,30 +44,6 @@ async def delete_attendance_mongo(classroom_uid: str, token: str):
         return False
 
 
-async def check_enrolled_in_classroom(classroom_uid, user_id):
-    try:
-        x = Mongo_CONN[DB_ENROLLED][classroom_uid].find_one(
-            {"uid": user_id}
-        )
-        if x:
-            return True
-        return False
-    except Exception as e:
-        print(e)
-        return False
-
-
-async def check_enrolled_in_user_enrolled(classroom_uid, user_id):
-    try:
-        x = Mongo_CONN['Users'][user_id].find_one()
-
-        if classroom_uid in x['enrolled']:
-            return True
-    except Exception as e:
-        print(e)
-        return False
-
-
 async def give_attendance(classroom_uid, user_id, attendance_token):
     try:
 

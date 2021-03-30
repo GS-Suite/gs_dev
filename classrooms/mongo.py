@@ -30,6 +30,30 @@ async def get_classroom_details(classroom_uid):
 '''
 
 
+async def check_enrolled_in_classroom(classroom_uid, user_id):
+    try:
+        x = Mongo_CONN[DB_ENROLLED][classroom_uid].find_one(
+            {"uid": user_id}
+        )
+        if x:
+            return True
+        return False
+    except Exception as e:
+        print(e)
+        return False
+
+
+async def check_enrolled_in_user_enrolled(classroom_uid, user_id):
+    try:
+        x = Mongo_CONN['Users'][user_id].find_one()
+
+        if classroom_uid in x['enrolled']:
+            return True
+    except Exception as e:
+        print(e)
+        return False
+
+
 async def get_user_enrolled(user_uid):
     x = Mongo_CONN[DB_USERS][user_uid].find({})
     return x[0]["enrolled"]

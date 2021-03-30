@@ -1,6 +1,26 @@
 from classrooms import helpers as classroom_helpers
 from classrooms import models as classroom_model
-from classrooms import mongo
+from classrooms import mongo as classroom_mongo
+
+
+async def check_user_if_creator(classroom_id, user_id):
+    classroom_obj = await classroom_model.get_classroom_by_uid(uid = classroom_id)
+    if user_id == classroom_obj.creator_uid:
+        return True
+    return False
+
+
+async def if_user_enrolled(classroom_uid, user_id):
+    classroom_enrolled_resp = await classroom_mongo.check_enrolled_in_classroom(classroom_uid, user_id)
+    user_enrolled_resp = await classroom_mongo.check_enrolled_in_user_enrolled(classroom_uid, user_id)
+
+    # print('classroom_enrolled_resp: ', classroom_enrolled_resp)
+    # print('user_enrolled_resp: ', user_enrolled_resp)
+
+    if classroom_enrolled_resp ==  True and user_enrolled_resp == True:
+        return True
+    
+    return False
 
 
 async def get_user_classrooms(user_uid):
@@ -16,12 +36,12 @@ async def get_user_classrooms(user_uid):
 
 async def get_user_enrolled(user_uid):
     #print(user_uid)
-    classrooms = await mongo.get_user_enrolled(user_uid)
+    classrooms = await classroom_mongo.get_user_enrolled(user_uid)
     return classrooms
 
 
 async def get_classroom_enrolled(classroom_uid):
-    enrolled = await mongo.get_classroom_enrolled(classroom_uid)
+    enrolled = await classroom_mongo.get_classroom_enrolled(classroom_uid)
     return enrolled
 
 
@@ -103,16 +123,16 @@ async def enroll_user(user_uid, username, classroom_uid, entry_code):
         return "code_error"
     
     ### check if user already enrolled
-    x = await mongo.get_classroom_enrolled(classroom_uid)
+    x = await classroom_mongo.get_classroom_enrolled(classroom_uid)
     if user_uid in x:
         return "exists"
     else:
         ### enroll user
         try:
             ### Updating user's enrolled array in mongo
-            if mongo.enroll_user(user_uid, username, classroom_uid):
+            if classroom_mongo.enroll_user(user_uid, username, classroom_uid):
                 ### Updating classroom enrolled array in mongo
-                if mongo.enroll_classroom(user_uid, classroom_uid):
+                if classroom_mongo.enroll_classroom(user_uid, classroom_uid):
                     return True
             ### undo stuff
             #

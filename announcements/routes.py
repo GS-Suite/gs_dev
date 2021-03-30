@@ -1,12 +1,11 @@
 from responses.standard_response_body import StandardResponseBody
-
-from attendance import controllers as attendance_controllers
 from announcements import controllers as announcement_controllers
+from classrooms import controllers as classroom_controllers
 from forum import mongo as forum_mongo
 
 
 async def create_announcement_pane(classroom_uid, token):
-    if_user_creator = await attendance_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
+    if_user_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
     if if_user_creator == True:
         if_announcement_pane_exists = forum_mongo.check_if_forum_exists(classroom_uid)
