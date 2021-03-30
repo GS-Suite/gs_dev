@@ -1,4 +1,4 @@
-from fastapi import BackgroundTasks, Depends, UploadFile, APIRouter, Body
+from fastapi import BackgroundTasks, Depends, UploadFile, APIRouter, Body, Request
 from tokens.controllers import token_validation
 from fastapi.param_functions import File
 from user import schemas as user_schemas
@@ -9,8 +9,9 @@ from typing import Optional
 router = APIRouter()
 
 @router.post("/sign_up/")
-async def sign_up(user: user_schemas.UserSignUp):
-    return await user_routes.sign_up(user)
+async def sign_up(user: user_schemas.UserSignUp, request: Request, bg: BackgroundTasks):
+    print(request.base_url)
+    return await user_routes.sign_up(user, request.url_for("verify_email"), bg)
 
 
 @router.post("/sign_in/")

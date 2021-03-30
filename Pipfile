@@ -22,6 +22,7 @@ dropbox = "*"
 redis = "*"
 python-multipart = "*"
 email-validator = "*"
+sendgrid = "*"
 
 [dev-packages]
 
