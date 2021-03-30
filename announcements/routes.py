@@ -31,5 +31,5 @@ async def create_announcement_pane(classroom_uid, token):
     )
 
 
-async def post_announcement(classroom_uid, announcement, token):
+async def post_announcement(classroom_uid, announcement, background_tasks,token):
     pass

@@ -4,6 +4,7 @@ from db_setup.pg_setup import Base, engine
 from fastapi import FastAPI
 import uvicorn
 
+from announcements.apis import router as announcement_router
 from attendance.apis import router as attendance_router
 from classrooms.apis import router as classroom_router
 from discover.apis import router as discover_router
@@ -36,12 +37,13 @@ async def home_to_doc():
     return RedirectResponse("/docs")
 
 
-app.include_router(user_router,         tags = ["users"])
-app.include_router(token_router,        tags = ["tokens"])
-app.include_router(classroom_router,    tags = ["classrooms"])
+app.include_router(user_router,                 tags = ["users"])
+app.include_router(token_router,                tags = ["tokens"])
+app.include_router(classroom_router,            tags = ["classrooms"])
 app.include_router(attendance_router)
-app.include_router(forum_router,        tags = ["forums"])
-app.include_router(discover_router,     tags = ["discover"])
+app.include_router(forum_router,                tags = ["forums"])
+app.include_router(announcement_router,         tags = ["announcement"])
+app.include_router(discover_router,             tags = ["discover"])
 
 
 if __name__ == "__main__":
