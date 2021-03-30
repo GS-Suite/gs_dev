@@ -7,6 +7,7 @@ import uvicorn
 from attendance.apis import router as attendance_router
 from classrooms.apis import router as classroom_router
 from discover.apis import router as discover_router
+from lectures.apis import router as lecture_router
 from tokens.apis import router as token_router
 from forum.apis import router as forum_router
 from user.apis import router as user_router
@@ -39,6 +40,7 @@ async def home_to_doc():
 app.include_router(user_router,         tags = ["users"])
 app.include_router(token_router,        tags = ["tokens"])
 app.include_router(classroom_router,    tags = ["classrooms"])
+app.include_router(lecture_router,    tags = ["lectures"])
 app.include_router(attendance_router)
 app.include_router(forum_router,        tags = ["forums"])
 app.include_router(discover_router,     tags = ["discover"])

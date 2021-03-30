@@ -5,8 +5,9 @@ from classrooms import mongo as classroom_mongo
 
 async def check_user_if_creator(classroom_id, user_id):
     classroom_obj = await classroom_model.get_classroom_by_uid(uid = classroom_id)
-    if user_id == classroom_obj.creator_uid:
-        return True
+    if classroom_obj:
+        if user_id == classroom_obj.creator_uid:
+            return True
     return False
 
 

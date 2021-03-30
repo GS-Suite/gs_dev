@@ -1,14 +1,14 @@
+from fastapi.param_functions import Body
 from tokens.controllers import token_validation
+from lectures import schemas as lecture_schemas
 from lectures import routes as lecture_routes
-from fastapi.param_functions import Depends
-from fastapi import APIRouter
-from pydantic import Field
+from fastapi import APIRouter, Depends
 
 
 router = APIRouter()
 
 ''' TEACHER APIS '''
 
-@router.post("/add_section/")
-async def add_section(classroom_uid: str = Field(...), section_name: str = Field(...), token: dict = Depends(token_validation)):
-    return await lecture_routes.add_section(token, classroom_uid, section_name)
+@router.post("/add_lecture/")
+async def add_lecture(lecture: lecture_schemas.CreateLectureSchema, classroom_uid: str = Body(..., embed = True), token: dict = Depends(token_validation)):
+    return await lecture_routes.add_lecture(token, classroom_uid, lecture)
