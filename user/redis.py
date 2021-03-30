@@ -7,7 +7,9 @@ async def set_token(token, email):
 
 
 async def get_token(token):
-    x = RED.get(token).decode("utf-8")
+    x = RED.get(token)
+    if x:
+        return x.decode("utf-8")
     return x
 
 

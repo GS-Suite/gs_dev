@@ -1,3 +1,5 @@
+import re
+from bson.objectid import ObjectId
 from db_setup.mongo_setup import Mongo_CONN
 from bson import json_util
 import json
@@ -27,3 +29,11 @@ async def get_classroom_lectures(classroom_uid):
     res = Mongo_CONN[DB_LECTURES][classroom_uid].find()
     x = json.loads(json_util.dumps(res))
     return x
+
+
+async def delete_lecture(classroom_uid, lecture_uid):
+    res = Mongo_CONN[DB_LECTURES][classroom_uid].delete_one(
+        {"_id": ObjectId(lecture_uid)}
+    )
+    print(res.acknowledged)
+    return res.acknowledged

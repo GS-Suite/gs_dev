@@ -43,3 +43,20 @@ async def add_lecture(token, classroom_uid, lecture):
             )
     else:
         return NotOwnerResponseBody(token.token_value)
+
+
+async def delete_lecture(token, classroom_uid, lecture_uid):
+    check_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
+
+    if check_creator:
+        response = await lecture_controllers.delete_lecture(classroom_uid, lecture_uid)
+        if response:
+            return StandardResponseBody(
+                True, 'Lecture deleted.', token.token_value, response
+            )
+        else:
+            return StandardResponseBody(
+                False, 'Lecture could not be deleted.', token.token_value
+            )
+    else:
+        return NotOwnerResponseBody(token.token_value)

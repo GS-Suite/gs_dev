@@ -108,5 +108,5 @@ async def verify_email(token):
             "<p>Email Verified</p>"
         )
     return HTMLResponse(
-            "<p>Email could not be verified</p>"
+            "<p>Token already used, or email could not be verified</p>"
         )
