@@ -32,7 +32,7 @@ async def sign_in(user):
 
 
 async def sign_out(token, background_tasks):
-    background_tasks.add_task(user_controllers.sign_out, token_value = token)
+    background_tasks.add_task(user_controllers.sign_out, token = token)
     return StandardResponseBody(
         True, "Successfully logged out"
     )
