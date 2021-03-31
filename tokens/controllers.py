@@ -55,8 +55,7 @@ async def delete_user_tokens(uid):
     return await token_model.delete_token(tokens)
 
 
-async def delete_token(token_value):
-    token = await token_model.get_token_by_value(token_value)
+async def delete_token(token):
     if token:
         return await token_model.delete_token(token)
     return True

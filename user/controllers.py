@@ -40,8 +40,8 @@ async def sign_in(user):
     return False
 
 
-async def sign_out(token_value):
-    await token_controllers.delete_token(token_value)
+async def sign_out(token):
+    await token_controllers.delete_token(token)
 
 
 async def update_profile(uid, details):
