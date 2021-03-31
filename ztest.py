@@ -68,17 +68,6 @@
 #         return False
 
 
-from classrooms import mongo as classroom_mongo
-from db_setup.mongo_setup import FORUM_MONGO_CONN
-
-classroom_uid = '737c056eaa3d4179915b97d0fe5a1f37-F'
-DB_ENROLLED = 'announcements'
-
-x = Mongo_CONN[classroom_uid][DB_ENROLLED].find({})
-
-
-print(y)
-
 
 
 
