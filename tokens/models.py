@@ -56,15 +56,16 @@ async def delete_token(token):
         return False
 
 
-async def refresh_token(user_id, new_token_value):
+async def refresh_token(user, new_token_value):
     ''' delete tokens '''
     token = db.query(Token).filter(
-        Token.user_id == user_id,
+        Token.user_id == user.uid,
     ).first()
     if token:
         db.delete(token)
     new_token = Token(
-        user_id = user_id,
+        user_id = user.uid,
+        username = user.username,
         token_value = new_token_value,
         date_issued = datetime.datetime.now()
     )

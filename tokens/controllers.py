@@ -2,6 +2,7 @@ from fastapi.param_functions import Header
 from responses.invalid_token_response_body import InvalidTokenResponseBody
 from tokens import helpers as token_helpers
 from tokens import models as token_model
+from user import models as user_models
 import settings
 import datetime
 
@@ -27,10 +28,12 @@ async def validate_token(token):
 async def refresh_token(uid):
     # print("refreshing")
     token_value = await token_helpers.generate_token()
-    res = await token_model.refresh_token(uid, token_value)
-    # print(res.user_id)
-    if res:
-        return res
+    user = await user_models.get_user_by_uid(uid)
+    if user:
+        res = await token_model.refresh_token(user, token_value)
+        # print(res.user_id)
+        if res:
+            return res
     return False
 
 
