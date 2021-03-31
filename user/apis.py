@@ -1,4 +1,5 @@
 from fastapi import BackgroundTasks, Depends, UploadFile, APIRouter, Body, Request
+from starlette.responses import RedirectResponse
 from tokens.controllers import token_validation
 from fastapi.param_functions import File
 from user import schemas as user_schemas
@@ -10,7 +11,7 @@ router = APIRouter()
 
 @router.post("/sign_up/")
 async def sign_up(user: user_schemas.UserSignUp, request: Request, bg: BackgroundTasks):
-    print(request.base_url)
+    #print(request.base_url)
     return await user_routes.sign_up(user, request.url_for("verify_email"), bg)
 
 
@@ -59,3 +60,13 @@ async def verify_email(token: str):
     #print(token)
     return await user_routes.verify_email(token)
 
+
+@router.post("/send_reset_password/")
+async def send_reset_password(request: Request, bg: BackgroundTasks, username: str = Body(..., embed = True), email: str = Body(..., embed = True)):
+    return await user_routes.send_reset_password(username, email, request.url_for("reset_password"), bg)
+
+
+@router.post("/reset_password/")
+async def reset_password(reset: user_schemas.ResetPasswordSchema):
+    #print(reset.token, reset.email)
+    return await user_routes.reset_password(reset)

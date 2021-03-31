@@ -1,3 +1,4 @@
+from starlette.responses import RedirectResponse
 from responses.standard_response_body import StandardResponseBody
 from user import controllers as user_controllers
 from fastapi.responses import HTMLResponse
@@ -111,3 +112,32 @@ async def verify_email(token):
     return HTMLResponse(
             "<p>Token already used, or email could not be verified</p>"
         )
+
+
+async def send_reset_password(username, email, url, bg):
+    ''' check if user exists '''
+    user = await user_controllers.get_user_from_email(username, email)
+    if user:
+        res = False
+        #res = await user_controllers.send_reset_password(user, url, bg)
+        if res:
+            return StandardResponseBody(
+                True, "Email to reset password sent successfully.", token = None
+            )
+        return StandardResponseBody(
+            False, "Failed to send email.", token = None
+        )
+    return StandardResponseBody(
+        False, "No account found with that email and username.", token = None
+    )
+
+
+async def reset_password(reset):
+    res = await user_controllers.reset_password(reset)
+    if res:
+        return StandardResponseBody(
+            True, "Your password has been changed.", token = None
+        )
+    return StandardResponseBody(
+        False, "Could not reset password.", token = None
+    )

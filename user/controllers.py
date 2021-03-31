@@ -1,3 +1,4 @@
+from mail.reset_password_mail import send_reset_password_email_mail
 from classrooms import controllers as classroom_controllers
 from mail.verify_email_mail import send_verify_email_mail
 from tokens import controllers as token_controllers
@@ -128,4 +129,44 @@ async def verify_email(token):
         if res:
             await user_redis.delete_token(token)
         return res 
+    return False
+
+
+async def send_reset_password(user, url, bg):
+    ### generate token
+    token = await user_helpers.generate_reset_password_token()
+
+    ### store in redis
+    if await user_redis.set_token(token, user.username, ex = 60 * 60):
+        ### send email
+        res = await send_reset_password_email_mail(user, url, token, bg)
+        return res
+    return False
+
+
+async def get_user_from_email(username, email):
+    return await user_models.get_user_by_email(username, email)
+
+
+async def reset_password(reset):
+    ### get email from token
+    username = await user_redis.get_token(reset.token)
+    #print(email, reset.email)
+    if username:
+        if reset.username == username:
+            ### get user
+            user = await user_models.get_user_by_username(username)
+            if user:
+                ### reset password
+                res = await user_models.update_password(
+                    user, 
+                    user_helpers.hash_password(reset.password)
+                )
+                if res:
+                    ### delete token
+                    await user_redis.delete_token(reset.token)
+                    
+                    return True
+        ### delete token
+        await user_redis.delete_token(reset.token)
     return False

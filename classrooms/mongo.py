@@ -59,7 +59,7 @@ async def get_user_enrolled(user_uid):
     return x[0]["enrolled"]
 
 
-def enroll_user(user_uid, classroom_uid):
+async def enroll_user(user_uid, classroom_uid):
     try:
         Mongo_CONN[DB_USERS][user_uid].update(
             {'user_id': user_uid},
@@ -74,7 +74,7 @@ def enroll_user(user_uid, classroom_uid):
         return False
 
 
-def enroll_classroom(user_uid, username, classroom_uid):
+async def enroll_classroom(user_uid, username, classroom_uid):
     try:
         Mongo_CONN[DB_ENROLLED][classroom_uid].insert_one(
             {

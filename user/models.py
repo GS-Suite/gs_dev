@@ -58,6 +58,13 @@ async def get_user_by_uid(uid: str):
     ).first()
 
 
+async def get_user_by_email(username: str, email: str):
+    return db.query(User).filter(
+        User.username == username,
+        User.email == email
+    ).first()
+
+
 async def get_user_for_dashboard(uid: str):
     return db.query(User).filter(
         User.uid == uid
