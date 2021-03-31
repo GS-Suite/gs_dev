@@ -125,22 +125,23 @@ async def enroll_user(user_uid, username, classroom_uid, entry_code):
     
     ### check if user already enrolled
     x = await classroom_mongo.get_classroom_enrolled(classroom_uid)
-    if user_uid in x:
-        return "exists"
+    for user in x:
+        if user["username"] == username:
+            return "exists"
     else:
         ### enroll user
         try:
             ### Updating user's enrolled array in mongo
-            if classroom_mongo.enroll_user(user_uid, username, classroom_uid):
-                ### Updating classroom enrolled array in mongo
-                if classroom_mongo.enroll_classroom(user_uid, classroom_uid):
-                    return True
-            ### undo stuff
+            await classroom_mongo.enroll_user(user_uid, classroom_uid)
+            ### Updating classroom enrolled array in mongo
+            await classroom_mongo.enroll_classroom(user_uid, username, classroom_uid)
+            return True
+        ### undo stuff
             #
             #
             #
-            return False
         except Exception as e:
+            print(e)
             return False
 
 async def getClassroomUid(entry_code):

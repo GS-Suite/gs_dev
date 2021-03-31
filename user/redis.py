@@ -1,8 +1,8 @@
 from db_setup.redis_setup import REDIS_CONN as RED
 
 
-async def set_token(token, email):
-    x = RED.set(token, email, ex = 60 * 60 * 24)
+async def set_token(token, email, ex = 60 * 60 * 24):
+    x = RED.set(token, email, ex = ex)
     return x
 
 

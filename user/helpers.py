@@ -49,3 +49,16 @@ async def generate_verify_email_token():
         )
     )
     return gen_code
+
+
+async def generate_reset_password_token():
+    N = 15
+    gen_code = ''.join(
+        random.choices(
+            string.ascii_uppercase +
+            string.digits +
+            string.ascii_lowercase,
+            k = N
+        )
+    )
+    return gen_code

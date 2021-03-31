@@ -77,3 +77,14 @@ class DeleteUserSchema(BaseModel):
     class Config:
         orm_mode = True
 
+class ResetPasswordSchema(BaseModel):
+    username: str = Field(...)
+    password: str = Field(...)
+    token: str = Field(...)
+    class Config:
+        orm_mode = True
+
+    @validator('password')
+    def password_length(cls, v):
+        assert len(v) > 8, 'Password must contain 8 characters or more'
+        return v
