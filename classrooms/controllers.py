@@ -1,6 +1,7 @@
 from classrooms import helpers as classroom_helpers
 from classrooms import models as classroom_model
 from classrooms import mongo as classroom_mongo
+from user import models as user_model
 
 
 async def check_user_if_creator(classroom_id, user_id):
@@ -38,7 +39,19 @@ async def get_user_classrooms(user_uid):
 async def get_user_enrolled(user_uid):
     #print(user_uid)
     classrooms = await classroom_mongo.get_user_enrolled(user_uid)
-    return classrooms
+    results = []
+    for uid in classrooms:
+        C = await classroom_model.get_classroom_by_uid(uid)
+        teacher = await user_model.get_user_by_uid(C.creator_uid)
+        results.append({
+            "uid": uid,
+            "name": C.name,
+            "teacher": {
+                "username": teacher.username,
+                "name": f"{teacher.first_name} {teacher.last_name}"
+            }
+        })
+    return results
 
 
 async def get_classroom_enrolled(classroom_uid):
