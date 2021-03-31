@@ -68,6 +68,20 @@
 #         return False
 
 
+from classrooms import mongo as classroom_mongo
+from db_setup.mongo_setup import Mongo_CONN
+
+classroom_uid = '737c056eaa3d4179915b97d0fe5a1f37'
+DB_ENROLLED = 'Enrolled'
+
+x = Mongo_CONN[DB_ENROLLED][classroom_uid].find()
+y = [{"uid": i["uid"], "username": i["username"]} for i in x]
+
+print(y)
+
+
+
+
 
 
 

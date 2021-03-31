@@ -1,6 +1,7 @@
 from responses.not_owner_response_body import NotOwnerResponseBody
 from responses.standard_response_body import StandardResponseBody
 from classrooms import controllers as classroom_controllers
+from classrooms import models as classroom_models
 from forum import controllers as forum_controllers
 from user import controllers as user_controllers
 from forum import helpers as forum_helpers
@@ -9,12 +10,13 @@ import datetime
 
 
 async def create_forum(classroom_uid, token):
-    '''
-        1. Check if user_id is classroom owner
-        2. Check if forum already exits, if true, return forum id, name, 'Already created for your classroom'
-            message
-        3. Create forum if does not exist, return forum id, name, 'Forum created' message
-    '''
+
+    classroom_exist_status = await classroom_models.get_classroom_by_uid(uid = classroom_uid)
+    if not classroom_exist_status:
+        return StandardResponseBody(
+            False, 'Create classroom before creating forum', token.token_value
+        )
+
     if_user_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
     if if_user_creator == True:
