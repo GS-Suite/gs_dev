@@ -19,10 +19,12 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 origins = [
+    "http://127.0.0.1",
     "http://localhost",
+    "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://gs-suite.herokuapp.com",
     "http://gs-suite.herokuapp.com",
+    "https://gs-suite.herokuapp.com",
 ]
 
 app.add_middleware(
