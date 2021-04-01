@@ -9,5 +9,6 @@ x = datetime.datetime.now()
 print(x)
 
 localized = timezone("Asia/Kolkata")
-
 print(localized.localize(x))
+
+print(x.astimezone(timezone("Asia/Kolkata")))
