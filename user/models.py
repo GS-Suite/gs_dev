@@ -19,16 +19,13 @@ class User(Base):
     last_name = Column(String)
     date_joined = Column(DateTime)
     verified = Column(Boolean, default = False)
+    timezone = Column(String, default = "UTC")
+
 
 
 async def create_user(user: dict, uid: str):
     db_user = User(
-        uid=uid,
-        username=user.username,
-        password=user.password,
-        email=user.email,
-        first_name=user.first_name,
-        last_name=user.last_name,
+        **user,
         date_joined=datetime.datetime.now()
     )
     try:

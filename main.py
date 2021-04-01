@@ -1,3 +1,4 @@
+from logging import debug
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from db_setup.pg_setup import Base, engine
