@@ -21,12 +21,3 @@
 -- Contains `PG_DB_URL` , `MONGO_DB_URL`
 
 ---
-
-### Alembic
--- Create a new migration: `alembic revision --autogenerate -m "<message>"`
-
--- Run migrations: `alembic upgrade head`
-
--- Check out the documentation: https://alembic.sqlalchemy.org/en/latest/tutorial.html
-
----
