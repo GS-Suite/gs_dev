@@ -37,7 +37,7 @@ async def create_announcement_pane(classroom_uid, token):
         return NotOwnerResponseBody(token.token_value)
 
 
-async def post_announcement(datetimestamp, classroom_uid, announcement, background_tasks, token):
+async def post_announcement(classroom_uid, announcement, background_tasks, token):
     if_user_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
     if if_user_creator ==  True:
@@ -45,7 +45,7 @@ async def post_announcement(datetimestamp, classroom_uid, announcement, backgrou
 
         if if_announcement_pane_exists['forum_exists'] ==  True:
     
-            announcement_email_notif_status = await announcement_controllers.send_notif(datetimestamp = datetimestamp, classroom_uid = classroom_uid, announcement = announcement, tasks = background_tasks)
+            announcement_email_notif_status = await announcement_controllers.send_notif(classroom_uid = classroom_uid, announcement = announcement, tasks = background_tasks)
 
             if announcement_email_notif_status ==  True:
                 return StandardResponseBody(

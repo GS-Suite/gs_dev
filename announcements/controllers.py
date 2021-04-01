@@ -13,12 +13,12 @@ def create_announcement_pane(classroom_uid):
     return announcement_mongo.create_announcement_pane(classroom_uid)
 
 
-async def send_notif(datetimestamp, classroom_uid, announcement, tasks):
+async def send_notif(classroom_uid, announcement, tasks):
     classroom_enrolled = await classroom_mongo.get_classroom_enrolled(classroom_uid=classroom_uid)
     classroom_info = await classroom_models.get_classroom_by_uid(uid=classroom_uid)
     creator_info = await user_models.get_user_by_uid(uid=classroom_info.creator_uid)
 
-    # datetimestamp = datetime.datetime.utcnow()
+    datetimestamp = datetime.datetime.now()
     
     enrolled_mailing_list = []
 
@@ -32,8 +32,7 @@ async def send_notif(datetimestamp, classroom_uid, announcement, tasks):
 
     email_struc = {
         'announcement': announcement,
-        'datetime': datetimestamp
-        # 'datetime': datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+        'datetime': datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')
     }
 
     post_announcement_mongo = announcement_mongo.post_announcement(mongo_ann_struc, classroom_uid)

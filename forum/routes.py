@@ -70,7 +70,7 @@ async def get_forum_chat(classroom_uid, token):
         ) 
 
 
-async def send_message(classroom_uid, datetimestamp, message, reply_user_id, reply_msg_id, tkn):
+async def send_message(classroom_uid, message, reply_user_id, reply_msg_id, tkn):
     reply_user_id_valid_status = False
     reply_user_id_username = ''
 
@@ -110,7 +110,7 @@ async def send_message(classroom_uid, datetimestamp, message, reply_user_id, rep
                 reply_user_id = reply_user_id,
                 reply_username = reply_user_id_username,
                 reply_msg_id = reply_msg_id,
-                datetimestamp = datetimestamp,
+                datetimestamp = datetime.datetime.now(),
                 user_id = tkn.user_id,
                 username = username,
                 message = message
