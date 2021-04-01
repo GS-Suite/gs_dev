@@ -58,7 +58,7 @@ def get_all_messages(classroom_uid):
 
         for i in resp:
             i.pop('_id')
-            # i['date'] = i['datetimestamp'].strftime('%d-%m-%Y')
+            i['datetime'] = i['datetimestamp'].strftime('%d-%m-%Y')
             # i['time'] = i['datetimestamp'].strftime('%H:%M:%S')
             # i.pop('datetimestamp')
             msgs.append(i)
