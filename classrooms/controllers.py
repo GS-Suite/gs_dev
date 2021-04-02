@@ -39,6 +39,7 @@ async def get_user_classrooms(user_uid):
 async def get_user_enrolled(user_uid):
     #print(user_uid)
     classrooms = await classroom_mongo.get_user_enrolled(user_uid)
+    print(classrooms)
     results = []
     for uid in classrooms:
         C = await classroom_model.get_classroom_by_uid(uid)

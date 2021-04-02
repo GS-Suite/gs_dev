@@ -24,6 +24,7 @@ class User(Base):
 async def create_user(user: dict, uid: str):
     db_user = User(
         **user.__dict__,
+        uid = uid,
         date_joined=datetime.datetime.now()
     )
     try:
