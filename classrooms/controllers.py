@@ -27,13 +27,20 @@ async def if_user_enrolled(classroom_uid, user_id):
 
 async def get_user_classrooms(user_uid):
     classrooms = await classroom_model.get_classrooms_by_user(user_uid)
-    c = [
-        {
-            "name": i.name,
-            "uid": i.uid
-        } for i in classrooms
-    ]
-    return c
+    results = []
+    for classroom in classrooms:
+        teacher = await user_model.get_user_by_uid(classroom.creator_uid)
+        results.append(
+            {
+                "name": classroom.name,
+                "uid": classroom.uid,
+                "teacher": {
+                    "username": teacher.username,
+                    "name": f"{teacher.first_name} {teacher.last_name}"
+                }
+            }
+        )
+    return results
 
 
 async def get_user_enrolled(user_uid):
