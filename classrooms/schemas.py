@@ -20,7 +20,6 @@ class ClassroomUidSchema(BaseModel):
         orm = True
 
 class UserClassroomEnroll(BaseModel):
-    classroom_uid: str = Field(...)
     entry_code: str = Field(...)
 
     class Config:

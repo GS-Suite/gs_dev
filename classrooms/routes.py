@@ -91,8 +91,8 @@ async def generate_classroom_entry_code(uid, token):
 
 
 
-async def course_enroll(token, classroom_uid, entry_code):
-    res = await classroom_controllers.enroll_user(token.user_id, token.username, classroom_uid, entry_code)
+async def course_enroll(token, entry_code):
+    res = await classroom_controllers.enroll_user(token.user_id, token, entry_code)
     print(token.username)
     if res == True:
         return StandardResponseBody(

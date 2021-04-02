@@ -127,28 +127,29 @@ async def generate_classroom_entry_code(user_uid, classroom_uid):
     return False
 
 
-async def enroll_user(user_uid, username, classroom_uid, entry_code):
+async def enroll_user(user_uid, token, entry_code):
     '''
     1. Get user_id from token model
     2. pass to mongo.course.enroll
     '''
 
     ### check code for validity
-    if not await classroom_model.get_classroom_by_entry_code(entry_code):
+    classroom = await classroom_model.get_classroom_by_entry_code(entry_code)
+    if not classroom:
         return "code_error"
     
     ### check if user already enrolled
-    x = await classroom_mongo.get_classroom_enrolled(classroom_uid)
+    x = await classroom_mongo.get_classroom_enrolled(classroom.uid)
     for user in x:
-        if user["username"] == username:
+        if user["username"] == token.username:
             return "exists"
     else:
         ### enroll user
         try:
             ### Updating user's enrolled array in mongo
-            await classroom_mongo.enroll_user(user_uid, classroom_uid)
+            await classroom_mongo.enroll_user(user_uid, classroom.uid)
             ### Updating classroom enrolled array in mongo
-            await classroom_mongo.enroll_classroom(user_uid, username, classroom_uid)
+            await classroom_mongo.enroll_classroom(user_uid, token.username, classroom.uid)
             return True
         ### undo stuff
             #

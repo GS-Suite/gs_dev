@@ -32,8 +32,8 @@ async def generate_classroom_entry_code(classroom_uid: classroom_schemas.Classro
 ''' STUDENT APIS '''
 
 @router.post('/enroll/')
-async def course_enroll(classroom: classroom_schemas.UserClassroomEnroll = Body(...), token: dict = Depends(token_validation)):
-    return await classroom_routes.course_enroll(token, classroom.classroom_uid, classroom.entry_code)
+async def course_enroll(entry_code: str = Body(..., embed=True), token: dict = Depends(token_validation)):
+    return await classroom_routes.course_enroll(token, entry_code)
 
 
 @router.post("/get_user_enrolled/")
