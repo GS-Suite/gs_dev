@@ -15,6 +15,7 @@ class Classroom(Base):
     name = Column(String)
     date_created = Column(DateTime)
     entry_code = Column(String, default = None)
+    public_storage_link = Column(String, default = None)
     
 
 async def get_classrooms_by_user(uid: str):
@@ -96,6 +97,22 @@ async def generate_entry_code(classroom, code):
         classroom.entry_code = code
         db.commit()
         return classroom
+    except Exception as e:
+        print(e)
+        db.rollback()
+        return False
+
+
+async def update_public_storage_link(classroom_uid, link):
+    try:
+        x = db.query(Classroom).filter(
+            Classroom.uid == classroom_uid
+        ).first()
+        if x:
+            x.public_storage_link = link
+            db.commit()
+            return True
+        return False
     except Exception as e:
         print(e)
         db.rollback()

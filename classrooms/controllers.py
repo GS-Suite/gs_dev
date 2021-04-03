@@ -1,3 +1,4 @@
+from storage import controllers as storage_controllers
 from classrooms import helpers as classroom_helpers
 from classrooms import models as classroom_model
 from classrooms import mongo as classroom_mongo
@@ -37,7 +38,8 @@ async def get_user_classrooms(user_uid):
                 "teacher": {
                     "username": teacher.username,
                     "name": f"{teacher.first_name} {teacher.last_name}"
-                }
+                },
+                "public_storage_link": classroom.public_storage_link
             }
         )
     return results
@@ -57,7 +59,8 @@ async def get_user_enrolled(user_uid):
             "teacher": {
                 "username": teacher.username,
                 "name": f"{teacher.first_name} {teacher.last_name}"
-            }
+            },
+            "public_storage_link": C.public_storage_link
         })
     return results
 
@@ -77,7 +80,8 @@ async def create_class(token, class_name):
         if c.name == class_name:
             return "exists", {
                 "name": c.name,
-                "uid": c.uid
+                "uid": c.uid,
+                "public_storage_link": c.public_storage_link
             }
 
     uid = await classroom_helpers.generate_uid()
@@ -87,6 +91,16 @@ async def create_class(token, class_name):
             "name": c.name,
             "uid": c.uid
         }
+        
+        
+        ### create dropbox classroom
+        if await storage_controllers.create_classroom_folder(c["uid"]):
+            ### generate link
+            link = await storage_controllers.get_classroom_folder_link(c["uid"])
+            if link:
+                ### update postgres
+                await classroom_model.update_public_storage_link(c["uid"], link)
+                c["public_storage_link"] = link
     return res, c
 
 
@@ -99,6 +113,7 @@ async def get_classroom_details(user_id, uid):
         "name": classroom.name,
         "uid": classroom.uid,
         "entry_code": classroom.entry_code,
+        "public_storage_link": classroom.public_storage_link
     }
     return cls
 
@@ -108,7 +123,7 @@ async def delete_classroom(token, classroom_name):
 
 
 async def generate_classroom_entry_code(user_uid, classroom_uid):
-    print(user_uid, classroom_uid)
+    #print(user_uid, classroom_uid)
     ### get classroom, check if user authorized
     classroom = await classroom_model.get_classroom_by_uid(classroom_uid)
     

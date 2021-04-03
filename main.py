@@ -1,4 +1,3 @@
-from logging import debug
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from db_setup.pg_setup import Base, engine
@@ -10,9 +9,13 @@ from attendance.apis import router as attendance_router
 from classrooms.apis import router as classroom_router
 from discover.apis import router as discover_router
 from lectures.apis import router as lecture_router
+from storage.apis import router as storage_router
 from tokens.apis import router as token_router
 from forum.apis import router as forum_router
 from user.apis import router as user_router
+
+from dotenv import load_dotenv
+load_dotenv()
 
 
 Base.metadata.create_all(bind=engine)
@@ -47,9 +50,11 @@ app.include_router(token_router,        tags = ["tokens"])
 app.include_router(classroom_router,    tags = ["classrooms"])
 app.include_router(lecture_router,    tags = ["lectures"])
 app.include_router(attendance_router)
+app.include_router(storage_router,              tags = ["storage"])
 app.include_router(forum_router,                tags = ["forums"])
 app.include_router(announcement_router,         tags = ["announcement"])
 app.include_router(discover_router,             tags = ["discover"])
+
 
 
 if __name__ == "__main__":
