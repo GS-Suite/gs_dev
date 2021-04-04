@@ -10,6 +10,8 @@ async def announcement_email(user, creator_info, classroom_info, email_struc):
                     <p>Hi {user['first_name']} {user['last_name']}!</p>
                     <p>{creator_info.username}, posted an announcement on {classroom_info.name}</p>
                     <p>The following is the announcement<p>
+                    <br>
+
                     <hr>
                         <p>{email_struc['announcement']}</p>
                         <br>
@@ -29,11 +31,11 @@ async def send_bulk(enrolled_mailing_list, subject, creator_info, classroom_info
     for user in enrolled_mailing_list:
         await mail_helpers.send_email(
             receiver_email= user['email'],
-            subject=subject,
-            html= await announcement_email(
+            subject = subject,
+            html = await announcement_email(
                 user = user,
                 creator_info = creator_info, 
-                classroom_info= classroom_info,
+                classroom_info = classroom_info,
                 email_struc =  email_struc
             )
         )
