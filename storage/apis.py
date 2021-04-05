@@ -21,3 +21,11 @@ async def get_storage_files_and_folders(
     path: str = Body(..., embed = True), 
     token: dict = Depends(token_validation)):
     return await storage_routes.get_files_and_folders(classroom_uid, path, token)
+
+
+@router.post("/delete_storage_folder/")
+async def delete_storage_folder(
+    classroom_uid: str = Body(..., embed = True),
+    path: str = Body(..., embed = True), 
+    token: dict = Depends(token_validation)):
+    return await storage_routes.delete_file(classroom_uid, path, token)

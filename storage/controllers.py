@@ -30,9 +30,9 @@ async def get_classroom_folder_link(classroom_uid):
         return False
 
 
-async def create_folder(classroom_uid, folder_name, path = ""):
+async def create_folder(folder_name, path):
     try:
-        upload_path = f"/classrooms/{classroom_uid}/{path}/{folder_name}"
+        upload_path = f"{path}/{folder_name}"
         x = DBX.files_create_folder(upload_path)
         if x:
             return True
@@ -41,16 +41,14 @@ async def create_folder(classroom_uid, folder_name, path = ""):
         return False
 
 
-async def get_files_and_folders(classroom_uid, path = ""):
+async def get_files_and_folders(full_path):
     try:
-        full_path = f"/classrooms/{classroom_uid}/{path}"
         res = DBX.files_list_folder(full_path)
         results = []
         if res:
             for file in res.entries:
                 x = {}
-                print(type(file) == dropbox.files.FileMetadata)
-                print(file)
+                #print(type(file) == dropbox.files.FileMetadata)
                 if type(file) == dropbox.files.FolderMetadata:
                     x = {
                         "type": "folder",
@@ -71,3 +69,13 @@ async def get_files_and_folders(classroom_uid, path = ""):
     except Exception as e:
         print(e)
     return False
+
+
+async def delete_file(path):
+    try:
+        x = DBX.files_delete(path)
+        if x:
+            return True
+    except Exception as e:
+        print(e)
+        return False
