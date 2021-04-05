@@ -89,6 +89,7 @@ async def change_profile_picture(token, picture):
         )
     return StandardResponseBody(False, "Could not update profile picture")
 
+
 async def get_username_from_user_id(user_uid, token):
     resp = await user_controllers.get_user_username(uid=user_uid)
 
