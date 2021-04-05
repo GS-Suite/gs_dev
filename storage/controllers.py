@@ -1,3 +1,4 @@
+from starlette.responses import FileResponse, Response, StreamingResponse
 from dropbox_setup import DBX
 import dropbox
 
@@ -70,6 +71,15 @@ async def get_files_and_folders(full_path):
         print(e)
     return False
 
+
+async def get_file_download_link(file_path):
+    try:
+        res = DBX.files_get_temporary_link(file_path)
+        #print(res.link)
+        return res.link
+    except Exception as e:
+        print(e)
+        return False
 
 async def delete_file(path):
     try:

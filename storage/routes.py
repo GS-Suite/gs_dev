@@ -15,23 +15,38 @@ async def create_folder(classroom_uid, folder_name, path, token):
             return StandardResponseBody(
                 False, "Folder already exists", token.token_value
             )
-        return StandardResponseBody(
-            False, "Folder not created"
-        )
+    return StandardResponseBody(
+        False, "Folder not created"
+    )
 
 
 
 async def get_files_and_folders(classroom_uid, path, token):
-    res = await classroom_controllers.check_user_if_creator(classroom_uid, token.user_id)
-    if res:
+    res1 = await classroom_controllers.check_user_if_creator(classroom_uid, token.user_id)
+    res2 = await classroom_controllers.if_user_enrolled(classroom_uid, token.user_id)
+    if res1 or res2:
         res = await storage_controllers.get_files_and_folders(path)
         if res:
             return StandardResponseBody(
                 True, "Files retrieved", token.token_value, res
             )
-        return StandardResponseBody(
-            False, "Files not retrieved"
+    return StandardResponseBody(
+        False, "Files not retrieved"
+    )
+
+
+async def get_file_download_link(classroom_uid, path, token):
+    res1 = await classroom_controllers.check_user_if_creator(classroom_uid, token.user_id)
+    res2 = await classroom_controllers.if_user_enrolled(classroom_uid, token.user_id)
+    if res1 or res2:
+        res = await storage_controllers.get_file_download_link(path)
+        if res:
+            return StandardResponseBody(
+            False, "Link retrieved", res
         )
+    return StandardResponseBody(
+        False, "Link not retrieved"
+    )
 
 
 async def delete_file(classroom_uid, path, token):
@@ -42,6 +57,6 @@ async def delete_file(classroom_uid, path, token):
             return StandardResponseBody(
                 True, "File / folder deleted", token.token_value
             )
-        return StandardResponseBody(
-            False, "File / folder not deleted"
-        )
+    return StandardResponseBody(
+        False, "File / folder not deleted"
+    )
