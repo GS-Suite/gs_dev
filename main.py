@@ -45,9 +45,9 @@ async def home_to_doc():
     return RedirectResponse("/docs")
 
 
-app.include_router(user_router,         tags = ["users"])
+app.include_router(user_router,         tags = [])
 app.include_router(token_router,        tags = ["tokens"])
-app.include_router(classroom_router,    tags = ["classrooms"])
+app.include_router(classroom_router,    tags = [])
 app.include_router(lecture_router,      tags = ["lectures"])
 app.include_router(attendance_router,       tags = [])
 app.include_router(storage_router,              tags = ["resources"],       prefix="/resources")
