@@ -1,6 +1,4 @@
-from typing import Optional
-from pydantic import BaseModel, Field, validator
-import re
+from pydantic import BaseModel, Field
 
 
 class CreateLectureSchema(BaseModel):

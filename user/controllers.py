@@ -19,9 +19,11 @@ async def sign_up(user, url, bg):
 
             ### generate token
             token = await user_helpers.generate_verify_email_token()
-            
             ### store in redis
             await user_redis.set_token(token, user.email)
+
+            ### create profile pic dropbox
+            await user_dropbox.create_profile_picture_with_link(uid, open("no_profile_pic.jpg", "rb").read())
 
             ''' EMAIL VALIDATION MAIL, USE SPARINGLY '''
             #await send_verify_email_mail(user, url, token, bg)

@@ -19,6 +19,7 @@ class User(Base):
     last_name = Column(String)
     date_joined = Column(DateTime)
     verified = Column(Boolean, default = False)
+    profile_picture_link = Column(String)
 
 
 async def create_user(user: dict, uid: str):
@@ -112,4 +113,17 @@ async def set_verified(email):
     except Exception as e:
         print(e)
         db.rollback()
+        return False
+
+
+async def update_profile_picture(uid, link):
+    try:
+        user = db.query(User).filter(
+            User.uid == uid
+        ).first()
+        user.profile_picture_link = link
+        db.commit()
+        return True
+    except Exception as e:
+        print(e)
         return False
