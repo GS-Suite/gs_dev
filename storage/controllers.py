@@ -1,4 +1,5 @@
 from dropbox_setup import DBX
+import dropbox
 
 
 async def create_classroom_folder(classroom_uid):
@@ -27,3 +28,46 @@ async def get_classroom_folder_link(classroom_uid):
     except Exception as e:
         print(e)
         return False
+
+
+async def create_folder(classroom_uid, folder_name, path = ""):
+    try:
+        upload_path = f"/classrooms/{classroom_uid}/{path}/{folder_name}"
+        x = DBX.files_create_folder(upload_path)
+        if x:
+            return True
+    except Exception as e:
+        print(e)
+        return False
+
+
+async def get_files_and_folders(classroom_uid, path = ""):
+    try:
+        full_path = f"/classrooms/{classroom_uid}/{path}"
+        res = DBX.files_list_folder(full_path)
+        results = []
+        if res:
+            for file in res.entries:
+                x = {}
+                print(type(file) == dropbox.files.FileMetadata)
+                print(file)
+                if type(file) == dropbox.files.FolderMetadata:
+                    x = {
+                        "type": "folder",
+                        "name": file.name,
+                        "path": file.path_display,
+                    }
+                elif type(file) == dropbox.files.FileMetadata:
+                    x = {
+                        "type": "file",
+                        "name": file.name,
+                        "path": file.path_display,
+                        "date_modified": file.server_modified,
+                        "content_hash": file.content_hash,
+                        "size": file.size
+                    }
+                results.append(x)
+            return results
+    except Exception as e:
+        print(e)
+    return False
