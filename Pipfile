@@ -21,6 +21,7 @@ dropbox = "*"
 redis = "*"
 python-multipart = "*"
 sendgrid = "*"
+pytest = "*"
 
 [dev-packages]
 
