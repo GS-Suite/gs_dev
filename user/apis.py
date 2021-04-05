@@ -62,8 +62,7 @@ async def get_any_user_profile(username: str = Body(...), user_id: str = Body(..
     else:
         return await user_routes.get_any_user_profile_from_username(username = username, token = token)
     
-
-
+    
 @router.get("/verify_email/")
 async def verify_email(token: str):
     #print(token)
