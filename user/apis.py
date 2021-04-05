@@ -68,7 +68,7 @@ async def get_username_from_user_id(user_uid: str = Body(..., embed=True), token
     return await user_routes.get_username_from_user_id(user_uid = user_uid, token = token)
 
 
-@router.post("/get_any_user_profile_from_username_or_userid/", tags = ["users : data"])
+@router.post("/get_any_user_profile/", tags = ["users : data"])
 async def get_any_user_profile_from_username_or_userid(username: str = Body(...), user_id: str = Body(...), token: dict = Depends(token_validation)):
     if username == '':
         return await user_routes.get_any_user_profile_from_user_id(user_id = user_id, token = token)
