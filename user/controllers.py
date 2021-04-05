@@ -174,3 +174,9 @@ async def reset_password(reset):
         ### delete token
         await user_redis.delete_token(reset.token)
     return False
+
+async def get_userid_from_username(username):
+    user = await user_models.get_user_by_username(username)
+    if user:
+        return user.uid
+    return False

@@ -3,6 +3,8 @@ from responses.standard_response_body import StandardResponseBody
 from user import controllers as user_controllers
 from fastapi.responses import HTMLResponse
 
+from classrooms import controllers as classroom_controllers
+
 
 async def sign_up(user, url, bg):
     res = await user_controllers.sign_up(user, url, bg)
@@ -140,4 +142,77 @@ async def reset_password(reset):
         )
     return StandardResponseBody(
         False, "Could not reset password.", token = None
+    )
+
+''' this function does not need some special controller code since it's just organising data (as of yet)'''
+async def get_any_user_profile_from_user_id(user_id, token):
+
+    ''' User ID validation '''
+    if user_id == '':
+        return StandardResponseBody(
+            False, 'User ID cannot be empty', token.token_value
+        )
+    
+    ''' Get (any) User Profile aka Dashboard '''
+    user_profile = await user_controllers.get_user_dashboard(user_id)
+
+    if user_profile == False:
+        return StandardResponseBody(
+            False, 'The user you are searching for does not exist', token.token_value
+        )
+
+    ''' Get the searched user's created classrooms, if any '''
+    user_created_classrooms = await classroom_controllers.get_user_classrooms(user_uid = user_id)
+
+    ''' Get the searched user's enrolled classrooms, if any '''
+    user_enrolled_classrooms = await classroom_controllers.get_user_enrolled(user_uid = user_id)
+    
+    if user_created_classrooms == [] and user_enrolled_classrooms == []:
+        return StandardResponseBody(
+            True, 'User profile could be procured', token.token_value, {
+                'user_profile': user_profile,
+                'user_created_classrooms': [],
+                'user_enrolled_classrooms': []
+            }
+        )
+    elif user_created_classrooms != [] and user_enrolled_classrooms == []:
+        return StandardResponseBody(
+            True, 'User Profile and user\'s created classrooms could be procured', token.token_value, {
+                'user_profile': user_profile, 
+                'user_created_classrooms': user_created_classrooms,
+                'user_enrolled_classrooms': []
+            }
+        )
+    elif user_created_classrooms == [] and user_enrolled_classrooms != []:
+        return StandardResponseBody(
+            True, 'User Profile and user\'s enrolled classrooms could be procured', token.token_value, {
+                'user_profile': user_profile, 
+                'user_created_classrooms': [],
+                'user_enrolled_classrooms': user_enrolled_classrooms
+            }
+        )
+    elif user_created_classrooms != [] and user_enrolled_classrooms != []:
+        return StandardResponseBody(
+            True, 'User Profile, User\'s enrolled and created classrooms could be procured', token.token_value, {
+                'user_profile': user_profile, 
+                'user_created_classrooms': user_created_classrooms,
+                'user_enrolled_classrooms': user_enrolled_classrooms
+            }
+        )
+    else:
+        return StandardResponseBody(
+            False, 'We have no clue why this would should up, it\'s an error', token.token_value
+        )
+
+
+async def get_any_user_profile_from_username(username, token):
+    if username == '':
+        return StandardResponseBody(
+            False, 'Username cannot be left empty', token.token_value
+        )
+    user_id = await user_controllers.get_userid_from_username(username = username)
+    if user_id:
+        return await get_any_user_profile_from_user_id(user_id = user_id, token = token)
+    return StandardResponseBody(
+        False, 'Could not get userid from username', token.token_value
     )
