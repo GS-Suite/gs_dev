@@ -42,6 +42,16 @@ async def create_folder(folder_name, path):
         return False
 
 
+async def upload_file(path, file):
+    try:
+        upload_path = f"{path}/{file.filename}"
+        x = DBX.files_upload(file.file.read(), upload_path)
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+
 async def get_files_and_folders(full_path):
     try:
         res = DBX.files_list_folder(full_path)
@@ -66,7 +76,7 @@ async def get_files_and_folders(full_path):
                         "size": file.size
                     }
                 results.append(x)
-            return results
+        return results
     except Exception as e:
         print(e)
     return False
@@ -80,6 +90,7 @@ async def get_file_download_link(file_path):
     except Exception as e:
         print(e)
         return False
+
 
 async def delete_file(path):
     try:

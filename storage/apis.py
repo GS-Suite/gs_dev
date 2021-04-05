@@ -1,3 +1,7 @@
+from typing import Optional
+
+from fastapi.datastructures import UploadFile
+from fastapi.params import File
 from tokens.controllers import token_validation
 from storage import routes as storage_routes
 from fastapi.param_functions import Depends
@@ -13,6 +17,15 @@ async def create_storage_folder(
     path: str = Body(..., embed = True), 
     token: dict = Depends(token_validation)):
     return await storage_routes.create_folder(classroom_uid, folder_name, path, token)
+
+
+@router.post("/upload_file/")
+async def upload_file(
+    classroom_uid: str = Body(..., embed = True),
+    path: str = Body(..., embed = True),    
+    token: dict = Depends(token_validation),
+    file: Optional[UploadFile] = File(None)):
+    return await storage_routes.upload_file(token, classroom_uid, path, file)
 
 
 @router.post("/get_files_and_folders/")
