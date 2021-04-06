@@ -25,5 +25,5 @@ async def get_all_announcements(classroom_uid: str = Body(..., embed=True), toke
 
 
 @router.post('/delete_announcement/')
-async def delete_announcement(classroom_uid: str = Body(...), announcement_id: str = Body(...), token: Depends(token_validation)):
+async def delete_announcement(token: dict = Depends(token_validation), classroom_uid: str = Body(...), announcement_id: str = Body(...)):
     return await announcement_routes.delete_announcement(classroom_uid = classroom_uid, announcement_id = announcement_id, token = token)

@@ -8,6 +8,7 @@ class CreateLectureSchema(BaseModel):
     playlists: list = []
     lecture_description: str = Field(...)
     lecture_resources: str = Field(...)
+    classroom_uid: str = Field(...)
 
     class Config:
         orm_mode = True

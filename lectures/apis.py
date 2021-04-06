@@ -26,8 +26,8 @@ async def get_classroom_playlist_videos(classroom_uid: str = Body(..., embed = T
 ''' TEACHER APIS '''
 
 @router.post("/add_lecture/")
-async def add_lecture(lecture: lecture_schemas.CreateLectureSchema, classroom_uid: str = Body(..., embed = True), token: dict = Depends(token_validation)):
-    return await lecture_routes.add_lecture(token, classroom_uid, lecture)
+async def add_lecture(lecture: lecture_schemas.CreateLectureSchema, token: dict = Depends(token_validation)):
+    return await lecture_routes.add_lecture(token, lecture.classroom_uid, lecture)
 
 
 @router.post("/edit_lecture/")
