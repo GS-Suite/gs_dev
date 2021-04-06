@@ -28,12 +28,21 @@ async def get_classroom_details(classroom: classroom_schemas.ClassroomUidSchema,
 async def generate_classroom_entry_code(classroom_uid: classroom_schemas.ClassroomUidSchema, token: dict = Depends(token_validation)):
     return await classroom_routes.generate_classroom_entry_code(classroom_uid.classroom_uid, token)
 
+@router.post('/unenroll_user/', tags = ['classrooms : teacher'])
+async def unenroll_user(classroom_uid: str = Body(...), user_id: str = Body(...), token: dict = Depends(token_validation)):
+    return await classroom_routes.unenroll_user(classroom_uid = classroom_uid, user_id = user_id, token = token)
+
 
 ''' STUDENT APIS '''
 
 @router.post('/enroll/', tags = ["classrooms : student"])
 async def course_enroll(entry_code: str = Body(..., embed=True), token: dict = Depends(token_validation)):
     return await classroom_routes.course_enroll(token, entry_code)
+
+
+@router.post('/unenroll/', tags = ['classrooms : student'])
+async def unenroll(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
+    return await classroom_routes.unenroll(classroom_uid = classroom_uid, token = token)
 
 
 @router.post("/get_user_enrolled/", tags = ["classrooms : student"])
@@ -51,6 +60,7 @@ async def get_classroom_enrolled(classroom_uid: classroom_schemas.ClassroomUidSc
 @router.post("/get_classroom_uid_from_entry_code/", tags = ["classrooms : data"])
 async def get_classroom_uid(entry_code: str = Body(..., embed=True), token: dict = Depends(token_validation)):
     return await classroom_routes.get_classroom_uid_by_entry_code(entry_code, token)
+
 
 @router.post('/get_classroom_owner_from_class_uid/', tags = ["classrooms : data"])
 async def get_classroom_owner_from_class_uid(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):

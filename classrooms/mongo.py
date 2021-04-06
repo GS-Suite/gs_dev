@@ -87,6 +87,29 @@ async def enroll_classroom(user_uid, username, classroom_uid):
         print(e)
         return False
 
+
+async def unenroll_from_user(classroom_uid, user_id):
+    try:
+        Mongo_CONN[DB_USERS][user_id].update_one(
+            {'user_id': user_id},
+            { '$pull': { 'enrolled': { '$in': [classroom_uid] }} },
+            False
+        )
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+async def unenroll_from_classroom(classroom_uid, user_id):
+    try:
+        Mongo_CONN[DB_ENROLLED][classroom_uid].delete_one(
+            {'user_id': user_id}
+        )
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
 '''
 def classroom_add_entry_code(classroom_uid: str, code: str):
     try:

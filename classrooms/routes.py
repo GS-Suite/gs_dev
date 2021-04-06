@@ -139,3 +139,65 @@ async def get_classroom_owner_from_class_uid(classroom_uid, token):
         return StandardResponseBody(
             False, "Could not get classroom owner ID", token.token_value
         )
+
+''' This is for the teacher to unenroll a user '''
+async def unenroll_user(classroom_uid, user_id, token):
+    ''' To check if person unenrolling a student is the owner '''
+    if_creator_status = await classroom_controllers.check_user_if_creator(classroom_id = classroom_uid, user_id = token.user_id)
+
+    if if_creator_status ==  False:
+        return StandardResponseBody(
+            False, 'User are not the owner of the classroom', token.token_value
+        )
+
+    ''' To check if the user to be unenrolled by the teacher is enrolled '''
+    if_user_enrolled_status = await classroom_controllers.if_user_enrolled(classroom_uid = classroom_uid, user_id = user_id)
+
+    if if_user_enrolled_status == False:
+        return StandardResponseBody(
+            False, 'The user you are trying to unenroll does not exist in this classroom', token.token_value
+        )
+
+    if if_creator_status == True and if_user_enrolled_status == True:
+        resp = await classroom_controllers.unenroll_user(classroom_uid = classroom_uid, user_id = user_id)
+
+        if resp ==  True:
+            return StandardResponseBody(
+                True, 'The user has been unenrolled from the classroom', token.token_value
+            )
+        else:
+            return StandardResponseBody(
+                False, 'The user could not be unenrolled from the classroom', token.token_value
+            )
+    else:
+        return StandardResponseBody(
+            False, 'You shouldnt see this error, but you are not the creator and not enrolled in this classroom', token.token_value
+        )
+
+
+''' This is for the student to unenroll oneself '''
+async def unenroll(classroom_uid, token):
+
+    ''' To check if the user trying to unenroll, is enrolled first '''
+    if_user_enrolled_status = await classroom_controllers.if_user_enrolled(classroom_uid = classroom_uid, user_id = token.user_id)
+
+    if if_user_enrolled_status == False:
+        return StandardResponseBody(
+            False, 'You do not belong to this classroom', token.token_value
+        )
+
+    if if_user_enrolled_status == True:
+        resp = await classroom_controllers.unenroll_user(classroom_uid = classroom_uid, user_id = user_id)
+
+        if resp ==  True:
+            return StandardResponseBody(
+                True, 'You have been unenrolled from the classroom', token.token_value
+            )
+        else:
+            return StandardResponseBody(
+                False, 'You could not be unenrolled from the classroom', token.token_value
+            )
+    else:
+        return StandardResponseBody(
+            False, 'You shouldnt see this error, but you are not part of the class, and then not unenrolled, obv', token.token_value
+        )  
