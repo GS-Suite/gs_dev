@@ -224,7 +224,7 @@ async def unenroll_user(classroom_uid, user_id):
             return False
         
         elif unenroll_from_user_enrolled_status == True and unenroll_from_enrolled_db_status == False:
-            print('unenroll_from_user_enrolled_status == False and unenroll_from_enrolled_db_status == False')
+            print('unenroll_from_user_enrolled_status == True and unenroll_from_enrolled_db_status == False')
             return False
         
         else:
