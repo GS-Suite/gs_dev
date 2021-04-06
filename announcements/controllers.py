@@ -95,3 +95,12 @@ async def get_all_announcements(classroom_uid):
         send['posts'] = posts
 
         return send
+
+async def delete_announcement(classroom_uid, announcement_id):
+    resp = announcement_mongo.delete_announcement(classroom_uid, announcement_id)
+
+    if resp ==  True:
+        return True
+    else:
+        return False
+        

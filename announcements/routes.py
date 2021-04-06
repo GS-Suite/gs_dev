@@ -85,7 +85,27 @@ async def get_all_announcements(classroom_uid, token):
         
         else:
             return StandardResponseBody(
-                False, 'Announcements does not exist', token.token_value
+                False, 'Announcements do not exist', token.token_value
             )
     else:
         return NotOwnerResponseBody(token.token_value)
+
+
+async def delete_announcement(classroom_uid, announcement_id, token):
+    if_user_creator = await classroom_controllers.check_user_if_creator(classroom_id = classroom_uid, user_id = token.user_id)
+
+    if if_user_creator == True:
+        resp = await announcement_controllers.delete_announcement(classroom_uid = classroom_uid, announcement_id = announcement_id)
+
+        if resp == True:
+            return StandardResponseBody(
+                True, 'Announcement has been deleted', token.token_value
+            )
+        else:
+            return StandardResponseBody(
+                False, 'Announcemement could not be deleted', token.token_value
+            )
+    
+    else:
+        return NotOwnerResponseBody(token = token.token_value)
+

@@ -38,3 +38,16 @@ def get_all_announcements(classroom_uid):
     except Exception as e:
         print(e)
         return False
+
+def delete_announcement(classroom_uid, announcement_id):
+    forum_id = classroom_uid + '-F'
+    try:
+        FORUM_MONGO_CONN[forum_id]['announcements'].delete_one(
+            {
+                'announcement_id': announcement_id
+            }
+        )
+        return True
+    except Exception as e:
+        print(e)
+        return False

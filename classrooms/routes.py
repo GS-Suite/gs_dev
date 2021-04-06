@@ -1,5 +1,6 @@
 from responses.invalid_token_response_body import InvalidTokenResponseBody
 from responses.standard_response_body import StandardResponseBody
+from responses.not_owner_response_body import NotOwnerResponseBody
 from classrooms import controllers as classroom_controllers
 
 
@@ -146,9 +147,7 @@ async def unenroll_user(classroom_uid, user_id, token):
     if_creator_status = await classroom_controllers.check_user_if_creator(classroom_id = classroom_uid, user_id = token.user_id)
 
     if if_creator_status ==  False:
-        return StandardResponseBody(
-            False, 'User are not the owner of the classroom', token.token_value
-        )
+        return NotOwnerResponseBody(token = token.token_value)
 
     ''' To check if the user to be unenrolled by the teacher is enrolled '''
     if_user_enrolled_status = await classroom_controllers.if_user_enrolled(classroom_uid = classroom_uid, user_id = user_id)
