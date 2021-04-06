@@ -22,7 +22,6 @@ redis = "*"
 python-multipart = "*"
 sendgrid = "*"
 pytest = "*"
-aiofiles = "*"
 
 [dev-packages]
 
