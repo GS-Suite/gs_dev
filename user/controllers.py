@@ -104,7 +104,9 @@ async def get_user_dashboard(uid):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "username": user.username,
-            "email": user.email
+            "email": user.email,
+            "profile": user.profile_picture_link,
+            "verified": user.verified
         }
     return False
 
