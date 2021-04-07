@@ -43,6 +43,4 @@ m = pymongo.MongoClient('mongodb://localhost:27017/?readPreference=primary&appna
 #     { '$pull': { 'enrolled': { '$in': ['lol'] }} },
 #     False
 # )
-print(client.find_one({}))
-
-
+# print(client.find_one({}))

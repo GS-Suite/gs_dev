@@ -103,7 +103,7 @@ async def unenroll_from_user(classroom_uid, user_id):
 async def unenroll_from_classroom(classroom_uid, user_id):
     try:
         Mongo_CONN[DB_ENROLLED][classroom_uid].delete_one(
-            {'user_id': user_id}
+            {'uid': user_id}
         )
         return True
     except Exception as e:
