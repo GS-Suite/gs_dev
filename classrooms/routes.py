@@ -19,7 +19,6 @@ async def create_classroom(classroom, token):
     )
 
 
-
 async def get_user_classrooms(token):
     res = await classroom_controllers.get_user_classrooms(token.user_id)
     if res == []:
@@ -38,7 +37,7 @@ async def get_user_classrooms(token):
 
 async def get_user_enrolled(token):
     res = await classroom_controllers.get_user_enrolled(token.user_id)
-    #print(res)
+    # print(res)
     if res == []:
         return StandardResponseBody(
             True, "You aren't enrolled in any classroom", token.token_value
@@ -55,10 +54,10 @@ async def get_user_enrolled(token):
 
 async def get_classroom_enrolled(classroom_uid, token):
     res = await classroom_controllers.get_classroom_enrolled(classroom_uid)
-    #print(res)
+    # print(res)
     if res:
         return StandardResponseBody(
-            True, "Enrolled students", token.token_value, {"enrolled" : res}
+            True, "Enrolled students", token.token_value, {"enrolled": res}
         )
     else:
         return StandardResponseBody(
@@ -68,7 +67,7 @@ async def get_classroom_enrolled(classroom_uid, token):
 
 async def get_classroom_details(uid, token):
     res = await classroom_controllers.get_classroom_details(token.user_id, uid)
-    #print(res)
+    # print(res)
     if res:
         return StandardResponseBody(
             True, "Classroom details retrieved", token.token_value, res
@@ -77,7 +76,6 @@ async def get_classroom_details(uid, token):
         return StandardResponseBody(
             False, "Could not retrieve data", token.token_value
         )
-
 
 
 async def generate_classroom_entry_code(uid, token):
@@ -89,7 +87,6 @@ async def generate_classroom_entry_code(uid, token):
     return StandardResponseBody(
         False, "Sorry! Couldn't generate entry code", token.token_value
     )
-
 
 
 async def course_enroll(token, entry_code):
@@ -117,7 +114,8 @@ async def get_classroom_uid_by_entry_code(entry_code, token):
 
     if res['status'] == True:
         return StandardResponseBody(
-            True, "Classroom ID aquired", token.token_value, {"classroom_uid": res['classroom_uid'], "classroom_name": res['classroom_name']}
+            True, "Classroom ID aquired", token.token_value, {
+                "classroom_uid": res['classroom_uid'], "classroom_name": res['classroom_name']}
         )
     else:
         return StandardResponseBody(
@@ -142,15 +140,17 @@ async def get_classroom_owner_from_class_uid(classroom_uid, token):
         )
 
 ''' This is for the teacher to unenroll a user '''
+
+
 async def unenroll_user(classroom_uid, user_id, token):
     ''' To check if person unenrolling a student is the owner '''
-    if_creator_status = await classroom_controllers.check_user_if_creator(classroom_id = classroom_uid, user_id = token.user_id)
+    if_creator_status = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
-    if if_creator_status ==  False:
-        return NotOwnerResponseBody(token = token.token_value)
+    if if_creator_status == False:
+        return NotOwnerResponseBody(token=token.token_value)
 
     ''' To check if the user to be unenrolled by the teacher is enrolled '''
-    if_user_enrolled_status = await classroom_controllers.if_user_enrolled(classroom_uid = classroom_uid, user_id = user_id)
+    if_user_enrolled_status = await classroom_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=user_id)
 
     if if_user_enrolled_status == False:
         return StandardResponseBody(
@@ -158,9 +158,9 @@ async def unenroll_user(classroom_uid, user_id, token):
         )
 
     if if_creator_status == True and if_user_enrolled_status == True:
-        resp = await classroom_controllers.unenroll_user(classroom_uid = classroom_uid, user_id = user_id)
+        resp = await classroom_controllers.unenroll_user(classroom_uid=classroom_uid, user_id=user_id)
 
-        if resp ==  True:
+        if resp == True:
             return StandardResponseBody(
                 True, 'The user has been unenrolled from the classroom', token.token_value
             )
@@ -175,10 +175,12 @@ async def unenroll_user(classroom_uid, user_id, token):
 
 
 ''' This is for the student to unenroll oneself '''
+
+
 async def unenroll(classroom_uid, token):
 
     ''' To check if the user trying to unenroll, is enrolled first '''
-    if_user_enrolled_status = await classroom_controllers.if_user_enrolled(classroom_uid = classroom_uid, user_id = token.user_id)
+    if_user_enrolled_status = await classroom_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=token.user_id)
 
     if if_user_enrolled_status == False:
         return StandardResponseBody(
@@ -186,9 +188,9 @@ async def unenroll(classroom_uid, token):
         )
 
     if if_user_enrolled_status == True:
-        resp = await classroom_controllers.unenroll_user(classroom_uid = classroom_uid, user_id = user_id)
+        resp = await classroom_controllers.unenroll_user(classroom_uid=classroom_uid, user_id=token.user_id)
 
-        if resp ==  True:
+        if resp == True:
             return StandardResponseBody(
                 True, 'You have been unenrolled from the classroom', token.token_value
             )
@@ -199,4 +201,4 @@ async def unenroll(classroom_uid, token):
     else:
         return StandardResponseBody(
             False, 'You shouldnt see this error, but you are not part of the class, and then not unenrolled, obv', token.token_value
-        )  
+        )
