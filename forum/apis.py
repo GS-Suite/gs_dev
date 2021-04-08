@@ -22,3 +22,7 @@ async def send_message(classroom_uid: str = Body(...), message: str = Body(...),
     return await forum_routes.send_message(classroom_uid=classroom_uid, message=message, reply_user_id=reply_user_id, 
                     reply_msg_id=reply_msg_id, tkn=token)
 
+
+@router.post('/delete_forum/')
+async def delete_forum(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
+    return await forum_routes.delete_forum(classroom_uid, token)

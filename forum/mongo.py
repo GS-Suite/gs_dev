@@ -67,3 +67,12 @@ async def get_all_messages(classroom_uid):
     except Exception as e:
         print(e)
         return False
+    
+
+async def delete_forum(classroom_uid):
+    try:
+        FORUM_MONGO_CONN.drop_database(classroom_uid + '-F')
+        return True
+    except Exception as e:
+        print(e)
+        return False

@@ -44,7 +44,6 @@ async def get_all_messages(classroom_uid):
 
     
 async def delete_forum(classroom_uid):
-    #return forum_mongo.delete_forum(classroom_uid)
-    pass
+    return await forum_mongo.delete_forum(classroom_uid)
 
     

@@ -44,7 +44,7 @@ async def get_forum_chat(classroom_uid, token):
     user_enrolled_status = await classroom_controllers.if_user_enrolled(classroom_uid=classroom_uid, user_id=token.user_id)
     if_user_is_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
-    if user_enrolled_status == True or if_user_is_creator == True:
+    if user_enrolled_status or if_user_is_creator:
         if_forum_exists = await forum_mongo.check_if_forum_exists(classroom_uid=classroom_uid)
 
         if if_forum_exists['forum_exists'] == True:
@@ -90,7 +90,7 @@ async def send_message(classroom_uid, message, reply_user_id, reply_msg_id, tkn)
             )
 
     
-    if user_enrolled_status == True or if_user_is_creator ==  True:
+    if user_enrolled_status or if_user_is_creator:
 
         '''Check if forum exists'''
         if_forum_exists = await forum_mongo.check_if_forum_exists(classroom_uid=classroom_uid)
@@ -131,3 +131,24 @@ async def send_message(classroom_uid, message, reply_user_id, reply_msg_id, tkn)
             False, 'You cannot send messsages to this forum', tkn.token_value
         )
             
+
+async def delete_forum(classroom_uid, token):
+    classroom_exist_status = await classroom_models.get_classroom_by_uid(uid = classroom_uid)
+    if not classroom_exist_status:
+        return StandardResponseBody(False, 'Classroom does not exist', token.token_value)
+
+    if_user_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
+    if if_user_creator:
+        
+        if_forum_exists = await forum_mongo.check_if_forum_exists(classroom_uid)
+        if if_forum_exists['forum_exists'] != True:
+            return StandardResponseBody(False, 'Forum does not exist', token.token_value)
+        else:
+            forum_deletion_status = await forum_controllers.delete_forum(classroom_uid)
+            if forum_deletion_status:
+                return StandardResponseBody(True, 'Forum has been deleted', token.token_value)
+            else:
+                return StandardResponseBody(True, 'Forum could not be deleted', token.token_value)
+    else:
+        return NotOwnerResponseBody(token.token_value)
+        
