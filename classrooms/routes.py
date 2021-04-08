@@ -226,3 +226,7 @@ async def unenroll_user(classroom_uid, token):
         return StandardResponseBody(
             False, 'You shouldnt see this error, but you are not the creator and not enrolled in this classroom', token.token_value
         )
+
+
+async def delete_classroom(classroom_uid, token):
+    return False

@@ -100,3 +100,14 @@ async def delete_file(path):
     except Exception as e:
         print(e)
         return False
+
+
+async def delete_classroom_folder(classroom_uid):
+    try:
+        x = DBX.files_delete(f"/classrooms/{classroom_uid}")
+        print(x)
+        if x:
+            return True
+    except Exception as e:
+        print(e)
+        return False

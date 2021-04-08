@@ -7,10 +7,10 @@
 # print(response.status_code)
 # print()
 
-
+'''
 import pymongo
 
-m = pymongo.MongoClient('mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false')
+m = pymongo.MongoClient('mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false')'''
 # print(m.list_database_names())
 # m.drop_database('Enrolled')
 # print(m.list_database_names())

@@ -33,8 +33,8 @@ async def unenroll_user(classroom_uid: str = Body(...), user_id: str = Body(...)
     return await classroom_routes.unenroll_user(classroom_uid = classroom_uid, user_id = user_id, token = token)
 
 
-@router.post("/delete_classroom/", tags = ["classroom : teacher"])
-async def delete_classroom(classroom_uid: str = Body(...), token: dict = Depends(token_validation)):
+@router.post("/delete_classroom/", tags = ["classrooms : teacher"])
+async def delete_classroom(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
     return await classroom_routes.delete_classroom(classroom_uid = classroom_uid, token = token)
 
 
