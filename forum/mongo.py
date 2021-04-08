@@ -1,7 +1,7 @@
 from db_setup.mongo_setup import FORUM_MONGO_CONN
 
 
-def check_if_forum_exists(classroom_uid):
+async def check_if_forum_exists(classroom_uid):
     try:
         list_of_forums = FORUM_MONGO_CONN.list_database_names()
         if classroom_uid+'-F' in list_of_forums:
@@ -14,7 +14,7 @@ def check_if_forum_exists(classroom_uid):
         return {'forum_exists': False, 'status': 'Failed'}
 
 
-def create_forum(classroom_uid):
+async def create_forum(classroom_uid):
     try:
         resp = FORUM_MONGO_CONN[classroom_uid + '-F']['main']
         resp.insert_one({"first": "firstmessage"})
@@ -26,7 +26,7 @@ def create_forum(classroom_uid):
         return False
 
 
-def post_message_to_forum(classroom_id, message_id, reply_user_id, reply_username, reply_msg_id, datetimestamp, user_id, username, message):
+async def post_message_to_forum(classroom_id, message_id, reply_user_id, reply_username, reply_msg_id, datetimestamp, user_id, username, message):
     forum_id = classroom_id + '-F'
     try:
         resp = FORUM_MONGO_CONN[forum_id]['main']
@@ -48,7 +48,7 @@ def post_message_to_forum(classroom_id, message_id, reply_user_id, reply_usernam
         return False
 
 
-def get_all_messages(classroom_uid):
+async def get_all_messages(classroom_uid):
     forum_id = classroom_uid + '-F'
     msgs = []
     

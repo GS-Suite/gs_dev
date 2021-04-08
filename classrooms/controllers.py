@@ -240,3 +240,20 @@ async def unenroll_user(classroom_uid, user_id):
 '''
 async def generate_join_link():
     return x'''
+
+
+async def delete_classroom(classroom_uid):
+    ### delete from mongo
+    
+    ### delete forums
+
+
+    ### delete attendance
+    ### delete enrolled
+    ### delete users
+    ### delete lectures
+
+    ### delete from pg
+
+    ### delete from classrooms
+    pass

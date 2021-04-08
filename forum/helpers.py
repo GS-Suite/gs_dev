@@ -2,7 +2,7 @@ import random
 import string
 
 
-def generate_message_code():
+async def generate_message_code():
     N = 15
     gen_code = ''.join(random.choices(string.ascii_uppercase +
                                       string.digits +

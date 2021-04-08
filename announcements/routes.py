@@ -17,14 +17,14 @@ async def create_announcement_pane(classroom_uid, token):
 
     if if_user_creator == True:
         ''' forum and announcements are in the same mongo database, just separate threads'''
-        if_announcement_pane_exists = forum_mongo.check_if_forum_exists(classroom_uid)
+        if_announcement_pane_exists = await forum_mongo.check_if_forum_exists(classroom_uid)
 
         if if_announcement_pane_exists['forum_exists'] == True:
             return StandardResponseBody(
                 False, 'Announcement Pane already exists', token.token_value
             )
         else:
-            announcement_pane_creation_status = announcement_controllers.create_announcement_pane(classroom_uid)
+            announcement_pane_creation_status = await announcement_controllers.create_announcement_pane(classroom_uid)
             if announcement_pane_creation_status == True:
                 return StandardResponseBody(
                     True, 'Announcement Pane has been created', token.token_value
@@ -41,7 +41,7 @@ async def post_announcement(classroom_uid, announcement, background_tasks, token
     if_user_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
     if if_user_creator ==  True:
-        if_announcement_pane_exists = forum_mongo.check_if_forum_exists(classroom_uid)
+        if_announcement_pane_exists = await forum_mongo.check_if_forum_exists(classroom_uid)
 
         if if_announcement_pane_exists['forum_exists'] ==  True:
     
@@ -69,7 +69,7 @@ async def get_all_announcements(classroom_uid, token):
     if_user_is_creator = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
 
     if user_enrolled_status == True or if_user_is_creator == True:
-        if_forum_exists = forum_mongo.check_if_forum_exists(classroom_uid=classroom_uid)
+        if_forum_exists = await forum_mongo.check_if_forum_exists(classroom_uid=classroom_uid)
 
         if if_forum_exists['forum_exists'] == True:
             get_all_announcements_response_dict = await announcement_controllers.get_all_announcements(classroom_uid = classroom_uid)
