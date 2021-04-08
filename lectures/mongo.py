@@ -66,5 +66,15 @@ async def delete_lecture(classroom_uid, lecture_uid):
     res = Mongo_CONN[DB_LECTURES][classroom_uid].delete_one(
         {"_id": ObjectId(lecture_uid)}
     )
-    print(res.acknowledged)
+    #print(res.acknowledged)
     return res.acknowledged
+
+
+async def delete_classroom_lectures(classroom_uid):
+    try:
+        res = Mongo_CONN[DB_LECTURES]
+        res.drop_collection(classroom_uid)
+        return True
+    except Exception as e:
+        print(e)
+        return False

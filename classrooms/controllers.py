@@ -6,6 +6,7 @@ from user import models as user_model
 
 from forum import controllers as forum_controllers
 from attendance import controllers as attendance_controllers
+from lectures import controllers as lecture_controllers
 
 
 async def check_user_if_creator(classroom_id, user_id):
@@ -111,14 +112,15 @@ async def get_classroom_details(user_id, uid):
     ### check user role (teacher, student, owner, etc)
     ### accordingly retrieve data
     classroom = await classroom_model.get_classroom_by_uid(uid)
-    
-    cls = {
-        "name": classroom.name,
-        "uid": classroom.uid,
-        "entry_code": classroom.entry_code,
-        "public_storage_link": classroom.public_storage_link
-    }
-    return cls
+    if classroom:
+        cls = {
+            "name": classroom.name,
+            "uid": classroom.uid,
+            "entry_code": classroom.entry_code,
+            "public_storage_link": classroom.public_storage_link
+        }
+        return cls
+    return False
 
 
 async def delete_classroom(token, classroom_name):
@@ -214,6 +216,7 @@ async def get_classroom_owner_from_class_uid(classroom_uid):
         print(e)
         return {'status': False}
 
+
 async def unenroll_user(classroom_uid, user_id):
     try:
         unenroll_from_user_enrolled_status = await classroom_mongo.unenroll_from_user(classroom_uid = classroom_uid, user_id = user_id)
@@ -239,24 +242,34 @@ async def unenroll_user(classroom_uid, user_id):
         return False
 
 
+async def unenroll_classroom_students(classroom_uid):
+    ### get all enrolled users
+    enrolled = await classroom_mongo.get_classroom_enrolled(classroom_uid)
+    for user in enrolled:
+        await classroom_mongo.unenroll_from_user(classroom_uid = classroom_uid, user_id = user["uid"])
+    ### remove from user enrolled array
 
-'''
-async def generate_join_link():
-    return x'''
+    ### remove from mongo enrolled
+    return True
 
 
 async def delete_classroom(classroom_uid):
-    ### delete from mongo
-    
+
+    ''' delete from mongo '''
     ### delete forums
-    forum_controllers.delete_forum(classroom_uid)
+    await forum_controllers.delete_forum(classroom_uid)
     ### delete attendance
-    attendance_controllers.delete_attendance_mongo(classroom_uid)
-    ### delete enrolled
-    ### delete users
+    await attendance_controllers.delete_classroom_attendance(classroom_uid)
     ### delete lectures
+    await lecture_controllers.delete_classroom_lectures(classroom_uid)
+    ### unenroll students
+    await unenroll_classroom_students(classroom_uid)
+    ### delete classroom enrolled
+    await classroom_mongo.delete_classroom_enrolled(classroom_uid)
+    
+    '''delete from pg '''
+    ### delete from classroom model
+    classroom = await classroom_model.get_classroom_by_uid(classroom_uid)
+    await classroom_model.delete_classroom(classroom)
 
-    ### delete from pg
-
-    ### delete from classrooms
-    pass
+    return True

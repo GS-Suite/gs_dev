@@ -126,3 +126,12 @@ def classroom_add_entry_code(classroom_uid: str, code: str):
         print(e)
         return False'''
 
+
+async def delete_classroom_enrolled(classroom_uid):
+    try:
+        x = Mongo_CONN[DB_ENROLLED]
+        x.drop_collection(classroom_uid)
+        return True
+    except Exception as e:
+        print(e)
+        return False

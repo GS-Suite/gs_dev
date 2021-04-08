@@ -38,3 +38,8 @@ async def delete_lecture(classroom_uid, lecture_uid):
     res = await lectures_mongo.delete_lecture(classroom_uid, lecture_uid)
     return res
 
+
+async def delete_classroom_lectures(classroom_uid):
+    res = await lectures_mongo.delete_classroom_lectures(classroom_uid)
+    return res
+

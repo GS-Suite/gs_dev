@@ -58,8 +58,6 @@ async def create_classroom(creator_uid: str, name: str, uid: str):
             Creating Mongo classroom
         '''
         #mongo_resp = mongo.create_mongo_classroom(uid)
-
-        db.refresh(classroom)
         return True, classroom
     except Exception as e:
         print(e)
@@ -71,7 +69,6 @@ async def delete_classroom(classroom: Classroom):
     try:
         db.delete(classroom)
         db.commit()
-        db.refresh(classroom)
         return True
     except Exception as e:
         print(e)

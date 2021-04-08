@@ -1,3 +1,4 @@
+from starlette.background import BackgroundTasks
 from classrooms import schemas as classroom_schemas
 from classrooms import routes as classroom_routes
 from tokens.controllers import token_validation
@@ -33,9 +34,14 @@ async def unenroll_user(classroom_uid: str = Body(...), user_id: str = Body(...)
     return await classroom_routes.unenroll_user(classroom_uid = classroom_uid, user_id = user_id, token = token)
 
 
+@router.post("/unenroll_classroom_students/", tags = ["classrooms : teacher"])
+async def unenroll_classroom_students(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
+    return await classroom_routes.unenroll_classroom_students(classroom_uid = classroom_uid, token = token)
+
+
 @router.post("/delete_classroom/", tags = ["classrooms : teacher"])
-async def delete_classroom(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
-    return await classroom_routes.delete_classroom(classroom_uid = classroom_uid, token = token)
+async def delete_classroom(bg: BackgroundTasks, classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
+    return await classroom_routes.delete_classroom(classroom_uid = classroom_uid, token = token, bg = bg)
 
 
 ''' STUDENT APIS '''
