@@ -68,7 +68,7 @@ async def get_file_download_link(classroom_uid, path, token):
         res = await storage_controllers.get_file_download_link(path)
         if res:
             return StandardResponseBody(
-            False, "Link retrieved", res
+            False, "Link retrieved", token, res
         )
     return StandardResponseBody(
         False, "User not authorized"
