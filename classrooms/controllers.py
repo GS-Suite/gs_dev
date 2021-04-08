@@ -4,6 +4,9 @@ from classrooms import models as classroom_model
 from classrooms import mongo as classroom_mongo
 from user import models as user_model
 
+from forum import controllers as forum_controllers
+from attendance import controllers as attendance_controllers
+
 
 async def check_user_if_creator(classroom_id, user_id):
     classroom_obj = await classroom_model.get_classroom_by_uid(uid = classroom_id)
@@ -246,9 +249,9 @@ async def delete_classroom(classroom_uid):
     ### delete from mongo
     
     ### delete forums
-
-
+    forum_controllers.delete_forum(classroom_uid)
     ### delete attendance
+    attendance_controllers.delete_attendance_mongo(classroom_uid)
     ### delete enrolled
     ### delete users
     ### delete lectures

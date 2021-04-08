@@ -95,3 +95,14 @@ async def view_classroom_attendance(classroom_uid):
         }
 
     return results
+
+
+async def delete_classroom_attendance(classroom_uid: str):
+    try:
+        mongo_resp = Mongo_CONN[DB_NAME]
+        if mongo_resp:
+            mongo_resp.drop_collection(classroom_uid)
+        return True
+    except Exception as e:
+        # print(e)
+        return False

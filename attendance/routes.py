@@ -106,9 +106,7 @@ async def delete_attendance(token, attendance_token, classroom_uid):
                 False, 'Could not delete attendance', token.token_value
             )
     else:
-        return StandardResponseBody(
-            False, 'You are not the owner of the classroom', token.token_value
-        )
+        return NotOwnerResponseBody(token)
 
 
 async def give_attendance(token, classroom_uid, attendance_token):
@@ -178,3 +176,21 @@ async def view_classroom_attendance(token, classroom_uid):
             )
     else:
         return NotOwnerResponseBody(token.token_value)
+
+'''
+
+async def delete_classroom_attendance(token, classroom_uid):
+    if_creator_bool = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
+
+    if if_creator_bool == True:
+        response = await attendance_controllers.delete_classroom_attendance(classroom_uid)
+        if response:
+            return StandardResponseBody(
+                True, 'Classroom attendance has been deleted', token.token_value
+            )
+        else:
+            return StandardResponseBody(
+                False, 'Could not delete classroom attendance', token.token_value
+            )
+    else:
+        return NotOwnerResponseBody(token)'''
