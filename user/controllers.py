@@ -73,25 +73,25 @@ async def delete_account(password, token):
     try:
         '''get user'''
         user = await user_models.get_user_by_uid(token.user_id)
-        if user == None:
-            return False
-
-        '''check password'''
-        print(password, user.password)
-        if not user_helpers.check_password(password, user.password):
-            return False
-        else:
-            ''' delete other data'''
-            if await classroom_controllers.delete_user_classrooms(user.uid):
-                '''delete tokens'''
-                if await token_controllers.delete_user_tokens(user.uid):
-                    '''delete user'''
-                    if await user_models.delete_user(user):
-                        return True
-
+        if user:
+            '''check password'''
+            #print(password, user.password)
+            if user_helpers.check_password(password, user.password):
+                ### delete classrooms
+                classrooms = await classroom_controllers.get_user_classrooms(token.user_id)
+                ### delete user mongo
+                ### delete tokens
+                ### delete user pg
+                ''' delete other data'''
+                if await classroom_controllers.delete_user_classrooms(user.uid):
+                    '''delete tokens'''
+                    if await token_controllers.delete_user_tokens(user.uid):
+                        '''delete user'''
+                        if await user_models.delete_user(user):
+                            return True
     except Exception as e:
         print(e)
-        return False
+    return False
 
 
 async def get_user_dashboard(uid):

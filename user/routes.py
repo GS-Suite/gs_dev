@@ -64,7 +64,7 @@ async def delete_account(password, token):
     #print(password.password)
     status = await user_controllers.delete_account(password.password, token)
     if status:
-        return StandardResponseBody(True, "Your account has been deleted")
+        return StandardResponseBody(True, "Your account has been deleted, along with all your data, and classrooms")
     return StandardResponseBody(False, "Error. Could not delete account")
 
 
