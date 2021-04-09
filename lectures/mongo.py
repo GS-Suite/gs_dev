@@ -37,13 +37,13 @@ async def get_classroom_lecture_playlists(classroom_uid):
     playlists = set()
     res = Mongo_CONN[DB_LECTURES][classroom_uid].find()
     for j in res:
-    if 'sections' in j.keys():
-        for p in j['sections']:
-            playlists.add(p)
-    else:
-        for p in j['playlists']:
-            playlists.add(p)
-    playlists.remove('')
+        #print(j)
+        if 'sections' in j.keys():
+            for p in j['sections']:
+                playlists.add(p)
+        else:
+            for p in j['playlists']:
+                playlists.add(p)
     return playlists
 
 
