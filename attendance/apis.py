@@ -49,6 +49,6 @@ async def give_attendance(classroom_uid: str = Body(...), attendance_token: str 
 
 ''' Common APIs '''
 
-@router.post("/view_student_attendance", tags = ["attendance : teacher", "attendance : student"])
+@router.post("/view_student_attendance/", tags = ["attendance : teacher", "attendance : student"])
 async def view_student_attendance(classroom_uid: str = Body(..., embed=True), token: dict = Depends(token_validation)):
     return await attendance_routes.view_student_attendance(token = token, classroom_uid = classroom_uid)

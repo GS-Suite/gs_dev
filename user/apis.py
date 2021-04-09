@@ -40,7 +40,7 @@ async def update_password(details: user_schemas.UpdatePasswordSchema, token: dic
     return await user_routes.update_password(token, details)
 
 
-@router.post("/change_profile_picture", tags = ["users : account"])
+@router.post("/change_profile_picture/", tags = ["users : account"])
 async def change_profile_picture(token: dict = Depends(token_validation), picture: Optional[UploadFile] = File(None)):
     return await user_routes.change_profile_picture(token, picture)
 
