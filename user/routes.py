@@ -63,11 +63,11 @@ async def update_password(token, details):
 async def delete_account(password, token, bg):
     #print(password.password)
     try:
-        bg.add_task(
-            user_controllers.delete_account,
+        res = await user_controllers.delete_account(
             password.password, token
         )
-        return StandardResponseBody(True, "Your account has been deleted, along with all your data, and classrooms")
+        if res:
+            return StandardResponseBody(True, "Your account has been deleted, along with all your data, and classrooms")
     except Exception as e:
         print(e)
     return StandardResponseBody(False, "Error. Could not delete account")
