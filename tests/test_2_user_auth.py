@@ -39,10 +39,10 @@ def test_sign_out():
     TOKEN = None
 
 
-def test_sign_out():
+def test_token_not_works():
     global TOKEN
     response = requests.post(
-        url = f"{BASE_URL}/sign_out/",
+        url = f"{BASE_URL}/get_user_classrooms/",
         headers = {
             "token": TOKEN
         }
@@ -50,4 +50,4 @@ def test_sign_out():
     assert response.status_code == 200
 
     res = json.loads(response._content)
-    assert res["success"] == False
+    assert res["detail"]["success"] == False

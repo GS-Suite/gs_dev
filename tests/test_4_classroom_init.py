@@ -42,7 +42,7 @@ def test_create_classroom():
 
 
 def test_get_user_classrooms():
-    global TOKEN
+    global TOKEN, UID
     response = requests.post(
         url = f"{BASE_URL}/get_user_classrooms/",
         headers = {"token": TOKEN}
@@ -52,6 +52,7 @@ def test_get_user_classrooms():
     res = json.loads(response._content)
     assert res["success"] == True
     assert len(res["data"]) == 1
+    UID = res["data"][0]["uid"]
 
 
 def test_generate_join_code():
