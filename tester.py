@@ -45,3 +45,32 @@ m = pymongo.MongoClient('mongodb://localhost:27017/?readPreference=primary&appna
 # )
 # print(client.find_one({}))
 
+from db_setup.mongo_setup import Mongo_CONN
+
+DB_LECTURES = 'Lectures'
+classroom_uid = '39c6e81c1a47463f96ed9d7d443efca2'
+
+
+playlists = set()
+res = Mongo_CONN[DB_LECTURES][classroom_uid].find({})
+# print(res)
+for j in res:
+    if 'sections' in j.keys():
+        for p in j['sections']:
+            playlists.add(p)
+    else:
+        for p in j['playlists']:
+            playlists.add(p)
+
+playlists.remove('')
+
+
+
+
+
+# x = json.loads(json_util.dumps(res))
+# for lec in x:
+#     for p in lec["playlists"]:
+#         playlists.add(p)
+print(playlists)
+
