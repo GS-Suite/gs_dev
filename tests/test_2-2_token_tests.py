@@ -10,7 +10,7 @@ BASE_URL = os.getenv("BASE_URL")
 TOKEN = None
 
 
-def test_sign_in():
+def sign_in():
     global TOKEN
     response = requests.post(
         url = f"{BASE_URL}/sign_in/",
@@ -24,6 +24,7 @@ def test_sign_in():
 
 
 def test_token_validation():
+    sign_in()
     global TOKEN
     response = requests.post(
         url = f"{BASE_URL}/validate_token/",

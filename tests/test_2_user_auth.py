@@ -11,6 +11,7 @@ TOKEN = None
 
 
 def sign_in():
+    global TOKEN
     response = requests.post(
         url = f"{BASE_URL}/sign_in/",
         json = {"username": "test_username", "password": "test_password"}
@@ -19,11 +20,23 @@ def sign_in():
     
     res = json.loads(response._content)
     assert res["success"] == True
-    return res["token"]
+    TOKEN =  res["token"]
 
-def test_sign_in():
+
+def test_sign_out():
+    sign_in()
     global TOKEN
-    TOKEN = sign_in()
+    response = requests.post(
+        url = f"{BASE_URL}/sign_out/",
+        headers = {
+            "token": TOKEN
+        }
+    )
+    assert response.status_code == 200
+
+    res = json.loads(response._content)
+    assert res["success"] == True
+    TOKEN = None
 
 
 def test_sign_out():
@@ -37,5 +50,4 @@ def test_sign_out():
     assert response.status_code == 200
 
     res = json.loads(response._content)
-    assert res["success"] == True
-    TOKEN = None
+    assert res["success"] == False

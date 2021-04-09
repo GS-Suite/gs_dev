@@ -25,7 +25,7 @@ async def get_classroom_details(classroom: classroom_schemas.ClassroomUidSchema,
     return await classroom_routes.get_classroom_details(classroom.classroom_uid, token)
 
 
-@router.post("/generate_classroom_join_code", tags = ["classrooms : teacher"])
+@router.post("/generate_classroom_join_code/", tags = ["classrooms : teacher"])
 async def generate_classroom_entry_code(classroom_uid: classroom_schemas.ClassroomUidSchema, token: dict = Depends(token_validation)):
     return await classroom_routes.generate_classroom_entry_code(classroom_uid.classroom_uid, token)
 
