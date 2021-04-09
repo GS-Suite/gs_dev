@@ -23,7 +23,7 @@ async def get_user_classrooms(token):
     res = await classroom_controllers.get_user_classrooms(token.user_id)
     if res == []:
         return StandardResponseBody(
-            False, "You haven't created any classrooms", token.token_value
+            True, "You haven't created any classrooms", token.token_value
         )
     elif res:
         return StandardResponseBody(

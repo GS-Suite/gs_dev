@@ -42,7 +42,7 @@ def test_token_refresh():
         url = f"{BASE_URL}/refresh_token/",
         headers = {"token": TOKEN}
     )
-    assert response.status_code == 500
+    assert response.status_code == 200
 
     res = json.loads(response._content)
     assert res["success"] == True
