@@ -71,6 +71,21 @@ def test_generate_join_code():
     ENTRY_CODE = res["data"]["entry_code"]
 
 
+def test_enroll_user():
+    global TOKEN, ENTRY_CODE, UID
+    response = requests.post(
+        url = f"{BASE_URL}/enroll/",
+        json = {
+            "entry_code": ENTRY_CODE
+        },
+        headers = {"token": TOKEN}
+    )
+    assert response.status_code == 200
+    
+    res = json.loads(response._content)
+    assert res["success"] == True
+
+
 def test_get_user_enrolled():
     global TOKEN
     response = requests.post(
