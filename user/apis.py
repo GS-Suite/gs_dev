@@ -52,8 +52,8 @@ async def reset_password(reset: user_schemas.ResetPasswordSchema):
 
 
 @router.post("/delete_account/", tags = ["users : account"])
-async def delete_account(password: user_schemas.DeleteUserSchema, token: dict = Depends(token_validation)):
-    return await user_routes.delete_account(password, token)
+async def delete_account(password: user_schemas.DeleteUserSchema, bg: BackgroundTasks, token: dict = Depends(token_validation)):
+    return await user_routes.delete_account(password, token, bg)
 
 
 ''' USER DATA APIS '''

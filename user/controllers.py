@@ -6,6 +6,7 @@ from user import dropbox as user_dropbox
 from user import helpers as user_helpers
 from user import models as user_models
 from user import redis as user_redis
+from user import mongo as user_mongo
 
 
 async def sign_up(user, url, bg):
@@ -66,31 +67,6 @@ async def update_password(uid, password):
                 user_helpers.hash_password(password.new_password)
             )
         return "invalid_password"
-    return False
-
-
-async def delete_account(password, token):
-    try:
-        '''get user'''
-        user = await user_models.get_user_by_uid(token.user_id)
-        if user:
-            '''check password'''
-            #print(password, user.password)
-            if user_helpers.check_password(password, user.password):
-                ### delete classrooms
-                classrooms = await classroom_controllers.get_user_classrooms(token.user_id)
-                ### delete user mongo
-                ### delete tokens
-                ### delete user pg
-                ''' delete other data'''
-                if await classroom_controllers.delete_user_classrooms(user.uid):
-                    '''delete tokens'''
-                    if await token_controllers.delete_user_tokens(user.uid):
-                        '''delete user'''
-                        if await user_models.delete_user(user):
-                            return True
-    except Exception as e:
-        print(e)
     return False
 
 
@@ -177,8 +153,46 @@ async def reset_password(reset):
         await user_redis.delete_token(reset.token)
     return False
 
+
 async def get_userid_from_username(username):
     user = await user_models.get_user_by_username(username)
     if user:
         return user.uid
+    return False
+
+
+async def delete_user(uid):
+    try:
+        user = await user_models.get_user_by_uid(uid)
+        if user:
+            await user_models.delete_user(user)
+        return True
+    except Exception as e:
+        print(e)
+    return False
+
+
+async def delete_account(password, token):
+    uid = token.user_id
+    try:
+        '''get user'''
+        user = await user_models.get_user_by_uid(uid)
+        if user:
+            '''check password'''
+            #print(password, user.password)
+            if user_helpers.check_password(password, user.password):
+                ### delete classrooms
+                classrooms = await classroom_controllers.get_user_classrooms(uid)
+                #print(classrooms)
+                for classroom in classrooms:
+                    await classroom_controllers.delete_classroom(classroom["uid"])
+                ### delete user mongo
+                await user_mongo.delete_user_mongo(uid)
+                ### delete tokens
+                await token_controllers.delete_user_tokens(uid)
+                ### delete user pg
+                await delete_user(uid)
+                return True
+    except Exception as e:
+        print(e)
     return False

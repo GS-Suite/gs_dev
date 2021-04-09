@@ -258,6 +258,8 @@ async def delete_classroom(classroom_uid):
     ''' delete from mongo '''
     ### delete forums
     await forum_controllers.delete_forum(classroom_uid)
+    ### delete dropbox
+    await storage_controllers.delete_classroom_folder(classroom_uid)
     ### delete attendance
     await attendance_controllers.delete_classroom_attendance(classroom_uid)
     ### delete lectures
