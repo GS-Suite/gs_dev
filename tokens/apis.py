@@ -13,4 +13,4 @@ async def validate_token(token: dict = Depends(token_validation)):
 
 @router.post("/refresh_token/")
 async def refresh_token(token: dict = Depends(token_validation)):
-    return await token_routes.refresh_token(token)
+    return await token_routes.refresh_token(token.token_value)
