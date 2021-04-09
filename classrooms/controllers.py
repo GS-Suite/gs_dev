@@ -219,8 +219,9 @@ async def get_classroom_owner_from_class_uid(classroom_uid):
 
 async def unenroll_user(classroom_uid, user_id):
     try:
-        unenroll_from_user_enrolled_status = await classroom_mongo.unenroll_from_user(classroom_uid = classroom_uid, user_id = user_id)
         unenroll_from_enrolled_db_status = await classroom_mongo.unenroll_from_classroom(classroom_uid = classroom_uid, user_id = user_id)
+        print('Unenrolled from classroom mongo document deleted')
+        unenroll_from_user_enrolled_status = await classroom_mongo.unenroll_from_user(classroom_uid = classroom_uid, user_id = user_id)
 
         if unenroll_from_user_enrolled_status == True and unenroll_from_enrolled_db_status == True:
             return True

@@ -44,3 +44,4 @@ m = pymongo.MongoClient('mongodb://localhost:27017/?readPreference=primary&appna
 #     False
 # )
 # print(client.find_one({}))
+

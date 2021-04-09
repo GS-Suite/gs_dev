@@ -204,28 +204,7 @@ async def unenroll(classroom_uid, token):
         )
 
 
-async def unenroll_user(classroom_uid, token):
-    ''' To check if person unenrolling a student is the owner '''
-    if_creator_status = await classroom_controllers.check_user_if_creator(classroom_id=classroom_uid, user_id=token.user_id)
-
-    if if_creator_status == False:
-        return NotOwnerResponseBody(token=token.token_value)
-
-    if if_creator_status == True:
-        resp = await classroom_controllers.delete_classroom(classroom_uid = classroom_uid)
-
-        if resp == True:
-            return StandardResponseBody(
-                True, 'The classroom has been deleted', token.token_value
-            )
-        else:
-            return StandardResponseBody(
-                False, 'The classroom could not be deleted', token.token_value
-            )
-    else:
-        return StandardResponseBody(
-            False, 'You shouldnt see this error, but you are not the creator and not enrolled in this classroom', token.token_value
-        )
+# keane's mistake
 
 
 async def unenroll_classroom_students(classroom_uid, token):
