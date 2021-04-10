@@ -15,7 +15,7 @@
 -- After running the app:
 - http://127.0.0.1:8000/docs
 - http://127.0.0.1:8000/redoc
-- To run tests... ```pytest```
+- To run tests... ```pytest -v```
 
 
 ---
