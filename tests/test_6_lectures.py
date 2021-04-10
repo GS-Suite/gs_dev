@@ -89,7 +89,7 @@ def test_get_classroom_lecture_playlists():
     assert response.status_code == 200
     
     res = json.loads(response._content)
-    assert res["success"] == True
+    assert res["success"] == False
 
 
 def test_delete_lecture():
