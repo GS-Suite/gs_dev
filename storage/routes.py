@@ -16,7 +16,7 @@ async def create_folder(classroom_uid, folder_name, path, token):
                 False, "Folder already exists", token.token_value
             )
         return StandardResponseBody(
-            True, "Folder could not be created", token.token_value
+            False, "Folder could not be created", token.token_value
         )
     return StandardResponseBody(
         False, "User not authorized"
@@ -32,7 +32,7 @@ async def upload_file(token, classroom_uid, path, file):
                 True, "File uploaded", token.token_value
             )
         return StandardResponseBody(
-            True, "File could not be uploaded", token.token_value
+            False, "File could not be uploaded", token.token_value
         )
     return StandardResponseBody(
         False, "User not authorized."
@@ -54,7 +54,7 @@ async def get_files_and_folders(classroom_uid, path, token):
                     True, "Files retrieved", token.token_value, []
                 )
             return StandardResponseBody(
-                True, "Files could not be retrieved", token.token_value
+                False, "Files could not be retrieved", token.token_value
             )
     return StandardResponseBody(
         False, "User not authorized"
@@ -68,7 +68,7 @@ async def get_file_download_link(classroom_uid, path, token):
         res = await storage_controllers.get_file_download_link(path)
         if res:
             return StandardResponseBody(
-            False, "Link retrieved", token, res
+            True, "Link retrieved", token, res
         )
     return StandardResponseBody(
         False, "User not authorized"
@@ -84,7 +84,7 @@ async def delete_file(classroom_uid, path, token):
                 True, "File / folder deleted", token.token_value
             )
         return StandardResponseBody(
-            True, "File / folder could not be deleted", token.token_value
+            False, "File / folder could not be deleted", token.token_value
         )
     return StandardResponseBody(
         False, "User not authorized"
