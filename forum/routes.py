@@ -53,7 +53,7 @@ async def get_forum_chat(classroom_uid, token):
             if 'status' in get_all_messages_response_dict.keys():
                 '''if status exists then mongo failed'''
                 return StandardResponseBody(
-                    False, get_all_messages_response_dict['message'], token.token_value
+                    True, get_all_messages_response_dict['message'], token.token_value
                 )
             else:
                 return StandardResponseBody(
