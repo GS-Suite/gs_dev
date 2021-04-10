@@ -14,11 +14,12 @@ from tokens.apis import router as token_router
 from forum.apis import router as forum_router
 from user.apis import router as user_router
 
+from user import controllers as user_controllers
+from classrooms import controllers as classroom_controllers
+
 from dotenv import load_dotenv
 load_dotenv()
 
-
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -55,6 +56,15 @@ app.include_router(forum_router,                tags = ["forums"])
 app.include_router(announcement_router,         tags = ["announcement"])
 app.include_router(discover_router,             tags = ["discover"])
 
+
+@app.get("/public/get_total_counts/", include_in_schema = False)
+async def get_total_counts():
+    user_count = await user_controllers.get_total_user_count()
+    classroom_count = await classroom_controllers.get_total_classroom_count()
+    return {
+        "user_count": user_count,
+        "classroom_count": classroom_count
+    }
 
 
 if __name__ == "__main__":

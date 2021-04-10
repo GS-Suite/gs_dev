@@ -276,3 +276,7 @@ async def delete_classroom(classroom_uid):
     await classroom_model.delete_classroom(classroom)
 
     return True
+
+
+async def get_total_classroom_count():
+    return await classroom_model.get_total_classroom_count()

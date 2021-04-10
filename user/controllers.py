@@ -196,3 +196,7 @@ async def delete_account(password, token):
     except Exception as e:
         print(e)
     return False
+
+
+async def get_total_user_count():
+    return await user_models.get_total_user_count()

@@ -127,3 +127,13 @@ async def update_profile_picture(uid, link):
     except Exception as e:
         print(e)
         return False
+    
+
+async def get_total_user_count():
+    try:
+        count = db.query(User).count()
+        print(count)
+        return count
+    except Exception as e:
+        print(e)
+        return 0

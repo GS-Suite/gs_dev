@@ -6,7 +6,7 @@ async def verify_email_message_body(user, url, token_value):
     return f'''
         <html>
             <body>
-                <h3>GS-Suite | Verify your email<u></h3>
+                <h3>Welcome to GS-Suite!</h3>
                 <p>Hi {user.first_name} {user.last_name}!</p>
                 <p>Your account with username <b>{user.username}</b> has been created successfully!</p>
                 <p>Verify your email by clicking on the button below.<p>

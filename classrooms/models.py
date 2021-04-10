@@ -114,3 +114,12 @@ async def update_public_storage_link(classroom_uid, link):
         print(e)
         db.rollback()
         return False
+
+
+async def get_total_classroom_count():
+    try:
+        count = db.query(Classroom).count()
+        return count
+    except Exception as e:
+        print(e)
+        return 0
