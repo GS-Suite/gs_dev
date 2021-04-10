@@ -7,6 +7,7 @@ from user import models as user_model
 from forum import controllers as forum_controllers
 from attendance import controllers as attendance_controllers
 from lectures import controllers as lecture_controllers
+from user import controllers as user_controllers
 
 
 async def check_user_if_creator(classroom_id, user_id):
@@ -206,11 +207,13 @@ async def delete_user_classrooms(uid):
 async def get_classroom_owner_from_class_uid(classroom_uid):
     try:
         classroom = await classroom_model.get_classroom_by_uid(uid=classroom_uid)
+        owner_username = await user_controllers.get_user_username(uid = classroom.creator_uid)
         return {
             'status': True,
             'classroom_uid': classroom.uid,
             'classroom_name': classroom.name,
-            'classroom_owner_id': classroom.creator_uid
+            'classroom_owner_id': classroom.creator_uid,
+            'owner_username': owner_username
         }
     except Exception as e:
         print(e)
