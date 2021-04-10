@@ -103,7 +103,7 @@ def test_get_all_announcements_again():
     
     res = json.loads(response._content)
     assert res["success"] == True
-    ANNOUNCEMENT_ID = res["posts"][0]["announcement_id"]
+    ANNOUNCEMENT_ID = res["data"]["forum_stuff"]["posts"][0]["announcement_id"]
 
 
 def test_delete_announcement():
