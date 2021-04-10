@@ -131,7 +131,8 @@ async def get_classroom_owner_from_class_uid(classroom_uid, token):
             True, "Classroom owner ID aquired", token.token_value, {
                 'classroom_uid': res['classroom_uid'],
                 'classroom_name': res['classroom_name'],
-                'classroom_owner_id': res['classroom_owner_id']
+                'classroom_owner_id': res['classroom_owner_id'],
+                'owner_username' = res['owner_username']
             }
         )
     else:
