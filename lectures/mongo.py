@@ -44,7 +44,6 @@ async def get_classroom_lecture_playlists(classroom_uid):
         else:
             for p in j['playlists']:
                 playlists.add(p)
-    playlists.remove('')
     return playlists
 
 
