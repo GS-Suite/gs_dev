@@ -51,7 +51,7 @@ async def get_files_and_folders(classroom_uid, path, token):
                 )
             elif res == []:
                 return StandardResponseBody(
-                    True, "Files retrieved", token.token_value, []
+                    False, "No files have been uploaded", token.token_value, []
                 )
             return StandardResponseBody(
                 False, "Files could not be retrieved", token.token_value
