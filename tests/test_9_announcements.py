@@ -68,7 +68,7 @@ def test_get_all_announcements():
     assert response.status_code == 200
     
     res = json.loads(response._content)
-    assert res["success"] == True
+    assert res["success"] == False
 
 
 def test_post_announcement():

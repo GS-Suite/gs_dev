@@ -17,7 +17,7 @@ async def get_classroom_lecture_videos(token, classroom_uid):
             )
         elif response == []:
             return StandardResponseBody(
-                True, 'There are no lectures to retrieve', token.token_value, response
+                False, 'There are no lectures to retrieve', token.token_value
             )
         else:
             return StandardResponseBody(

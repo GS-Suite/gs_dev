@@ -76,7 +76,7 @@ async def get_all_announcements(classroom_uid, token):
             if 'status' in get_all_announcements_response_dict.keys():
                 '''if status exists then mongo failed'''
                 return StandardResponseBody(
-                    True, get_all_announcements_response_dict['message'], token.token_value
+                    False, get_all_announcements_response_dict['message'], token.token_value
                 )
             else:
                 return StandardResponseBody(
