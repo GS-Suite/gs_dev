@@ -10,7 +10,8 @@ BASE_URL = os.getenv("BASE_URL")
 TOKEN = None
 UID = None
 ENTRY_CODE = None
-ATTENDANCE_CODE = None
+LECTURE_UID = None
+
 
 def sign_in():
     global TOKEN
@@ -39,32 +40,19 @@ def get_user_classrooms():
     UID = res["data"][0]["uid"]
 
 
-def test_take_attendance():
+def test_add_lecture():
     sign_in()
     get_user_classrooms()
     global TOKEN, ATTENDANCE_CODE
     response = requests.post(
-        url = f"{BASE_URL}/take_attendance/",
+        url = f"{BASE_URL}/add_lecture/",
         json = {
-            "classroom_uid": UID,
-            "timeout_minutes": 30
-        },
-        headers = {"token": TOKEN}
-    )
-    assert response.status_code == 200
-    
-    res = json.loads(response._content)
-    assert res["success"] == True
-    ATTENDANCE_CODE = res["data"]["attendance_token"]
-
-
-def test_give_attendance():
-    global TOKEN, UID
-    response = requests.post(
-        url = f"{BASE_URL}/take_attendance/",
-        json = {
-            "classroom_uid": UID,
-            "attendance_token": ATTENDANCE_CODE
+            "lecture_name": "test_lecture",
+            "lecture_link": "https://youtu.be/8vHil1Az2dE",
+            "playlists": ["test_playlist"],
+            "lecture_description": "A testing description",
+            "lecture_resources": "No resources",
+            "classroom_uid": UID
         },
         headers = {"token": TOKEN}
     )
@@ -74,10 +62,10 @@ def test_give_attendance():
     assert res["success"] == True
 
 
-def test_generate_join_code():
-    global TOKEN, ENTRY_CODE, UID
+def test_get_classroom_lecture_videos():
+    global TOKEN, UID, LECTURE_UID
     response = requests.post(
-        url = f"{BASE_URL}/generate_classroom_join_code/",
+        url = f"{BASE_URL}/get_classroom_lecture_videos/",
         json = {
             "classroom_uid": UID
         },
@@ -87,13 +75,13 @@ def test_generate_join_code():
     
     res = json.loads(response._content)
     assert res["success"] == True
-    ENTRY_CODE = res["data"]["entry_code"]
+    LECTURE_UID = res["data"][0]["_id"]["$oid"]
 
 
-def test_view_student_attendance():
+def test_get_classroom_lecture_playlists():
     global TOKEN, UID
     response = requests.post(
-        url = f"{BASE_URL}/view_student_attendance/",
+        url = f"{BASE_URL}/get_classroom_lecture_playlists/",
         json = {
             "classroom_uid": UID
         },
@@ -105,28 +93,13 @@ def test_view_student_attendance():
     assert res["success"] == True
 
 
-def test_view_classroom_attendance():
-    global TOKEN, UID
+def test_delete_lecture():
+    global TOKEN, UID, LECTURE_UID
     response = requests.post(
-        url = f"{BASE_URL}/view_classroom_attendance/",
-        json = {
-            "classroom_uid": UID
-        },
-        headers = {"token": TOKEN}
-    )
-    assert response.status_code == 200
-    
-    res = json.loads(response._content)
-    assert res["success"] == True
-
-
-def test_stop_attendance():
-    global TOKEN, UID, ATTENDANCE_CODE
-    response = requests.post(
-        url = f"{BASE_URL}/stop_attendance/",
+        url = f"{BASE_URL}/delete_lecture/",
         json = {
             "classroom_uid": UID,
-            "attendance_token": ATTENDANCE_CODE
+            "lecture_uid": LECTURE_UID
         },
         headers = {"token": TOKEN}
     )
