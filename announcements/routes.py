@@ -21,7 +21,7 @@ async def create_announcement_pane(classroom_uid, token):
 
         if if_announcement_pane_exists['forum_exists'] == True:
             return StandardResponseBody(
-                False, 'Announcement Pane already exists', token.token_value
+                True, 'Announcement Pane already exists', token.token_value
             )
         else:
             announcement_pane_creation_status = await announcement_controllers.create_announcement_pane(classroom_uid)
@@ -31,7 +31,7 @@ async def create_announcement_pane(classroom_uid, token):
                 )
             else:
                 return StandardResponseBody(
-                    True, 'Announcement Pane could not be created', token.token_value
+                    False, 'Announcement Pane could not be created', token.token_value
                 )
     else:
         return NotOwnerResponseBody(token.token_value)
@@ -76,7 +76,7 @@ async def get_all_announcements(classroom_uid, token):
             if 'status' in get_all_announcements_response_dict.keys():
                 '''if status exists then mongo failed'''
                 return StandardResponseBody(
-                    False, get_all_announcements_response_dict['message'], token.token_value
+                    True, get_all_announcements_response_dict['message'], token.token_value
                 )
             else:
                 return StandardResponseBody(

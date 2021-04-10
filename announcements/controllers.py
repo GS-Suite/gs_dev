@@ -77,7 +77,7 @@ async def get_all_announcements(classroom_uid):
 
     if posts == []:
         return {
-            'status': False,
+            'status': True,
             'message': 'There are no announcements'
         }
 
@@ -93,9 +93,9 @@ async def get_all_announcements(classroom_uid):
             'classroom_owner_username': owner_username,
             'forum_id': classroom_uid + '-F',
             'thread': 'announcements',
+            "posts": posts 
         }
-        send['posts'] = posts
-
+        
         return send
 
 async def delete_announcement(classroom_uid, announcement_id):
