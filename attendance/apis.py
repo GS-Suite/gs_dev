@@ -28,7 +28,7 @@ async def stop_attendance(classroom_uid: str = Body(...), attendance_token: str 
 
 @router.post('/delete_user_attendance/', tags = ["attendance : teacher"])
 async def delete_user_attendance(classroom_uid: str = Body(...), attendance_token: str = Body(...), token: dict = Depends(token_validation)):
-    return await attendance_routes.delete_attendance(token=token, classroom_uid=classroom_uid.classroom_uid, attendance_token=attendance_token)
+    return await attendance_routes.delete_attendance(token=token, classroom_uid=classroom_uid, attendance_token=attendance_token)
 
 
 @router.post("/view_classroom_attendance/", tags = ["attendance : teacher"])
