@@ -1,5 +1,7 @@
 from db_setup.mongo_setup import FORUM_MONGO_CONN
 
+import datetime
+
 
 async def check_if_forum_exists(classroom_uid):
     try:
@@ -58,7 +60,7 @@ async def get_all_messages(classroom_uid):
 
         for i in resp:
             i.pop('_id')
-            i['datetime'] = i['datetimestamp'].strftime('%d-%m-%Y')
+            i['datetime'] = i['datetimestamp'].strptime('%d-%m-%Y %H:%M:%S'')
             # i['time'] = i['datetimestamp'].strftime('%H:%M:%S')
             # i.pop('datetimestamp')
             msgs.append(i)

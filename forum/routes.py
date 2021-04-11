@@ -7,6 +7,7 @@ from user import controllers as user_controllers
 from forum import helpers as forum_helpers
 from forum import mongo as forum_mongo
 import datetime
+import pytz
 
 
 async def create_forum(classroom_uid, token):
@@ -108,7 +109,7 @@ async def send_message(classroom_uid, message, reply_user_id, reply_msg_id, tkn)
                 reply_user_id = reply_user_id,
                 reply_username = reply_user_id_username,
                 reply_msg_id = reply_msg_id,
-                datetimestamp = datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
+                datetimestamp = datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata')).strftime('%d-%m-%Y %H:%M:%S'),
                 user_id = tkn.user_id,
                 username = username,
                 message = message
