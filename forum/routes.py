@@ -108,7 +108,7 @@ async def send_message(classroom_uid, message, reply_user_id, reply_msg_id, tkn)
                 reply_user_id = reply_user_id,
                 reply_username = reply_user_id_username,
                 reply_msg_id = reply_msg_id,
-                datetimestamp = datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
+                datetimestamp = datetime.datetime.now(),
                 user_id = tkn.user_id,
                 username = username,
                 message = message

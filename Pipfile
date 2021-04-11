@@ -22,6 +22,7 @@ redis = "*"
 python-multipart = "*"
 sendgrid = "*"
 pytest = "*"
+pytz = "*"
 
 [dev-packages]
 
