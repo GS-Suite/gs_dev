@@ -53,7 +53,6 @@ async def send_notif(classroom_uid, announcement, tasks):
                 }
                 enrolled_mailing_list.append(user_info)
             
-            return True
             
             mail_status = await announcement_helpers.send_announcement_email(
                  enrolled_mailing_list=enrolled_mailing_list,
