@@ -7,9 +7,9 @@ async def announcement_email(user, creator_info, classroom_info, email_struc):
             <html>
                 <body>
                     <h3>GS-Suite | Announcements<u></h3>
-                    <p>Hi {user['first_name']} {user['last_name']}!</p>
+                    <p>Hi {user['first_name']}!</p>
                     <p>{creator_info.username}, posted an announcement on {classroom_info.name}</p>
-                    <p>The following is the announcement<p>
+                    <p>The following is the announcement...<p>
                     <br>
 
                     <hr>
