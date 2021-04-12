@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-engine = create_engine("postgresql://poledahmmstoof:ff787d6bdafa96fd2132c35efff92a76a6bb4ad189948cdb7758fc1a4a341f72@ec2-54-73-58-75.eu-west-1.compute.amazonaws.com:5432/dbv10n31ojlgtb", echo = True)
+engine = create_engine(os.getenv("PG_DB_URL"), echo = True)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
