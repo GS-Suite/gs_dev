@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-engine = create_engine(os.getenv("PG_DB_URL"), echo = True)
+engine = create_engine(os.getenv("PG_DB_URL"), echo = False)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
