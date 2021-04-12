@@ -31,6 +31,8 @@ origins = [
     "http://127.0.0.1:3000",
     "http://gs-suite.herokuapp.com",
     "https://gs-suite.herokuapp.com",
+    "http://gs-suite-main.herokuapp.com",
+    "https://gs-suite-main.herokuapp.com",
 ]
 
 app.add_middleware(
