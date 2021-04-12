@@ -55,15 +55,15 @@ async def send_notif(classroom_uid, announcement, tasks):
             
             return True
             
-            # mail_status = await announcement_helpers.send_announcement_email(
-            #     enrolled_mailing_list=enrolled_mailing_list,
-            #     classroom_info=classroom_info,
-            #     creator_info = creator_info,
-            #     email_struc=email_struc,
-            #     bg = tasks
-            # )
-            # if mail_status:
-            #     return True
+            mail_status = await announcement_helpers.send_announcement_email(
+                 enrolled_mailing_list=enrolled_mailing_list,
+                 classroom_info=classroom_info,
+                 creator_info = creator_info,
+                 email_struc=email_struc,
+                 bg = tasks
+            )
+            if mail_status:
+                 return True
         else:
             ''' which is empty obv '''
             return False
