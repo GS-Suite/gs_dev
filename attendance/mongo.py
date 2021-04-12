@@ -44,14 +44,14 @@ async def delete_attendance_mongo(classroom_uid: str, token: str):
         return False
 
 
-async def give_attendance(classroom_uid, user_id, attendance_token):
+async def give_attendance(classroom_uid, username, attendance_token):
     try:
 
         x = Mongo_CONN[DB_NAME][classroom_uid].update(
                 {'token': attendance_token},
                 { 
                     '$set': {
-                        f'students.{user_id}': datetime.datetime.now()
+                        f'students.{username}': datetime.datetime.now()
                     }
                 }
             )
@@ -61,7 +61,7 @@ async def give_attendance(classroom_uid, user_id, attendance_token):
         return False
 
 
-async def view_student_attendance(classroom_uid, user_uid):
+async def view_student_attendance(classroom_uid, username):
     #print(classroom_uid, user_uid)
     results = {
         "attended_count": 0,
@@ -70,7 +70,7 @@ async def view_student_attendance(classroom_uid, user_uid):
     }
     x = Mongo_CONN[DB_NAME][classroom_uid].find()
     for i in x:
-        if user_uid in i["students"]:
+        if username in i["students"]:
             results["details"][i["created_timestamp"]] = True
             results["attended_count"] += 1
         else:

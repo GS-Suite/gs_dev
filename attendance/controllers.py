@@ -29,22 +29,22 @@ async def delete_attendance_mongo(classroom_uid, token):
     return delete_resp
 
 
-async def log_attendance(classroom_uid, user_id, attendance_token):
+async def log_attendance(classroom_uid, username, attendance_token):
     ### check if token in redis
     valid = await attendance_redis.get_token(attendance_token)
     print(valid)
 
     if valid:
-        logged_attendance_resp = await attendance_mongo.give_attendance(classroom_uid, user_id, attendance_token)
+        logged_attendance_resp = await attendance_mongo.give_attendance(classroom_uid, username, attendance_token)
 
         if logged_attendance_resp ==  True:
             return True
     return False
 
 
-async def view_student_attendance(classroom_uid, user_uid):
+async def view_student_attendance(classroom_uid, username):
     ### calculate student attendance mongo
-    res = await attendance_mongo.view_student_attendance(classroom_uid, user_uid)
+    res = await attendance_mongo.view_student_attendance(classroom_uid, username)
     return res
 
 

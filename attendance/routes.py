@@ -116,7 +116,7 @@ async def give_attendance(token, classroom_uid, attendance_token):
 
         response = await attendance_controllers.log_attendance(
             classroom_uid=classroom_uid,
-            user_id=token.user_id,
+            username=token.username,
             attendance_token=attendance_token)
 
         if response == True:
@@ -141,7 +141,7 @@ async def view_student_attendance(token, classroom_uid):
 
         response = await attendance_controllers.view_student_attendance(
             classroom_uid = classroom_uid,
-            user_uid = token.user_id
+            username = token.username
         )
         
         if response:
