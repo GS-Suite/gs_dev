@@ -27,7 +27,7 @@ async def sign_up(user, url, bg):
             await user_dropbox.create_profile_picture_with_link(uid, open("no_profile_pic.jpg", "rb").read())
 
             ''' EMAIL VALIDATION MAIL, USE SPARINGLY '''
-            #await send_verify_email_mail(user, url, token, bg)
+            await send_verify_email_mail(user, url, token, bg)
             return True
         else:
             return False
