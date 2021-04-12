@@ -127,7 +127,7 @@ async def send_reset_password(username, email, url, bg):
     user = await user_controllers.get_user_from_email(username, email)
     if user:
         res = False
-        #res = await user_controllers.send_reset_password(user, url, bg)
+        res = await user_controllers.send_reset_password(user, url, bg)
         if res:
             return StandardResponseBody(
                 True, "Email to reset password sent successfully.", token = None
