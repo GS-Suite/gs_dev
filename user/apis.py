@@ -86,4 +86,4 @@ async def verify_user(token: str):
 
 @router.post("/send_reset_password/", tags = ["users : email"])
 async def send_reset_password(request: Request, bg: BackgroundTasks, username: str = Body(..., embed = True), email: str = Body(..., embed = True)):
-    return await user_routes.send_reset_password(username, email, request.url_for("reset_password"), bg)
+    return await user_routes.send_reset_password(username, email, "https://gs-suite.herokuapp.com/password/reset" , bg)
