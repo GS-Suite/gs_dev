@@ -39,7 +39,6 @@ async def send_notif(classroom_uid, announcement, tasks):
 
     if post_announcement_mongo ==  True:
         ###
-        return True
         
         if classroom_enrolled != []:
             ''' Prepping mailing list'''
@@ -63,9 +62,7 @@ async def send_notif(classroom_uid, announcement, tasks):
             )
             if mail_status:
                  return True
-        else:
-            ''' which is empty obv '''
-            return False
+    return False
 
 
 
