@@ -111,8 +111,8 @@ async def get_username_from_user_id(user_uid, token):
         )
 
 
-async def verify_email(token):
-    res = await user_controllers.verify_email(token)
+async def verify_user(token):
+    res = await user_controllers.verify_user(token)
     if res:
         return HTMLResponse(
             "<p>Email Verified</p>"

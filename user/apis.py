@@ -15,7 +15,7 @@ router = APIRouter()
 @router.post("/sign_up/", tags = ["user : auth"])
 async def sign_up(user: user_schemas.UserSignUp, request: Request, bg: BackgroundTasks):
     #print(request.base_url)
-    return await user_routes.sign_up(user, request.url_for("verify_email"), bg)
+    return await user_routes.sign_up(user, request.url_for("verify_user"), bg)
 
 
 @router.post("/sign_in/", tags = ["user : auth"])
@@ -78,10 +78,10 @@ async def get_any_user_profile(username: str = Body(...), user_id: str = Body(..
 
 ''' EMAIL APIS '''
 
-@router.get("/verify_email/", tags = ["users : email"])
-async def verify_email(token: str):
+@router.get("/verify_user/", tags = ["users : email"])
+async def verify_user(token: str):
     #print(token)
-    return await user_routes.verify_email(token)
+    return await user_routes.verify_user(token)
 
 
 @router.post("/send_reset_password/", tags = ["users : email"])

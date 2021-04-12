@@ -21,7 +21,7 @@ async def sign_up(user, url, bg):
             ### generate token
             token = await user_helpers.generate_verify_email_token()
             ### store in redis
-            await user_redis.set_token(token, user.email)
+            await user_redis.set_token(token, user.username)
 
             ### create profile pic dropbox
             await user_dropbox.create_profile_picture_with_link(uid, open("no_profile_pic.jpg", "rb").read())
@@ -104,10 +104,10 @@ async def change_profile_picture(user_uid, picture):
     return "deleted"
 
 
-async def verify_email(token):
-    email = await user_redis.get_token(token)
-    if email:
-        res = await user_models.set_verified(email)
+async def verify_user(token):
+    username = await user_redis.get_token(token)
+    if username:
+        res = await user_models.set_verified(username)
         if res:
             await user_redis.delete_token(token)
         return res 

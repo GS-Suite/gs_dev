@@ -102,18 +102,19 @@ async def delete_user(user: User):
         return False
 
 
-async def set_verified(email):
+async def set_verified(username):
     try:
         x = db.query(User).filter(
-            User.email == email
+            User.username == username
         ).first()
-        x.verified = True
-        db.commit()
-        return True
+        
+        if x:
+            x.verified = True
+            db.commit()
+            return True
     except Exception as e:
         print(e)
-        db.rollback()
-        return False
+    return False
 
 
 async def update_profile_picture(uid, link):
