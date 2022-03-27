@@ -1,4 +1,7 @@
-## Login ~ FastAPI, SQLAlchemy
+# Login ~ FastAPI, SQLAlchemy
+
+## A project by Quirkle.in
+
 ---
 ### To run the app
 -- `pip install pipenv`
